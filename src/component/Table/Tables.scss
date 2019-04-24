@@ -1,0 +1,40 @@
+.table-component-add-icon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex: 1;
+}
+.table-component-add-search {
+  display: flex;
+}
+.table-component-search {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  flex: 1;
+}
+.input-search {
+  width: 100%;
+}
+
+.table-component {
+  display: flex;
+  width: 100%;
+}
+
+.table-container {
+  display: flex;
+  width: 92%;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+.icons-table-cell {
+  display: flex !important;
+  justify-content: flex-end;
+}
+
+.table-pagination-wrapper {
+  padding: 10px 0;
+  border-collapse: separate;
+}

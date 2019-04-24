@@ -1,0 +1,33 @@
+.table-page-container {
+  
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 30px;
+  border: none;
+}
+
+.table-page {
+  height: 27px;
+  width: 27px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto !important;
+  margin: 0 5px;
+}
+
+.table-arrow {
+  margin: 0;
+}
+
+.table-page-selected {
+  background-color: #3444a4 !important;
+  color: #fff !important;
+}
+
+.table-page-separator {
+  pointer-events: none;
+  margin: 0;
+  letter-spacing: 3px;
+}

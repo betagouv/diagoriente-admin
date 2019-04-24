@@ -1,0 +1,13 @@
+{
+  "extends": ["tslint-config-airbnb"],
+  "rules": {
+    "interface-name": false,
+    "import-name": false,
+    "variable-name": false,
+    "ter-arrow-parens": false
+  },
+  "linterOptions": {
+    "exclude": ["node_modules/**/*.ts", "coverage/lcov-report/*.js"]
+  },
+  "defaultSeverity": "warning"
+}
