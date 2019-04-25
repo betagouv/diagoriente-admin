@@ -14,7 +14,7 @@ function* getRequest() {
   // console.log('role startup', login.toJS());
   try {
     const domain =
-      process.env.REACT_APP_API_URL || 'https://api-dev.projetttv.org';
+      process.env.REACT_APP_API_URL || 'https://api2.projetttv.org';
     const baseUrl = domain + '/v1/auth/refresh-token';
 
     let token = null;
