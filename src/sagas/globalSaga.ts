@@ -58,6 +58,12 @@ import { loginSagaAdvisor } from './profileAdvisor/loginSaga';
 import { logoutSagaAdvisor } from './profileAdvisor/logoutSaga';
 /* job */
 import getJob from './job/getJob';
+/* Question */
+import createQuestion from './questions/createQuestion';
+import deleteQuestion from './questions/deleteQuestion';
+import editQuestion from './questions/editQuestions';
+import getQuestion from './questions/getQuestion';
+import listQuestions from './questions/listQuestions';
 
 const sagas = [
   configSaga,
@@ -108,6 +114,13 @@ const sagas = [
   loginSagaAdvisor,
   logoutSagaAdvisor,
   getJob,
+  createQuestion,
+  deleteQuestion,
+  editQuestion,
+  getQuestion,
+  listQuestions
+
+
 ];
 
 export default function* () {

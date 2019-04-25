@@ -47,6 +47,7 @@ declare module 'requests' {
     nom: string;
     rank: string;
   }
+ 
   export interface ListInterestsParams {
     page?: number;
     perPage?: number;
@@ -63,6 +64,26 @@ declare module 'requests' {
   }
   export type DeleteInterestParams = DeleteOrGetParams;
   export type PatchInterestParams = CreateInterestParams & { id: string };
+
+  /* Question */
+  export interface Question {
+    title: string;
+    _id:string
+  }
+  export interface ListQuestionsParams {
+    page?: number;
+    perPage?: number;
+    search?: string;
+  }
+  export type ListQuestionResponse = ListResponse<Question>;
+  export interface CreateQuestionParams {
+    title: string;
+  }
+  export interface GetQuestionParams {
+    id: number;
+  }
+  export type DeleteQuestionParams = DeleteOrGetParams;
+  export type EditQuestionParams = CreateQuestionParams & { id: string };
 
   /* Activities */
   export interface Activity {

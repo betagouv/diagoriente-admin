@@ -12,3 +12,4 @@ export * from './secteur';
 export * from './Famille';
 export * from './authAdvisor';
 export * from './jobs';
+export * from './questions';

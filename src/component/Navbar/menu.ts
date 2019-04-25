@@ -9,6 +9,9 @@ import ViewCompact from '@material-ui/icons/ViewCompactOutlined';
 import LineStyle from '@material-ui/icons/LineStyleOutlined';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import BusinessCenter from '@material-ui/icons/BusinessCenterOutlined';
+import question_answer from '@material-ui/icons/FeedbackOutlined';
+
+
 const menu = [
   {
     nom: 'Thèmes',
@@ -69,6 +72,12 @@ const menu = [
     url: '/jobs',
     icon: BusinessCenter,
     id: 9,
+  },
+  {
+    nom: 'Questions',
+    url: '/questions',
+    icon: question_answer,
+    id: 10,
   },
 ];
 

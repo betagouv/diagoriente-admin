@@ -16,6 +16,7 @@ import Competences from '../CompetencesContainer';
 import ParcoursContainer from '../ParcoursContainer';
 import AdvisorContainer from '../AdvisorContainer';
 import SecteurContainer from '../SecteurContainer';
+import QuestionContainer from '../QuestioinsContainer';
 import './home.css';
 import FamilleContainer from '../FamilleContainer';
 import JobsContainer from '../JobsContainer';
@@ -61,6 +62,7 @@ class HomeContainer extends React.Component<Props> {
                 <Route path="/competences" component={Competences} />
                 <Route path="/advisor" component={AdvisorContainer} />
                 <Route path="/secteur" component={SecteurContainer} />
+                <Route path="/questions" component={QuestionContainer} />
                 <Route path="/famille" component={FamilleContainer} />
                 <Route path="/parcours" component={ParcoursContainer} />
                 <Route path="/jobs" component={JobsContainer} />
