@@ -18,7 +18,7 @@ type Props = TextFieldProps & {
   placeholder?: string;
   error?: boolean;
   required?: boolean;
-  value?: string;
+  value?: any;
   InputIndication?: string;
   textArea?: boolean;
   onChangeInput(e: any): void;

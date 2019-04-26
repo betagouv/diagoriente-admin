@@ -9,6 +9,7 @@ import ViewCompact from '@material-ui/icons/ViewCompactOutlined';
 import LineStyle from '@material-ui/icons/LineStyleOutlined';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import BusinessCenter from '@material-ui/icons/BusinessCenterOutlined';
+import Layers from '@material-ui/icons/LayersOutlined';
 const menu = [
   {
     nom: 'Thèmes',
@@ -69,6 +70,12 @@ const menu = [
     url: '/jobs',
     icon: BusinessCenter,
     id: 9,
+  },
+  {
+    nom: 'Rang Famille',
+    url: '/familleRank',
+    icon: Layers,
+    id: 11,
   },
 ];
 

@@ -17,6 +17,7 @@ import advisor from './Advisor';
 import secteur from './secteur';
 import famille from './famille';
 import { reducer as job } from './job/GetJob';
+import ranks from './familleRank';
 
 // redux reducers
 export default (history: any) =>
@@ -35,5 +36,6 @@ export default (history: any) =>
     secteur,
     famille,
     job,
+    ranks,
     router: connectRouter(history),
   });

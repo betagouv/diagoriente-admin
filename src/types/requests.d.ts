@@ -22,8 +22,6 @@ declare module 'requests' {
     message?: string;
   }
 
-
-
   export interface WrappedResponse<T> {
     data?: T;
     success: boolean;
@@ -254,7 +252,7 @@ declare module 'requests' {
         institution: string;
       };
     };
-    families : Famille[];
+    families: Famille[];
   }
 
   export interface listLoginParams {
@@ -312,19 +310,17 @@ declare module 'requests' {
     nom: string;
     interests: Interest[];
     resources: any[];
-    
   }
   export type GetFamilleParams = DeleteOrGetParams;
   export type DeleteFamilleParams = DeleteOrGetParams;
   export type DeletePhotoParams = {
     id: string;
     resource: string;
-  }
+  };
   export interface CreateFamilleParams {
     nom: string;
     interests: Interest[];
     resources: any[];
-    
   }
   export type PatchFamilleParams = CreateFamilleParams & { id: string };
   export type ListFamillesResponse = ListResponse<Famille>;
@@ -343,8 +339,8 @@ declare module 'requests' {
     formations: any;
     _id: string;
     jobRank: number;
-    secteur:{title: string; _id:string; }[];
-    accessibility:string;
+    secteur: { title: string; _id: string }[];
+    accessibility: string;
     interested: boolean;
   }
 
@@ -357,4 +353,19 @@ declare module 'requests' {
     secteur: any;
     accessibility?: string;
   }
+
+  export interface Rank {
+    id: string;
+    rank: string;
+    pExpInt: number;
+  }
+  export type ListRanksResponse = ListResponse<Rank>;
+  export interface CreateRankParams {
+    familiesRank: { pExpInt: number; rank: number }[];
+  }
+  export type ListRanksParams = {
+    page?: number;
+    perPage?: number;
+    search?: string;
+  };
 }

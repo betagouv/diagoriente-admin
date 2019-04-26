@@ -17,6 +17,7 @@ declare module 'reducers' {
     Famille,
     ListFamillesResponse,
     Job,
+    ListRanksResponse,
   } from 'requests';
 
   export interface ImmutableMap<T> extends Map<string, any> {
@@ -220,6 +221,15 @@ declare module 'reducers' {
     listFamilles: ListFamilles;
   }>;
 
+  export type CreateRank = ImmutableMap<ApiReducer>;
+  export type ListRanks = ImmutableMap<{ ranks: ListRanksResponse } & ApiReducer>;
+  
+
+  export type IRanks = ImmutableMap<{
+    createRank: CreateRank;
+    listRanks : ListRanks;
+  }>
+
   export interface ReduxState {
     config: ConfigState;
     router: RouterState;
@@ -237,5 +247,6 @@ declare module 'reducers' {
     secteur: Secteur;
     famille: FamilleInteret;
     job: getJobs;
+    ranks: IRanks;
   }
 }
