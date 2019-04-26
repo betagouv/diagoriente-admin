@@ -10,6 +10,8 @@ import themes from './themes';
 import { reducer as startUp } from './startUp';
 import activities from './activities';
 import interests from './interests';
+import questions from './Questions';
+
 import users from './users';
 import competences from './competences';
 import parcours from './parcours';
@@ -34,6 +36,7 @@ export default (history: any) =>
     competences,
     advisor,
     secteur,
+    questions,
     famille,
     job,
     ranks,

@@ -13,3 +13,4 @@ export * from './Famille';
 export * from './authAdvisor';
 export * from './jobs';
 export * from './ranks';
+export * from './questions';

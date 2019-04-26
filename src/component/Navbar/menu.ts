@@ -10,6 +10,9 @@ import LineStyle from '@material-ui/icons/LineStyleOutlined';
 import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import BusinessCenter from '@material-ui/icons/BusinessCenterOutlined';
 import Layers from '@material-ui/icons/LayersOutlined';
+import question_answer from '@material-ui/icons/FeedbackOutlined';
+
+
 const menu = [
   {
     nom: 'Thèmes',
@@ -70,6 +73,12 @@ const menu = [
     url: '/jobs',
     icon: BusinessCenter,
     id: 9,
+  },
+  {
+    nom: 'Questions',
+    url: '/questions',
+    icon: question_answer,
+    id: 10,
   },
   {
     nom: 'Rang Famille',

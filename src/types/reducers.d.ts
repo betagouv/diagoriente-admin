@@ -18,6 +18,7 @@ declare module 'reducers' {
     ListFamillesResponse,
     Job,
     ListRanksResponse,
+    Question
   } from 'requests';
 
   export interface ImmutableMap<T> extends Map<string, any> {
@@ -109,6 +110,22 @@ declare module 'reducers' {
     patchInterest: PatchInterest;
     deleteInterest: DeleteInterest;
   }>;
+
+  export type CreateQuestion = ImmutableMap<ApiReducer>;
+  export type ListQuestions = ImmutableMap<{ questions: ListQuestionResponse } & ApiReducer>;
+  export type GetQuestion= ImmutableMap<{ question: Question } & ApiReducer>;
+  export type EditQuestion = ImmutableMap<ApiReducer>;
+  export type DeleteQuestion = ImmutableMap<ApiReducer>;
+
+  export type Questions = ImmutableMap<{
+    createQuestion: CreateQuestion;
+    listQuestion: ListQuestions;
+    getQuestion: GetQuestion;
+    editQuestion: EditQuestion;
+    deleteQuestion: DeleteQuestion;
+  }>;
+
+
 
   export type GetUser = ImmutableMap<{
     fetching: boolean;
@@ -248,5 +265,6 @@ declare module 'reducers' {
     famille: FamilleInteret;
     job: getJobs;
     ranks: IRanks;
+    questions:Questions
   }
 }

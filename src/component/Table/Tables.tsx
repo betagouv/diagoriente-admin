@@ -143,6 +143,7 @@ class Tables<T> extends React.PureComponent<Props<T>, State> {
 
   onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      console.log('de value',this.state.value)
       this.props.search(this.state.value);
     }
   }
@@ -158,6 +159,7 @@ class Tables<T> extends React.PureComponent<Props<T>, State> {
 
   search = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    console.log('de value',this.state.value)
     this.props.search(this.state.value);
   }
 
