@@ -121,7 +121,7 @@ interface MapToProps {
   totalPages: number;
   createActivityFetching: boolean;
   createActivityError: string;
-  secteurs: {_id: string; title: string; }[];
+  secteurs: { _id: string; title: string }[];
 }
 
 interface DispatchToProps {
@@ -184,11 +184,11 @@ class ThemesContainer extends Component<Props, State> {
   activityForm: ActivityFormComponent | null = null;
 
   search: string = '';
-  type: string = 'professional' || 'personal';
+  type: string =  'personal' || 'professional';
 
   componentDidMount() {
     const { page } = decodeUri(this.props.location.search);
-    this.getListThemes({ page });
+    this.getListThemes({ page, type:'' });
     const edit = this.isEdit(this.props.location);
     if (edit) {
       this.props.getTheme({ id: (edit.params as any).id });
@@ -462,7 +462,6 @@ class ThemesContainer extends Component<Props, State> {
           {...initialValues}
           secteur={this.props.secteurs}
           selectedSecteur={this.props.theme.parentId}
-
         />
         <div className={this.props.classes.leftModalContainer}>
           <ResourcesForm
