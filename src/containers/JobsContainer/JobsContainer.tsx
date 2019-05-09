@@ -168,7 +168,7 @@ class JobsContainer extends React.Component<Props, State> {
     this.props.list.call({ perPage: PER_PAGE, ...params });
   }
   getSecteurs = (params: ListParams = {}) => {
-    this.props.secteurs.call({ perPage: 20, type: 'secteur', ...params });
+    this.props.secteurs.call({ perPage: 100, type: 'secteur', ...params });
   }
 
   handlePageChange = (page: number) => {
