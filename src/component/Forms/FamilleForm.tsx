@@ -23,6 +23,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 interface Props {
   interests?: any[];
@@ -35,6 +37,7 @@ interface Props {
   photos?: any[];
   withPreview?: boolean;
   idFamilly: string;
+  isFetching?: boolean;
 }
 interface Photo {
   preview: string;
@@ -153,20 +156,6 @@ class FamilleForm extends React.Component<Props> {
     }));
   }
   handleDelete = (id: string) => {
-    /* const response: Response<Famille> = await deleteFamillePhoto({
-      id: this.props.idFamilly,
-      resource: id,
-    });
-    if (response.code === 200 && response.data) {
-
-      // this.setState({ previews: response.data.resources });
-      const  previews = response.data.resources
-    ? response.data.resources.map(photoPreview => ({
-      preview: `data:image/png;base64,${photoPreview.base64}`,
-    }))
-    : [];
-      this.setState({ previews });
-    } */
     this.setState({ open: true, currentResourceId: id });
   }
   handleClose = () => {
@@ -194,6 +183,13 @@ class FamilleForm extends React.Component<Props> {
 
     return (
       <div className={classes.container}>
+      {this.props.isFetching && (
+          <div
+            className={classes.spinner}
+          >
+            <LinearProgress />
+          </div>
+        )}
         <Card className={classes.card}>
           <Input
             id="1"
@@ -367,6 +363,9 @@ const styles = () =>
     },
     dialogActions :{
       justifyContent:'space-evenly !important',
+    },
+    spinner: {
+      zIndex:1000,
     },
   });
 export default withStyles(styles)(FamilleForm);

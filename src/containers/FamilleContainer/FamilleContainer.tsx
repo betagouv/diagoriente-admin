@@ -291,6 +291,7 @@ class FamilleContainer extends Component<Props, State> {
             photos={this.props.famille.resources}
             withPreview={false}
             idFamilly={this.state.currentSelectedId}
+            isFetching={this.props.editFamilleFetching}
           />
 
         )}
@@ -364,6 +365,7 @@ class FamilleContainer extends Component<Props, State> {
                 requestClose={this.closeEditModal}
                 withPreview
                 idFamilly={this.state.currentSelectedId}
+                isFetching={this.props.createFamilleFetching}
               />
 
             </Grid>
