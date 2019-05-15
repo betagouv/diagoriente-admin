@@ -167,7 +167,6 @@ class FamilleForm extends React.Component<Props> {
       resource: this.state.currentResourceId,
     });
     if (response.code === 200 && response.data) {
-
       // this.setState({ previews: response.data.resources });
       const previews = response.data.resources
         ? response.data.resources.map(photoPreview => ({
@@ -183,13 +182,12 @@ class FamilleForm extends React.Component<Props> {
 
     return (
       <div className={classes.container}>
-      {this.props.isFetching && (
-          <div
-            className={classes.spinner}
-          >
-            <LinearProgress />
-          </div>
-        )}
+        {this.props.isFetching && ( 
+        <div className={classes.spinner}>
+          <CircularProgress className={classes.loader} />
+          <h4 className={classes.text}> Veuillez patienter...</h4>
+        </div>
+         )} 
         <Card className={classes.card}>
           <Input
             id="1"
@@ -253,13 +251,15 @@ class FamilleForm extends React.Component<Props> {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle className={classes.dialogTitle} >{'Confirmation'}</DialogTitle>
+          <DialogTitle className={classes.dialogTitle}>
+            {'Confirmation'}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Confirmez-vous la suppression definitive de cet element
             </DialogContentText>
           </DialogContent>
-          <DialogActions className={classes.dialogActions} >
+          <DialogActions className={classes.dialogActions}>
             <Button onClick={this.handleClose} color="primary">
               Annuler
             </Button>
@@ -357,15 +357,37 @@ const styles = () =>
     image: {
       width: '100%',
     },
-    dialogTitle : {
-      display:'flex',
-      justifyContent:'center',
+    dialogTitle: {
+      display: 'flex',
+      justifyContent: 'center',
     },
-    dialogActions :{
-      justifyContent:'space-evenly !important',
+    dialogActions: {
+      justifyContent: 'space-evenly !important',
     },
     spinner: {
-      zIndex:1000,
+      zIndex: 1000,
+      position: 'fixed',
+      left: 0,
+      top: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0, 0, 0 , .5)',
+    },
+    loader: {
+      top: '50%',
+      position: 'absolute',
+      left: '50%',
+      height: 60,
+      width: 60,
+      color: '#fff',
+    },
+    text: {
+      top: '55%',
+      left: '50%',
+      position: 'absolute',
+      transform: 'translateX(-40%)',
+      color: '#FFF',
+      fontSize: 20,
     },
   });
 export default withStyles(styles)(FamilleForm);
