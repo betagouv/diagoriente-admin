@@ -40,8 +40,8 @@ interface Props {
   isFetching?: boolean;
 }
 interface Photo {
-  preview: string;
   _id: string;
+  preview: string;
 }
 
 interface State {
@@ -51,6 +51,7 @@ interface State {
   nomError: string;
   pictures: File[];
   previews: Photo[];
+  localPreviews: any[];
   open: boolean;
   currentResourceId: string;
 }
@@ -70,33 +71,21 @@ class FamilleForm extends React.Component<Props> {
     pictures: [],
     previews: this.props.photos
       ? this.props.photos.map(photoPreview => ({
-        preview: `data:image/png;base64,${photoPreview.base64}`,
+        preview: `data:${photoPreview.mimetype};base64,${
+            photoPreview.base64
+          }`,
         _id: photoPreview._id,
       }))
       : [],
     currentResourceId: '',
+    localPreviews: [],
   };
 
   previews = this.props.photos
     ? this.props.photos.map(photoPreview => ({
-      preview: `data:image/png;base64,${photoPreview.base64}`,
+      preview: `data:${photoPreview.mimetype};base64,${photoPreview.base64}`,
     }))
     : [];
-
-  /* componentDidMount = () => {
-    if (this.state.previews) {
-      const pictures: File[] = [];
-      this.state.previews.forEach(el => {
-        fetch(el.preview)
-          .then(res => res.blob())
-          .then(blob => {
-            const file = new File([blob], 'File name');
-            pictures.push(file);
-          });
-      });
-
-    }
-  } */
 
   validateTitle = (value: string) => {
     return value ? '' : 'vous devez inserer un titre';
@@ -134,6 +123,17 @@ class FamilleForm extends React.Component<Props> {
     });
   }
 
+  /* blolToFile = (blob: Blob) => {
+    const rand = Math.random()
+      .toString(36)
+      .substring(7);
+    const file = new File([blob], `${rand}.png`, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
+    return file;
+  } */
+
   onSubmitHandler = (e: React.MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.props.onSubmitHandler({
@@ -150,13 +150,14 @@ class FamilleForm extends React.Component<Props> {
     const prevs = pictureFiles.map(el => ({
       preview: URL.createObjectURL(el),
     }));
+    this.setState({ localPreviews: prevs });
 
-    this.setState((prevState: State) => ({
+    /* this.setState((prevState: State) => ({
       previews: [...this.previews, ...prevs],
-    }));
+    })); */
   }
   handleDelete = (id: string) => {
-    this.setState({ open: true, currentResourceId: id });
+    this.setState({ open: true, currentResourceId: id }, () => console.log(id));
   }
   handleClose = () => {
     this.setState({ open: false });
@@ -166,28 +167,44 @@ class FamilleForm extends React.Component<Props> {
       id: this.props.idFamilly,
       resource: this.state.currentResourceId,
     });
+
     if (response.code === 200 && response.data) {
       // this.setState({ previews: response.data.resources });
       const previews = response.data.resources
         ? response.data.resources.map(photoPreview => ({
           preview: `data:image/png;base64,${photoPreview.base64}`,
+          _id: photoPreview._id,
         }))
         : [];
       this.setState({ previews, open: false });
     }
   }
+  remove = (index: number) => {
+    let removed = this.state.localPreviews;
+    let picturesUpdated = this.state.pictures;
+    console.log(removed.length);
+
+    removed = this.state.localPreviews.filter(el => el !== removed[index]);
+    picturesUpdated = this.state.pictures.filter(
+      el => el !== picturesUpdated[index],
+    );
+
+    this.setState({ localPreviews: removed, pictures: picturesUpdated });
+  }
 
   render(): JSX.Element {
     const { classes } = this.props;
+    console.log(this.state);
+    console.log(this.props)
 
     return (
       <div className={classes.container}>
-        {this.props.isFetching && ( 
-        <div className={classes.spinner}>
-          <CircularProgress className={classes.loader} />
-          <h4 className={classes.text}> Veuillez patienter...</h4>
-        </div>
-         )} 
+        {this.props.isFetching && (
+          <div className={classes.spinner}>
+            <CircularProgress className={classes.loader} />
+            <h4 className={classes.text}> Veuillez patienter...</h4>
+          </div>
+        )}
         <Card className={classes.card}>
           <Input
             id="1"
@@ -214,11 +231,31 @@ class FamilleForm extends React.Component<Props> {
                     <div key={index} className={classes.photoContainer}>
                       <div
                         className={classes.deleteButton}
-                        onClick={() => this.handleDelete(preview._id)}
+                        onClick={() => {
+                          this.handleDelete(preview._id);
+                        }}
                       >
                         X
                       </div>
                       <img src={preview.preview} className={classes.image} />
+                    </div>
+                  );
+                })
+              : null}
+            {this.props.hasEdit === true
+              ? this.state.localPreviews &&
+                this.state.localPreviews.map((al, index) => {
+                  return (
+                    <div key={index} className={classes.photoContainer}>
+                      <div
+                        className={classes.deleteButton}
+                        onClick={() => {
+                          this.remove(index);
+                        }}
+                      >
+                        X
+                      </div>
+                      <img src={al.preview} className={classes.image} />
                     </div>
                   );
                 })
