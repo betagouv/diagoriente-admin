@@ -267,7 +267,7 @@ class FamilleForm extends React.Component<Props> {
             buttonClassName={classes.buttonChoose}
             onChange={this.onDrop}
             imgExtension={['.jpg', '.gif', '.png', '.gif']}
-            maxFileSize={5242880}
+            maxFileSize={20242880}
             withPreview={this.props.withPreview}
             className={classes.filesContainer}
             withLabel={false}
