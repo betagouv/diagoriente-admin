@@ -291,6 +291,11 @@ class ParcoursContainer extends Component<Props> {
       render: customRender,
     },
     {
+      id: 'userInstitution',
+      title: 'SNU',
+      render: customRender,
+    },
+    {
       id: 'advisorName',
       title: 'Conseiller',
       render: customRender,
@@ -600,6 +605,7 @@ class ParcoursContainer extends Component<Props> {
       let advisorName = '';
       let userName = '';
       let userEmail = '';
+      let userInstitution = '';
       if (advisorId && advisorId.profile) {
         const profile: any = advisorId.profile;
         advisorName = Object.keys(profile)
@@ -607,7 +613,6 @@ class ParcoursContainer extends Component<Props> {
           .map(key => profile[key])
           .join(' ');
       }
-
       if (userId && userId.profile) {
         const profile: any = userId.profile;
         userName = Object.keys(profile)
@@ -623,9 +628,12 @@ class ParcoursContainer extends Component<Props> {
             userEmail = userId.profile.email;
           }
         }
+        if (userId.profile.institution) {
+          userInstitution = userId.profile.institution;
+        }
       }
 
-      return { ...parcour, advisorName, userName, userEmail };
+      return { ...parcour, advisorName, userName, userEmail, userInstitution };
     });
 
     return (
@@ -820,10 +828,8 @@ class ParcoursContainer extends Component<Props> {
                               {item.jobRank.toFixed(3)}
                             </Typography>
                           </ExpansionPanelSummary>
-                          <ExpansionPanelDetails >
-                            <Typography>
-                              {item.description}
-                            </Typography>
+                          <ExpansionPanelDetails>
+                            <Typography>{item.description}</Typography>
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
                       );

@@ -8,7 +8,7 @@ import {
   DeleteUserParams,
   GetUserParams,
 } from 'requests';
-
+import { isArray } from 'lodash';
 import { ReduxState } from 'reducers';
 import { RouteComponentProps } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
@@ -81,6 +81,8 @@ interface State {
 
 type Props = MapToProps & DispatchToProps & RouteComponentProps & StyleProps;
 
+const customRender = (row: string): string => row || '--';
+
 class UsersContainer extends Component<Props> {
   state = {
     currentSelectedId: '',
@@ -88,7 +90,16 @@ class UsersContainer extends Component<Props> {
   };
 
   headers = [
-    { id: 'uniqId', title: 'ID Unique' },
+    {
+      id: 'profile',
+      title: 'Nom et prénom',
+      render: (profile: any) => `${profile.firstName}  ${profile.lastName}`,
+    },
+    {
+      id: 'profile',
+      title: 'SNU',
+      render: (profile: any) => profile.institution,
+    },
     {
       id: 'role',
       title: 'Role',
@@ -140,6 +151,32 @@ class UsersContainer extends Component<Props> {
     this.getListUsers();
   }
 
+  handleValue(value: any): any {
+    if (typeof value !== 'object' || value === null) {
+      return value;
+    }
+    if (isArray(value)) {
+      return value.map(item => this.handleValue(item));
+    }
+    return { ...this.deepObject(value) };
+  }
+
+  deepObject(obj: any) {
+    let result: any = {};
+
+    const keys = Object.keys(obj);
+
+    keys.forEach(key => {
+      const value = this.handleValue(obj[key]);
+      if (typeof value !== 'object' || value === null) {
+        result[key] = value;
+      } else {
+        result = { ...result, ...this.deepObject(obj[key]) };
+      }
+    });
+    return result;
+  }
+
   resetUsers = () => {
     this.search = '';
     this.getListUsers();
@@ -164,6 +201,20 @@ class UsersContainer extends Component<Props> {
   }
 
   render(): JSX.Element {
+    const users: any = this.props.users.map(item => {
+      let name = '';
+      let institution = '';
+      if (item.profile.firstName && item.profile.lastName) {
+        name = `${item.profile.firstName} ${item.profile.lastName}`;
+      }
+      if (item.profile.institution) {
+        institution = item.profile.institution;
+      }
+      console.log(name);
+
+      return { ...users, name, institution };
+    });
+
     return (
       <>
         {this.props.fetching && (

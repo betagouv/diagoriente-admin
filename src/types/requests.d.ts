@@ -161,6 +161,7 @@ declare module 'requests' {
       pseudo: string;
       firstName: string;
       lastName: string;
+      institution: string;
     };
   }
 
@@ -258,6 +259,7 @@ declare module 'requests' {
         lastName: string;
         pseudo: string;
         email: string;
+        institution: string;
       };
     };
     completed: boolean;
