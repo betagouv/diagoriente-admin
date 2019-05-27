@@ -27,6 +27,7 @@ interface Props {
   interests?: Interest[];
   fetching?: boolean;
   showInterest: boolean;
+  description?: string;
 }
 
 interface State {
@@ -40,6 +41,9 @@ interface State {
   checkBoxError: string;
   verified: boolean;
   interests: { label: string; value: string }[];
+  descriptionError: string;
+  errorForDescription: boolean;
+  descriptionValue: string;
 }
 
 class ActivityForm extends React.Component<Props, State> {
@@ -67,6 +71,9 @@ class ActivityForm extends React.Component<Props, State> {
           value: interest._id,
         }))
         : [],
+      descriptionError: '',
+      errorForDescription: false,
+      descriptionValue: this.props.description || '',
     };
   }
 
@@ -90,6 +97,13 @@ class ActivityForm extends React.Component<Props, State> {
     // handle title error
     if (value === '') {
       return 'vous devez inserer un titre';
+    }
+    return '';
+  }
+  validateDescription = (value: string) => {
+    // handle title error
+    if (value === '') {
+      return 'vous devez inserer une Description';
     }
     return '';
   }
@@ -129,6 +143,16 @@ class ActivityForm extends React.Component<Props, State> {
       errorForTitle: !!titleError,
     });
   }
+  // handle change for description
+  handleChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const descriptionError = this.validateDescription(e.currentTarget.value);
+    this.setState({
+      descriptionError,
+      descriptionValue: e.currentTarget.value,
+      errorForDescription: !!descriptionError,
+    });
+  }
+
   // handle change for rank
   handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const typeError = this.validateType(e.currentTarget.value);
@@ -156,6 +180,7 @@ class ActivityForm extends React.Component<Props, State> {
     } else {
       this.props.onSubmitHandler({
         title: this.state.titleValue,
+        description: this.state.descriptionValue,
         type: this.state.typeValue,
         verified: this.state.verified,
         interests: this.state.interests.map(({ value }) => value),
@@ -188,6 +213,16 @@ class ActivityForm extends React.Component<Props, State> {
                 error={this.state.errorForTitle}
                 value={this.state.titleValue}
                 onChangeInput={this.handleChangeTitle}
+              />
+              <Input
+                placeholder="Description"
+                id="11"
+                label="Description"
+                InputIndication={this.state.descriptionError}
+                error={this.state.errorForDescription}
+                value={this.state.descriptionValue}
+                onChangeInput={this.handleChangeDescription}
+                multiline
               />
               <SelectInput
                 label="Type"

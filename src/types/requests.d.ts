@@ -87,6 +87,7 @@ declare module 'requests' {
   export interface Activity {
     _id: string;
     title: string;
+    description: string;
     type: string;
     verified: boolean;
     interests: Interest[];
@@ -103,6 +104,7 @@ declare module 'requests' {
 
   export interface CreateActivityParams {
     title: string;
+    description?: string;
     type: string;
     verified: boolean;
     interests: string[];
