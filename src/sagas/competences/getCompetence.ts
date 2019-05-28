@@ -3,7 +3,7 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 import getCompetenceActions, {
     getCompetenceTypes,
 } from '../../reducers/competences/getCompetence';
-import { getInterest, wrapApiCall } from '../../requests';
+import { GetCompetence, wrapApiCall } from '../../requests';
 import { GetCompetenceParams, WrappedResponse, ICompetence } from 'requests';
 
 type Action = { type: string; payload: GetCompetenceParams };
@@ -12,7 +12,7 @@ function* getCompetenceRequest({ payload }: Action) {
   try {
     const response: WrappedResponse<ICompetence> = yield call(
       wrapApiCall,
-      getInterest,
+      GetCompetence,
       payload,
     );
     if (response.success) {

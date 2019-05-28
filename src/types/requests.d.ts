@@ -221,17 +221,30 @@ declare module 'requests' {
     _id?: string;
     title: string;
     rank?: string;
+    niveau :Iniveau[];
+  }
+  export interface Iniveau {
+    title: string;
+    sub_title:  string;
+    _id?: string;
+
   }
 
   export interface CreateComptenceParams {
     title: string;
     rank: string;
+    niveau :Iniveau[];
   }
+
+  export interface EditComptenceParams {
+    niveau :Iniveau[];
+  }
+
 
   export type ListCompetencesResponse = ListResponse<ICompetence>;
   export type GetCompetenceParams = DeleteOrGetParams;
   export type DeleteCompetenceParams = DeleteOrGetParams;
-  export type patchCompetenceParams = CreateComptenceParams & {
+  export type patchCompetenceParams = EditComptenceParams & {
     id: string | undefined;
   };
 

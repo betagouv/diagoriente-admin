@@ -9,6 +9,7 @@ import {
   GetCompetenceParams,
   ListCompetencesParams,
   patchCompetenceParams,
+  EditComptenceParams,
 } from 'requests';
 import { ReduxState } from 'reducers';
 import { RouteComponentProps, matchPath } from 'react-router-dom';
@@ -19,7 +20,7 @@ import { Location } from 'history';
 // components
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '../../component/Table/Tables';
-import CompetenceForm from '../../component/Forms/CompetenceForm';
+import CompetenceForm from '../../component/Forms/competencesForm';
 import FullModal from '../../component/fullScreenModal/fullModal';
 import ConfirmModal from '../../component/ConfirmModal/ConfirmModal';
 import Card from '@material-ui/core/Card';
@@ -148,7 +149,11 @@ class CompetencesContainer extends Component<Props, State> {
   }
 
   componentDidUpdate(props: Props) {
-    if (!this.props.deleteFetching && props.deleteFetching && !this.props.deleteError) {
+    if (
+      !this.props.deleteFetching &&
+      props.deleteFetching &&
+      !this.props.deleteError
+    ) {
       this.getListCompetences();
     }
     const edit = this.isEdit(this.props.location);
@@ -156,7 +161,11 @@ class CompetencesContainer extends Component<Props, State> {
       this.props.getCompetence({ id: (edit.params as any).id });
     }
 
-    if (!this.props.editCompetenceFetching && props.editCompetenceFetching && !this.props.editCompetenceError) {
+    if (
+      !this.props.editCompetenceFetching &&
+      props.editCompetenceFetching &&
+      !this.props.editCompetenceError
+    ) {
       this.getListCompetences();
       this.props.history.push({
         pathname: '/competences',
@@ -164,7 +173,11 @@ class CompetencesContainer extends Component<Props, State> {
       });
     }
 
-    if (!this.props.createCompetenceFetching && props.createCompetenceFetching && !this.props.createCompetenceFetching) {
+    if (
+      !this.props.createCompetenceFetching &&
+      props.createCompetenceFetching &&
+      !this.props.createCompetenceFetching
+    ) {
       this.search = '';
       this.getListCompetences({ page: 0 });
       this.setState({ open: false });
@@ -210,7 +223,7 @@ class CompetencesContainer extends Component<Props, State> {
     this.props.deleteCompetence({ id });
   }
 
-  edit = (params: CreateComptenceParams) => {
+  edit = (params: EditComptenceParams) => {
     const id = this.props.competence._id;
     this.props.editCompetence({ id, ...params });
   }
@@ -254,9 +267,6 @@ class CompetencesContainer extends Component<Props, State> {
 
   getListCompetences = (params: ListCompetencesParams = {}) => {
     this.props.getListCompetences({
-      /* search: this.search,
-      // page: this.props.currentPage,
-      perPage: PER_PAGE, */
       ...params,
     });
   }
@@ -267,12 +277,17 @@ class CompetencesContainer extends Component<Props, State> {
     }
     return (
       <CompetenceForm
-        // header={'Modifier intérêt'}
-        submitText={'Modifier Compétence'}
+        n1={this.props.competence.niveau && this.props.competence.niveau[0].title}
+        n2={this.props.competence.niveau && this.props.competence.niveau[1].title}
+        n3={this.props.competence.niveau && this.props.competence.niveau[2].title}
+        n4={this.props.competence.niveau && this.props.competence.niveau[3].title}
+        n1desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
+        n2desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
+        n3desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
+        n4desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
         onSubmitHandler={this.edit}
-        title={this.props.competence.title}
-        rank={this.props.competence.rank}
-        buttonName="Modifier Compétence"
+        requestClose={() => {}}
+        submitText="Modifier Competence"
       />
     );
   }
@@ -281,7 +296,11 @@ class CompetencesContainer extends Component<Props, State> {
     return (
       <>
         {this.props.fetching && (
-          <div className={`${this.props.classes.absolute} ${this.props.classes.center}`}>
+          <div
+            className={`${this.props.classes.absolute} ${
+              this.props.classes.center
+            }`}
+          >
             <CircularProgress />
           </div>
         )}
@@ -301,18 +320,41 @@ class CompetencesContainer extends Component<Props, State> {
           search={this.handleSearch}
           typeFilter={false}
           hasPagination={false}
-          hasEdit={false}
+          hasEdit={true}
           hasDelete={false}
           hasAdd={false}
         />
 
-        <FullModal open={!!this.isEdit(this.props.location)} handleClose={this.closeEditModal} title="Modifier Compétence">
-          <div className={`${this.props.classes.fill} ${this.props.classes.center}`}>{this.renderModalContent()}</div>
+        <FullModal
+          open={!!this.isEdit(this.props.location)}
+          handleClose={this.closeEditModal}
+          title="Modifier Compétence"
+          fullScreen
+        >
+          <div
+            className={`${this.props.classes.fill} ${
+              this.props.classes.center
+            }`}
+          >
+            {this.renderModalContent()}
+          </div>
         </FullModal>
-        <FullModal open={this.state.open} handleClose={this.handleClose} title="Créer Compétence">
-          <CompetenceForm onSubmitHandler={this.create} buttonName="Créer Compétence" />
+        <FullModal
+          open={this.state.open}
+          handleClose={this.handleClose}
+          title="Créer Compétence"
+        >
+          {/* <CompetenceForm
+            onSubmitHandler={this.create}
+            buttonName="Créer Compétence"
+          /> */}
         </FullModal>
-        <ConfirmModal open={this.state.openConfirm} YesButton={this.YesDelete} NoButton={this.NoDelete} close={this.NoDelete} />
+        <ConfirmModal
+          open={this.state.openConfirm}
+          YesButton={this.YesDelete}
+          NoButton={this.NoDelete}
+          close={this.NoDelete}
+        />
       </>
     );
   }
@@ -346,11 +388,16 @@ function mapStateToProps(state: ReduxState): MapToProps {
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
   return {
-    getListCompetences: (payload) => dispatch(listCompetencesActions.listCompetencesRequest(payload)),
-    deleteCompetence: (payload) => dispatch(deleteCompetenceActions.deleteCompetenceRequest(payload)),
-    getCompetence: (payload) => dispatch(getCompetenceActions.getCompetenceRequest(payload)),
-    editCompetence: (payload) => dispatch(patchCompetenceActions.patchCompetenceRequest(payload)),
-    createCompetence: (payload) => dispatch(createCompetenceActions.createCompetenceRequest(payload)),
+    getListCompetences: payload =>
+      dispatch(listCompetencesActions.listCompetencesRequest(payload)),
+    deleteCompetence: payload =>
+      dispatch(deleteCompetenceActions.deleteCompetenceRequest(payload)),
+    getCompetence: payload =>
+      dispatch(getCompetenceActions.getCompetenceRequest(payload)),
+    editCompetence: payload =>
+      dispatch(patchCompetenceActions.patchCompetenceRequest(payload)),
+    createCompetence: payload =>
+      dispatch(createCompetenceActions.createCompetenceRequest(payload)),
   };
 }
 
