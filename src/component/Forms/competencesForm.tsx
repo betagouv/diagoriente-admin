@@ -15,10 +15,10 @@ interface Props {
   submitText: string;
   requestClose: () => void;
   classes: any;
-  n1?: string;
-  n2?: string;
-  n3?: string;
-  n4?: string;
+  n1: string;
+  n2: string;
+  n3: string;
+  n4: string;
   n1desc?: string;
   n2desc?: string;
   n3desc?: string;

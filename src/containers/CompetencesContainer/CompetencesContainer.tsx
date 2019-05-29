@@ -37,6 +37,7 @@ import createCompetenceActions from '../../reducers/competences/createCompetence
 import { encodeUri, decodeUri } from '../../utils/url';
 import { Button } from '@material-ui/core';
 import Collapse from '../../component/CollaplseList/collpase';
+import {isEmpty} from  'lodash'
 
 const styles = () =>
   createStyles({
@@ -275,16 +276,45 @@ class CompetencesContainer extends Component<Props, State> {
     if (this.props.getCompetenceFetching) {
       return <CircularProgress />;
     }
+   
     return (
       <CompetenceForm
-        n1={this.props.competence.niveau && this.props.competence.niveau[0].title}
-        n2={this.props.competence.niveau && this.props.competence.niveau[1].title}
-        n3={this.props.competence.niveau && this.props.competence.niveau[2].title}
-        n4={this.props.competence.niveau && this.props.competence.niveau[3].title}
-        n1desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
-        n2desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
-        n3desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
-        n4desc={this.props.competence.niveau && this.props.competence.niveau[0].sub_title}
+        n1={
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[0].title
+            : ''
+        }
+        n2={
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[1].title
+            : ''
+        }
+        n3={
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[2].title
+            : ''
+        }
+        n4={
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[3].title
+            : ''
+        }
+        n1desc={
+          this.props.competence.niveau &&
+          this.props.competence.niveau[0].sub_title
+        }
+        n2desc={
+          this.props.competence.niveau &&
+          this.props.competence.niveau[0].sub_title
+        }
+        n3desc={
+          this.props.competence.niveau &&
+          this.props.competence.niveau[0].sub_title
+        }
+        n4desc={
+          this.props.competence.niveau &&
+          this.props.competence.niveau[0].sub_title
+        }
         onSubmitHandler={this.edit}
         requestClose={() => {}}
         submitText="Modifier Competence"
@@ -293,14 +323,14 @@ class CompetencesContainer extends Component<Props, State> {
   }
 
   render() {
+    
     return (
       <>
         {this.props.fetching && (
           <div
             className={`${this.props.classes.absolute} ${
               this.props.classes.center
-            }`}
-          >
+            }`}>
             <CircularProgress />
           </div>
         )}
@@ -329,17 +359,12 @@ class CompetencesContainer extends Component<Props, State> {
           open={!!this.isEdit(this.props.location)}
           handleClose={this.closeEditModal}
           title="Modifier Compétence"
-          fullScreen
-        >
-          <div
-            className={
-              this.props.classes.center
-            }
-          >
+          fullScreen>
+          <div className={this.props.classes.center}>
             {this.renderModalContent()}
           </div>
         </FullModal>
-        
+
         <ConfirmModal
           open={this.state.openConfirm}
           YesButton={this.YesDelete}
@@ -379,15 +404,15 @@ function mapStateToProps(state: ReduxState): MapToProps {
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
   return {
-    getListCompetences: payload =>
+    getListCompetences: (payload) =>
       dispatch(listCompetencesActions.listCompetencesRequest(payload)),
-    deleteCompetence: payload =>
+    deleteCompetence: (payload) =>
       dispatch(deleteCompetenceActions.deleteCompetenceRequest(payload)),
-    getCompetence: payload =>
+    getCompetence: (payload) =>
       dispatch(getCompetenceActions.getCompetenceRequest(payload)),
-    editCompetence: payload =>
+    editCompetence: (payload) =>
       dispatch(patchCompetenceActions.patchCompetenceRequest(payload)),
-    createCompetence: payload =>
+    createCompetence: (payload) =>
       dispatch(createCompetenceActions.createCompetenceRequest(payload)),
   };
 }
