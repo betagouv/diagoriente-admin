@@ -37,7 +37,7 @@ import createCompetenceActions from '../../reducers/competences/createCompetence
 import { encodeUri, decodeUri } from '../../utils/url';
 import { Button } from '@material-ui/core';
 import Collapse from '../../component/CollaplseList/collpase';
-import {isEmpty} from  'lodash'
+import { isEmpty } from 'lodash';
 
 const styles = () =>
   createStyles({
@@ -276,7 +276,7 @@ class CompetencesContainer extends Component<Props, State> {
     if (this.props.getCompetenceFetching) {
       return <CircularProgress />;
     }
-   
+
     return (
       <CompetenceForm
         n1={
@@ -300,20 +300,24 @@ class CompetencesContainer extends Component<Props, State> {
             : ''
         }
         n1desc={
-          this.props.competence.niveau &&
-          this.props.competence.niveau[0].sub_title
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[0].sub_title
+            : ''
         }
         n2desc={
-          this.props.competence.niveau &&
-          this.props.competence.niveau[0].sub_title
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[0].sub_title
+            : ''
         }
         n3desc={
-          this.props.competence.niveau &&
-          this.props.competence.niveau[0].sub_title
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[0].sub_title
+            : ''
         }
         n4desc={
-          this.props.competence.niveau &&
-          this.props.competence.niveau[0].sub_title
+          !isEmpty(this.props.competence.niveau)
+            ? this.props.competence.niveau[0].sub_title
+            : ''
         }
         onSubmitHandler={this.edit}
         requestClose={() => {}}
@@ -323,7 +327,6 @@ class CompetencesContainer extends Component<Props, State> {
   }
 
   render() {
-    
     return (
       <>
         {this.props.fetching && (
