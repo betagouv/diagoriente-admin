@@ -332,23 +332,14 @@ class CompetencesContainer extends Component<Props, State> {
           fullScreen
         >
           <div
-            className={`${this.props.classes.fill} ${
+            className={
               this.props.classes.center
-            }`}
+            }
           >
             {this.renderModalContent()}
           </div>
         </FullModal>
-        <FullModal
-          open={this.state.open}
-          handleClose={this.handleClose}
-          title="Créer Compétence"
-        >
-          {/* <CompetenceForm
-            onSubmitHandler={this.create}
-            buttonName="Créer Compétence"
-          /> */}
-        </FullModal>
+        
         <ConfirmModal
           open={this.state.openConfirm}
           YesButton={this.YesDelete}
