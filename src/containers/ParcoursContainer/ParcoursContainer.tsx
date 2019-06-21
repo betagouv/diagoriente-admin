@@ -291,11 +291,6 @@ class ParcoursContainer extends Component<Props> {
       render: customRender,
     },
     {
-      id: 'userInstitution',
-      title: 'SNU',
-      render: customRender,
-    },
-    {
       id: 'advisorName',
       title: 'Conseiller',
       render: customRender,
