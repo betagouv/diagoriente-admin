@@ -97,6 +97,7 @@ class ResourcesForm extends React.Component<Props, State> {
           <Grid container spacing={8} justify="center">
             <Grid item className={classes.sketchCountainer}>
               <SketchPicker
+              // @ts-ignore: Unreachable code error
                 color={this.state.background}
                 onChangeComplete={this.handleChangeComplete}
               />
