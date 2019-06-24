@@ -95,6 +95,12 @@ class UsersContainer extends Component<Props> {
       title: 'Nom et prénom',
       render: (profile: any) => `${profile.firstName}  ${profile.lastName}`,
     },
+       {
+      id: 'profile',
+      title: 'SNU',
+      render: (profile: any) => profile.institution,
+    },
+
     {
       id: 'role',
       title: 'Role',
