@@ -12,8 +12,14 @@ import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import AutoComplete from '../inputs/autoComplete';
 import Close from '../Icons/Close';
-import { listActivities } from '../../requests';
-import { Activity, ListActivitiesResponse, Response } from 'requests';
+import { listActivities, listCompetences } from '../../requests';
+import {
+  Activity,
+  ListActivitiesResponse,
+  Response,
+  ListCompetencesResponse,
+  ICompetence,
+} from 'requests';
 
 export interface SubmitParams {
   title: string;
@@ -38,6 +44,7 @@ interface Props {
   secteur: { _id: string; title: string }[];
   selectedSecteur: string;
   selectedSecteurId?: string;
+  competences?: ICompetence[];
 }
 
 class CreateTheme extends React.Component<Props> {
@@ -59,11 +66,17 @@ class CreateTheme extends React.Component<Props> {
     activity: '',
     verified: this.props.verified || false,
     submit: false,
-    secteur:'' || this.props.selectedSecteur,
+    secteur: '' || this.props.selectedSecteur,
     activities: this.props.activities
       ? this.props.activities.map(activity => ({
         label: activity.title,
         value: activity._id,
+      }))
+      : [],
+    Competences: this.props.competences
+      ? this.props.competences.map(competence => ({
+        label: competence.title,
+        value: competence._id,
       }))
       : [],
   };
@@ -106,7 +119,7 @@ class CreateTheme extends React.Component<Props> {
     this.setState({ roleError, role: e.target.value, emptyRole: !!roleError });
   }
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({  secteur: e.target.value });
+    this.setState({ secteur: e.target.value });
   }
 
   handleSuggestion = async (value: string) => {
@@ -131,6 +144,33 @@ class CreateTheme extends React.Component<Props> {
   activitiesChange = (activities: { label: string; value: string }[]) => {
     this.setState({
       activities,
+    });
+  }
+
+  handleSuggestionCompetences = async (value: string) => {
+    try {
+      const response: Response<any> = await listCompetences(
+        {
+          search: value,
+          perPage: 10,
+        },
+      );
+
+      if (response.code === 200 && response.data) {
+        return response.data.map((suggestion: any) => ({
+          value: suggestion._id,
+          label: suggestion.title,
+        }));
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  CompetencesChange = (Competences: { label: string; value: string }[]) => {
+    this.setState({
+      Competences,
     });
   }
 
@@ -162,7 +202,6 @@ class CreateTheme extends React.Component<Props> {
   }
 
   public render(): JSX.Element {
-
     const { classes } = this.props;
     return (
       <div className={classes.container}>
@@ -209,21 +248,30 @@ class CreateTheme extends React.Component<Props> {
                 { _id: 'personal', title: 'personal' },
               ]}
             />
-            {this.state.role === 'professional' ? <SelectInput
-              label="Secteur"
-              Selectvalue={this.state.secteur}
-              handleChange={this.handleSecteurChange}
-              id="2"
-              choice={this.props.secteur}
-              defaultValue={this.props.selectedSecteur}
-              defaultValueID={this.props.selectedSecteurId}
-            /> : null }
+            {this.state.role === 'professional' ? (
+              <SelectInput
+                label="Secteur"
+                Selectvalue={this.state.secteur}
+                handleChange={this.handleSecteurChange}
+                id="2"
+                choice={this.props.secteur}
+                defaultValue={this.props.selectedSecteur}
+                defaultValueID={this.props.selectedSecteurId}
+              />
+            ) : null}
             <AutoComplete
               placeholder="activité"
               handleChange={this.activitiesChange}
               value={this.state.activities}
               title={'activities'}
               handleInputChange={this.handleSuggestion}
+            />
+            <AutoComplete
+              placeholder="Compétences"
+              handleChange={this.CompetencesChange}
+              value={this.state.Competences}
+              title={'Competences'}
+              handleInputChange={this.handleSuggestionCompetences}
             />
 
             <Button

@@ -218,7 +218,7 @@ declare module 'requests' {
   }
   /* Competences */
   export interface ICompetence {
-    _id?: string;
+    _id: string;
     title: string;
     rank?: string;
     niveau :Iniveau[];
