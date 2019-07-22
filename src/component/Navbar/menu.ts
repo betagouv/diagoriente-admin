@@ -11,6 +11,7 @@ import AccountCircle from '@material-ui/icons/AccountCircleOutlined';
 import BusinessCenter from '@material-ui/icons/BusinessCenterOutlined';
 import Layers from '@material-ui/icons/LayersOutlined';
 import question_answer from '@material-ui/icons/FeedbackOutlined';
+import context from '@material-ui/icons/VerifiedUserOutlined';
 
 
 const menu = [
@@ -85,6 +86,12 @@ const menu = [
     url: '/familleRank',
     icon: Layers,
     id: 11,
+  },
+  {
+    nom: 'Contexte',
+    url: '/context',
+    icon: context,
+    id: 12,
   },
 ];
 

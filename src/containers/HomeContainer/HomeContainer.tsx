@@ -21,6 +21,7 @@ import './home.css';
 import FamilleContainer from '../FamilleContainer';
 import JobsContainer from '../JobsContainer';
 import ConstContainer from '../familleConstContainer';
+import ContextContainer from '../ContextContainer';
 
 interface MapToProps {
   language: Language;
@@ -68,6 +69,7 @@ class HomeContainer extends React.Component<Props> {
                 <Route path="/parcours" component={ParcoursContainer} />
                 <Route path="/jobs" component={JobsContainer} />
                 <Route path="/familleRank" component={ConstContainer}/>
+                <Route path="/context" component={ContextContainer}/>
               </>
             )}
             <Route path="/parcours" component={ParcoursContainer} />

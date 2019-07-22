@@ -45,7 +45,7 @@ declare module 'requests' {
     nom: string;
     rank: string;
   }
- 
+
   export interface ListInterestsParams {
     page?: number;
     perPage?: number;
@@ -66,7 +66,7 @@ declare module 'requests' {
   /* Question */
   export interface Question {
     title: string;
-    _id:string
+    _id: string;
   }
   export interface ListQuestionsParams {
     page?: number;
@@ -124,6 +124,7 @@ declare module 'requests' {
     activities: Activity[];
     resources: { color: string; backgroundColor: string; icon: string };
     parentId: string;
+    required?: string[];
   }
   export interface ListThemesParams {
     page?: number;
@@ -146,6 +147,7 @@ declare module 'requests' {
     };
     icon?: File;
     parentId?: string;
+    required?: string[];
   }
   export type GetThemeParams = DeleteOrGetParams;
   export type DeleteThemeParams = DeleteOrGetParams;
@@ -221,25 +223,25 @@ declare module 'requests' {
     _id: string;
     title: string;
     rank?: string;
-    niveau :Iniveau[];
+    niveau: Iniveau[];
+    color: string;
   }
   export interface Iniveau {
     title: string;
-    sub_title:  string;
+    sub_title: string;
     _id?: string;
-
   }
 
   export interface CreateComptenceParams {
     title: string;
     rank: string;
-    niveau :Iniveau[];
+    niveau: Iniveau[];
   }
 
   export interface EditComptenceParams {
-    niveau :Iniveau[];
+    niveau: Iniveau[];
+    color: string;
   }
-
 
   export type ListCompetencesResponse = ListResponse<ICompetence>;
   export type GetCompetenceParams = DeleteOrGetParams;
@@ -406,4 +408,23 @@ declare module 'requests' {
     perPage?: number;
     search?: string;
   };
+
+  export interface IContext {
+    _id: string;
+    title: string;
+    description: string;
+  }
+
+  export type ListContextResponse = ListResponse<IContext>;
+  export type GetContextParams = DeleteOrGetParams;
+  export interface CreateContextParams {
+    title: string;
+    description: string;
+  }
+  export type PatchContextparams = CreateContextParams & { id: string };
+  export interface ListContextsParams {
+    page?: number;
+    perPage?: number;
+    search?: string;
+  }
 }

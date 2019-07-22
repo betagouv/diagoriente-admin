@@ -312,6 +312,7 @@ class ThemesContainer extends Component<Props, State> {
     verified,
     activities,
     parentId,
+    required,
   }: SubmitParams) => {
     const id = this.props.theme._id;
     const node = this.resourcesForm;
@@ -327,6 +328,7 @@ class ThemesContainer extends Component<Props, State> {
         icon,
         parentId,
         verified,
+        required,
         title,
         description,
         activities,
@@ -344,6 +346,7 @@ class ThemesContainer extends Component<Props, State> {
     verified,
     activities,
     parentId,
+    required,
   }: SubmitParams) => {
     const node = this.resourcesForm;
     if (node) {
@@ -357,6 +360,7 @@ class ThemesContainer extends Component<Props, State> {
         verified,
         activities,
         icon,
+        required,
         resources: {
           color: backgroundColor,
           backgroundColor,
@@ -462,6 +466,7 @@ class ThemesContainer extends Component<Props, State> {
           {...initialValues}
           secteur={this.props.secteurs}
           selectedSecteur={this.props.theme.parentId}
+          required={this.props.theme.required}
         />
         <div className={this.props.classes.leftModalContainer}>
           <ResourcesForm

@@ -28,6 +28,7 @@ export interface SubmitParams {
   verified: boolean;
   activities: string[];
   parentId?: string;
+  required?: any[];
 }
 
 interface Props {
@@ -44,7 +45,7 @@ interface Props {
   secteur: { _id: string; title: string }[];
   selectedSecteur: string;
   selectedSecteurId?: string;
-  competences?: ICompetence[];
+  required?: any[];
 }
 
 class CreateTheme extends React.Component<Props> {
@@ -73,8 +74,8 @@ class CreateTheme extends React.Component<Props> {
         value: activity._id,
       }))
       : [],
-    Competences: this.props.competences
-      ? this.props.competences.map(competence => ({
+    required: this.props.required
+      ? this.props.required.map(competence => ({
         label: competence.title,
         value: competence._id,
       }))
@@ -149,12 +150,10 @@ class CreateTheme extends React.Component<Props> {
 
   handleSuggestionCompetences = async (value: string) => {
     try {
-      const response: Response<any> = await listCompetences(
-        {
-          search: value,
-          perPage: 10,
-        },
-      );
+      const response: Response<any> = await listCompetences({
+        search: value,
+        perPage: 10,
+      });
 
       if (response.code === 200 && response.data) {
         return response.data.map((suggestion: any) => ({
@@ -170,7 +169,7 @@ class CreateTheme extends React.Component<Props> {
 
   CompetencesChange = (Competences: { label: string; value: string }[]) => {
     this.setState({
-      Competences,
+      required: Competences,
     });
   }
 
@@ -197,6 +196,7 @@ class CreateTheme extends React.Component<Props> {
         verified: this.state.verified,
         activities: this.state.activities.map(activity => activity.value),
         parentId: this.state.secteur,
+        required: this.state.required.map(required => required.value),
       });
     }
   }
@@ -269,7 +269,7 @@ class CreateTheme extends React.Component<Props> {
             <AutoComplete
               placeholder="Compétences"
               handleChange={this.CompetencesChange}
-              value={this.state.Competences}
+              value={this.state.required}
               title={'Competences'}
               handleInputChange={this.handleSuggestionCompetences}
             />

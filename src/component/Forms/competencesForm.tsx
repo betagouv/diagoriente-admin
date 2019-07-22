@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from '../inputs/input';
 import { EditComptenceParams } from 'requests';
+import { SketchPicker } from 'react-color';
 
 interface Props {
   onSubmitHandler(params: EditComptenceParams): void;
@@ -24,6 +25,7 @@ interface Props {
   n3desc?: string;
   n4desc?: string;
   fetching?: boolean;
+  color?: string;
 }
 
 interface State {
@@ -48,6 +50,8 @@ interface State {
   n2desc: string;
   n3desc: string;
   n4desc: string;
+
+  background: string;
 }
 
 class CompetencesForm extends React.Component<Props, State> {
@@ -77,6 +81,7 @@ class CompetencesForm extends React.Component<Props, State> {
       n2desc: this.props.n2desc || '',
       n3desc: this.props.n3desc || '',
       n4desc: this.props.n4desc || '',
+      background: this.props.color || '',
     };
   }
 
@@ -156,6 +161,9 @@ class CompetencesForm extends React.Component<Props, State> {
   handlechangeN4desc = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ n4desc: e.target.value });
   }
+  handleChangeComplete = (color: any) => {
+    this.setState({ background: color.hex });
+  }
 
   // oncreate theme handler
   onSubmitHandler = (e: MouseEvent<HTMLInputElement>) => {
@@ -173,13 +181,14 @@ class CompetencesForm extends React.Component<Props, State> {
           { title: this.state.n3Value, sub_title: this.state.n3desc },
           { title: this.state.n4Value, sub_title: this.state.n4desc },
         ],
+        color: this.state.background,
       });
     }
   }
 
   public render(): JSX.Element {
     const { classes } = this.props;
-
+    console.log(this.state.background);
     return (
       <div className={classes.container}>
         {this.props.fetching && (
@@ -193,80 +202,95 @@ class CompetencesForm extends React.Component<Props, State> {
         )}
         <Card className={classes.card}>
           <Grid container spacing={8} justify="center">
-            <Grid item sm={8}>
-              <Paper className={classes.paper}>
-                <Input
-                  placeholder="Niveau 1"
-                  id="1"
-                  label="Niveau 1"
-                  InputIndication={this.state.n1Error}
-                  error={this.state.errorForN1}
-                  value={this.state.n1Value}
-                  onChangeInput={this.handleChangeN1}
-                />
-                <Input
-                  placeholder="Niveau 1 description"
-                  id="1"
-                  label="Niveau 1 description"
-                  value={this.state.n1desc}
-                  onChangeInput={this.handlechangeN1desc}
-                />
-              </Paper>
-              <Paper className={classes.paper}>
-                <Input
-                  placeholder="Niveau 2"
-                  id="1"
-                  label="Niveau 2"
-                  InputIndication={this.state.n2Error}
-                  error={this.state.errorForN2}
-                  value={this.state.n2Value}
-                  onChangeInput={this.handleChangeN2}
-                />
-                <Input
-                  placeholder="Niveau 2 description"
-                  id="1"
-                  label="Niveau 2 description"
-                  value={this.state.n2desc}
-                  onChangeInput={this.handlechangeN2desc}
-                />
-              </Paper>
-              <Paper className={classes.paper}>
-                <Input
-                  placeholder="Niveau 3"
-                  id="1"
-                  label="Niveau 3"
-                  InputIndication={this.state.n3Error}
-                  error={this.state.errorForN3}
-                  value={this.state.n3Value}
-                  onChangeInput={this.handleChangeN3}
-                />
-                <Input
-                  placeholder="Niveau 3 description"
-                  id="1"
-                  label="Niveau 3 description"
-                  value={this.state.n3desc}
-                  onChangeInput={this.handlechangeN3desc}
-                />
-              </Paper>
-              <Paper className={classes.paper}>
-                <Input
-                  placeholder="Niveau 4"
-                  id="1"
-                  label="Niveau 4"
-                  InputIndication={this.state.n4Error}
-                  error={this.state.errorForN4}
-                  value={this.state.n4Value}
-                  onChangeInput={this.handleChangeN4}
-                />
-                <Input
-                  placeholder="Niveau 4 description"
-                  id="1"
-                  label="Niveau 4 description"
-                  value={this.state.n4desc}
-                  onChangeInput={this.handlechangeN4desc}
-                />
-              </Paper>
+            <Grid container spacing={8} justify="center">
+              <Grid item sm={8}>
+                <Paper className={classes.paper}>
+                  <Input
+                    placeholder="Niveau 1"
+                    id="1"
+                    label="Niveau 1"
+                    InputIndication={this.state.n1Error}
+                    error={this.state.errorForN1}
+                    value={this.state.n1Value}
+                    onChangeInput={this.handleChangeN1}
+                  />
+                  <Input
+                    placeholder="Niveau 1 description"
+                    id="1"
+                    label="Niveau 1 description"
+                    value={this.state.n1desc}
+                    onChangeInput={this.handlechangeN1desc}
+                  />
+                </Paper>
+                <Paper className={classes.paper}>
+                  <Input
+                    placeholder="Niveau 2"
+                    id="1"
+                    label="Niveau 2"
+                    InputIndication={this.state.n2Error}
+                    error={this.state.errorForN2}
+                    value={this.state.n2Value}
+                    onChangeInput={this.handleChangeN2}
+                  />
+                  <Input
+                    placeholder="Niveau 2 description"
+                    id="1"
+                    label="Niveau 2 description"
+                    value={this.state.n2desc}
+                    onChangeInput={this.handlechangeN2desc}
+                  />
+                </Paper>
+                <Paper className={classes.paper}>
+                  <Input
+                    placeholder="Niveau 3"
+                    id="1"
+                    label="Niveau 3"
+                    InputIndication={this.state.n3Error}
+                    error={this.state.errorForN3}
+                    value={this.state.n3Value}
+                    onChangeInput={this.handleChangeN3}
+                  />
+                  <Input
+                    placeholder="Niveau 3 description"
+                    id="1"
+                    label="Niveau 3 description"
+                    value={this.state.n3desc}
+                    onChangeInput={this.handlechangeN3desc}
+                  />
+                </Paper>
+                <Paper className={classes.paper}>
+                  <Input
+                    placeholder="Niveau 4"
+                    id="1"
+                    label="Niveau 4"
+                    InputIndication={this.state.n4Error}
+                    error={this.state.errorForN4}
+                    value={this.state.n4Value}
+                    onChangeInput={this.handleChangeN4}
+                  />
+                  <Input
+                    placeholder="Niveau 4 description"
+                    id="1"
+                    label="Niveau 4 description"
+                    value={this.state.n4desc}
+                    onChangeInput={this.handlechangeN4desc}
+                  />
+                </Paper>
+              </Grid>
+              <Grid item sm={8}>
+                <Paper className={classes.sketchContainer}>
+                  <SketchPicker
+                    color={this.state.background}
+                    onChangeComplete={this.handleChangeComplete}
+                  />
+                  <div
+                    className={classes.colorContainer}
+                    style={{ background: this.state.background }}
+                  />
+                </Paper>
+              </Grid>
             </Grid>
+
             <Grid item xs={12}>
               <Button
                 variant="contained"
@@ -329,6 +353,16 @@ const styles = () =>
     paper: {
       padding: 25,
       margin: 10,
+    },
+    colorContainer: {
+      width: 100,
+      height: 100,
+      borderRadius: 10,
+    },
+    sketchContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
     },
   });
 

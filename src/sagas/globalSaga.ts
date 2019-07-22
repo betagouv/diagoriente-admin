@@ -65,6 +65,11 @@ import editQuestion from './questions/editQuestions';
 import getQuestion from './questions/getQuestion';
 import listQuestions from './questions/listQuestions';
 
+import listContext from './context/listContext';
+import getContext from './context/getContext';
+import patchContext from './context/patchContext';
+import createContext from './context/createContext';
+
 const sagas = [
   configSaga,
   loginSaga,
@@ -118,11 +123,13 @@ const sagas = [
   deleteQuestion,
   editQuestion,
   getQuestion,
-  listQuestions
-
-
+  listQuestions,
+  listContext,
+  getContext,
+  patchContext,
+  createContext,
 ];
 
 export default function* () {
-  yield all(sagas.map((saga) => fork(saga)));
+  yield all(sagas.map(saga => fork(saga)));
 }

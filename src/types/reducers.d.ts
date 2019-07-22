@@ -18,7 +18,9 @@ declare module 'reducers' {
     ListFamillesResponse,
     Job,
     ListRanksResponse,
-    Question
+    Question,
+    IContext,
+    ListContextResponse
   } from 'requests';
 
   export interface ImmutableMap<T> extends Map<string, any> {
@@ -247,6 +249,18 @@ declare module 'reducers' {
     listRanks : ListRanks;
   }>
 
+  export type CreateContext = ImmutableMap<ApiReducer>
+  export type GetContext = ImmutableMap<{context: IContext} & ApiReducer>
+  export type PatchContext = ImmutableMap<ApiReducer>
+  export type ListContext = ImmutableMap<{contexts: ListContextResponse} & ApiReducer >;
+
+  export type Context = ImmutableMap<{
+    createContext: CreateContext;
+    getContext: GetContext;
+    patchContext: PatchContext;
+    listContext: ListContext;
+  }>
+
   export interface ReduxState {
     config: ConfigState;
     router: RouterState;
@@ -265,6 +279,7 @@ declare module 'reducers' {
     famille: FamilleInteret;
     job: getJobs;
     ranks: IRanks;
-    questions:Questions
+    questions:Questions;
+    Context: Context;
   }
 }

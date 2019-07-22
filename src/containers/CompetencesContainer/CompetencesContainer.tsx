@@ -319,6 +319,7 @@ class CompetencesContainer extends Component<Props, State> {
             ? this.props.competence.niveau[0].sub_title
             : ''
         }
+        color ={ this.props.competence.color && this.props.competence.color}
         onSubmitHandler={this.edit}
         requestClose={() => {}}
         submitText="Modifier Competence"
