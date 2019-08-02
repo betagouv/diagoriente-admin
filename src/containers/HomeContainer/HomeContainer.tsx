@@ -22,6 +22,7 @@ import FamilleContainer from '../FamilleContainer';
 import JobsContainer from '../JobsContainer';
 import ConstContainer from '../familleConstContainer';
 import ContextContainer from '../ContextContainer';
+import EnvironmentContainer from '../EnvironmentContainer';
 
 interface MapToProps {
   language: Language;
@@ -45,9 +46,9 @@ class HomeContainer extends React.Component<Props> {
       pathname: this.props.location.pathname,
       search: search
         ? encodeUri({ ...decodeUri(search), lang: value })
-        : encodeUri({ lang: value }),
+        : encodeUri({ lang: value })
     });
-  }
+  };
 
   public render(): JSX.Element {
     return (
@@ -68,8 +69,9 @@ class HomeContainer extends React.Component<Props> {
                 <Route path="/famille" component={FamilleContainer} />
                 <Route path="/parcours" component={ParcoursContainer} />
                 <Route path="/jobs" component={JobsContainer} />
-                <Route path="/familleRank" component={ConstContainer}/>
-                <Route path="/context" component={ContextContainer}/>
+                <Route path="/familleRank" component={ConstContainer} />
+                <Route path="/context" component={ContextContainer} />
+                <Route path="/environment" component={EnvironmentContainer} />
               </>
             )}
             <Route path="/parcours" component={ParcoursContainer} />
@@ -83,7 +85,7 @@ class HomeContainer extends React.Component<Props> {
 
 const mapStateToProps = (state: ReduxState): MapToProps => ({
   language: state.config.get('language'),
-  role: state.login.get('role'),
+  role: state.login.get('role')
 });
 
 export default injectIntl(connect(mapStateToProps)(HomeContainer));

@@ -385,6 +385,7 @@ declare module 'requests' {
     secteur: { title: string; _id: string }[];
     accessibility: string;
     interested: boolean;
+    environments: IEnvironment[];
   }
 
   export interface CreateJobData {
@@ -395,6 +396,7 @@ declare module 'requests' {
     formations: any;
     secteur: any;
     accessibility?: string;
+    environments: IEnvironment[];
   }
 
   export interface Rank {
@@ -418,6 +420,11 @@ declare module 'requests' {
     description: string;
   }
 
+  export interface IEnvironment {
+    _id: string;
+    title: string;
+  }
+
   export type ListContextResponse = ListResponse<IContext>;
   export type GetContextParams = DeleteOrGetParams;
   export interface CreateContextParams {
@@ -426,6 +433,18 @@ declare module 'requests' {
   }
   export type PatchContextparams = CreateContextParams & { id: string };
   export interface ListContextsParams {
+    page?: number;
+    perPage?: number;
+    search?: string;
+  }
+
+  export type ListEnvironmentResponse = ListResponse<IEnvironment>;
+  export type GetEnvironmentParams = DeleteOrGetParams;
+  export interface CreateEnvironmentParams {
+    title: string;
+  }
+  export type PatchEnvironmentparams = CreateEnvironmentParams & { id: string };
+  export interface ListEnvironmentsParams {
     page?: number;
     perPage?: number;
     search?: string;

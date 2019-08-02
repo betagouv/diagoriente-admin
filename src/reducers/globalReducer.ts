@@ -21,6 +21,7 @@ import famille from './famille';
 import { reducer as job } from './job/GetJob';
 import ranks from './familleRank';
 import Context from './context';
+import Environment from './environment';
 
 // redux reducers
 export default (history: any) =>
@@ -42,5 +43,6 @@ export default (history: any) =>
     job,
     ranks,
     Context,
-    router: connectRouter(history),
+    Environment,
+    router: connectRouter(history)
   });

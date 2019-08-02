@@ -51,22 +51,22 @@ interface State {
 }
 
 const formatInterests = (
-  interests: { _id: string; weight: number; rank: string; nom: string }[],
+  interests: { _id: string; weight: number; rank: string; nom: string }[]
 ) => {
   return interests.map(interest => ({
     value: interest._id,
     weight: `${interest.weight}`,
-    label: interest.nom,
+    label: interest.nom
   }));
 };
 
 const formatCompétence = (
-  competences: { _id: string; weight: number; rank: string; title: string }[],
+  competences: { _id: string; weight: number; rank: string; title: string }[]
 ) => {
   return competences.map(competence => ({
     value: competence._id,
     weight: `${competence.weight}`,
-    label: competence.title,
+    label: competence.title
   }));
 };
 
@@ -75,7 +75,7 @@ class JobForm extends React.Component<Props, State> {
     submitText: 'Créer Emplois',
     onSubmit: () => {},
     interests: [],
-    competences: [],
+    competences: []
   };
 
   static getDerivedStateFromProps(props: Props, state: State) {
@@ -83,7 +83,7 @@ class JobForm extends React.Component<Props, State> {
     if (state.descriptionProps !== props.description) {
       returnValue = {
         description: props.description,
-        descriptionProps: props.description,
+        descriptionProps: props.description
       };
     }
     if (state.titleProps !== props.title) {
@@ -94,7 +94,7 @@ class JobForm extends React.Component<Props, State> {
     if (!isEqual(state.interestsProps, props.interests)) {
       const interestsPart = {
         interests: formatInterests(props.interests),
-        interestsProps: props.interests,
+        interestsProps: props.interests
       };
       returnValue = returnValue
         ? { ...returnValue, ...interestsPart }
@@ -104,7 +104,7 @@ class JobForm extends React.Component<Props, State> {
     if (!isEqual(state.competencesProps, props.competences)) {
       const competencePart = {
         competences: formatCompétence(props.competences),
-        competencesProps: props.competences,
+        competencesProps: props.competences
       };
       returnValue = returnValue
         ? { ...returnValue, ...competencePart }
@@ -114,7 +114,7 @@ class JobForm extends React.Component<Props, State> {
     if (state.secteurProps !== props.selectedSecteur) {
       const secteurPart = {
         secteurProps: props.selectedSecteur,
-        secteur: props.selectedSecteur,
+        secteur: props.selectedSecteur
       };
       returnValue = returnValue
         ? { ...returnValue, ...secteurPart }
@@ -123,7 +123,7 @@ class JobForm extends React.Component<Props, State> {
     if (state.AcceccibleProps !== props.Acceccible) {
       const AccecciblePart = {
         Acceccible: props.Acceccible,
-        AcceccibleProps: props.Acceccible,
+        AcceccibleProps: props.Acceccible
       };
       returnValue = returnValue
         ? { ...returnValue, ...AccecciblePart }
@@ -147,7 +147,7 @@ class JobForm extends React.Component<Props, State> {
     secteurProps: this.props.selectedSecteur,
     secteur: this.props.selectedSecteur || '',
     Acceccible: this.props.Acceccible || '',
-    AcceccibleProps: this.props.Acceccible,
+    AcceccibleProps: this.props.Acceccible
   };
 
   isValid = () => {
@@ -157,7 +157,7 @@ class JobForm extends React.Component<Props, State> {
       description,
       descriptionError,
       competences,
-      interests,
+      interests
     } = this.state;
 
     const titleValid = !!title && !titleError;
@@ -165,44 +165,44 @@ class JobForm extends React.Component<Props, State> {
     const interestsValid = this.isWeightValid(interests);
     const competencesValid = this.isWeightValid(competences);
     return titleValid && descriptionValid && interestsValid && competencesValid;
-  }
+  };
 
   isWeightValid = (
-    array: { label: string; value: string; weight: string }[],
+    array: { label: string; value: string; weight: string }[]
   ) => {
     if (array.length === 0) return true;
     if (array.find(({ weight }) => (weight as any) <= 0)) return false;
     return true;
-  }
+  };
 
   handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({
       title: e.target.value,
-      titleError: e.target.value.length < 3,
+      titleError: e.target.value.length < 3
     });
-  }
+  };
   handleAccecibleChange = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({ Acceccible: e.target.value });
-  }
+  };
 
   handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({
       description: e.target.value,
-      descriptionError: e.target.value.length < 3,
+      descriptionError: e.target.value.length < 3
     });
-  }
+  };
 
   handleInterestChange = (
-    interests: { value: string; weight: string; label: string }[],
+    interests: { value: string; weight: string; label: string }[]
   ) => {
     this.setState({ interests });
-  }
+  };
 
   handleCompetenceChange = (
-    competences: { value: string; weight: string; label: string }[],
+    competences: { value: string; weight: string; label: string }[]
   ) => {
     this.setState({ competences });
-  }
+  };
 
   getCompetence = async (value: string) => {
     try {
@@ -210,14 +210,14 @@ class JobForm extends React.Component<Props, State> {
       if (response.code === 200 && response.data) {
         return response.data.map((d: any) => ({
           label: d.title,
-          value: d._id,
+          value: d._id
         }));
       }
       return [];
     } catch (e) {
       return [];
     }
-  }
+  };
 
   getInterest = async (value: string) => {
     try {
@@ -229,7 +229,7 @@ class JobForm extends React.Component<Props, State> {
     } catch (e) {
       return [];
     }
-  }
+  };
 
   submit = () => {
     this.props.onSubmit({
@@ -237,22 +237,21 @@ class JobForm extends React.Component<Props, State> {
       description: this.state.description,
       interests: this.state.interests.map(({ weight, value }) => ({
         weight,
-        _id: value,
+        _id: value
       })),
       competences: this.state.competences.map(({ weight, value }) => ({
         weight,
-        _id: value,
+        _id: value
       })),
       formations: [],
       secteur: [this.state.secteur],
       accessibility: this.state.Acceccible,
+      environments: []
     });
-  }
+  };
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
     this.setState({ secteur: e.target.value });
-
-  }
+  };
 
   public render(): JSX.Element {
     const { classes, error, submitText, fetching } = this.props;
@@ -366,14 +365,14 @@ const styles = createStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    minHeight: 'calc(50vh - 64px)',
+    minHeight: 'calc(50vh - 64px)'
   },
   title: {
     color: 'rgba(0, 0, 0, 0.87)',
     margin: '10px 0',
     flex: '0 0 auto',
     textAlign: 'center',
-    width: '70%',
+    width: '70%'
   },
   card: {
     width: '100%',
@@ -382,38 +381,38 @@ const styles = createStyles({
     display: 'flex',
     flexDirection: 'column',
     padding: '15px 30px',
-    margin: 'auto',
+    margin: 'auto'
   },
   formTitle: {
-    margin: 25,
+    margin: 25
   },
   button: {
     margin: '30px auto',
-    display: 'block',
+    display: 'block'
   },
   close: {
     position: 'absolute',
     right: 15,
-    top: 20,
+    top: 20
   },
   absolute: {
     position: 'absolute',
     bottom: 0,
     top: 0,
     left: 0,
-    right: 0,
+    right: 0
   },
   center: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   error: {
     color: 'rgb(225, 0, 80)',
     fontSize: 18,
     textAlign: 'center',
-    fontFamily: 'inherit',
-  },
+    fontFamily: 'inherit'
+  }
 });
 
 export interface JobFormComponent extends JobForm {}

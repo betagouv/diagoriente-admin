@@ -20,6 +20,8 @@ declare module 'reducers' {
     ListRanksResponse,
     Question,
     IContext,
+    IEnvironment,
+    ListEnvironmentResponse,
     ListContextResponse
   } from 'requests';
 
@@ -72,7 +74,9 @@ declare module 'reducers' {
     } & ApiReducer
   >;
   export type CreateTheme = ImmutableMap<ApiReducer>;
-  export type ListThemes = ImmutableMap<{ themes: ListThemesResponse } & ApiReducer>;
+  export type ListThemes = ImmutableMap<
+    { themes: ListThemesResponse } & ApiReducer
+  >;
   export type GetTheme = ImmutableMap<{ theme: Theme } & ApiReducer>;
   export type PatchTheme = ImmutableMap<ApiReducer>;
   export type DeleteTheme = ImmutableMap<ApiReducer>;
@@ -86,7 +90,9 @@ declare module 'reducers' {
   }>;
 
   export type CreateActivity = ImmutableMap<ApiReducer>;
-  export type ListActivities = ImmutableMap<{ activities: ListActivitiesResponse } & ApiReducer>;
+  export type ListActivities = ImmutableMap<
+    { activities: ListActivitiesResponse } & ApiReducer
+  >;
   export type GetActivity = ImmutableMap<{ activity: Activity } & ApiReducer>;
   export type PatchActivity = ImmutableMap<ApiReducer>;
   export type DeleteActivity = ImmutableMap<ApiReducer>;
@@ -100,7 +106,9 @@ declare module 'reducers' {
   }>;
 
   export type CreateInterest = ImmutableMap<ApiReducer>;
-  export type ListInterests = ImmutableMap<{ interests: ListInterestResponse } & ApiReducer>;
+  export type ListInterests = ImmutableMap<
+    { interests: ListInterestResponse } & ApiReducer
+  >;
   export type GetInterest = ImmutableMap<{ interest: Interest } & ApiReducer>;
   export type PatchInterest = ImmutableMap<ApiReducer>;
   export type DeleteInterest = ImmutableMap<ApiReducer>;
@@ -114,8 +122,10 @@ declare module 'reducers' {
   }>;
 
   export type CreateQuestion = ImmutableMap<ApiReducer>;
-  export type ListQuestions = ImmutableMap<{ questions: ListQuestionResponse } & ApiReducer>;
-  export type GetQuestion= ImmutableMap<{ question: Question } & ApiReducer>;
+  export type ListQuestions = ImmutableMap<
+    { questions: ListQuestionResponse } & ApiReducer
+  >;
+  export type GetQuestion = ImmutableMap<{ question: Question } & ApiReducer>;
   export type EditQuestion = ImmutableMap<ApiReducer>;
   export type DeleteQuestion = ImmutableMap<ApiReducer>;
 
@@ -126,8 +136,6 @@ declare module 'reducers' {
     editQuestion: EditQuestion;
     deleteQuestion: DeleteQuestion;
   }>;
-
-
 
   export type GetUser = ImmutableMap<{
     fetching: boolean;
@@ -174,7 +182,9 @@ declare module 'reducers' {
     error: string;
     competence: ICompetence;
   }>;
-  export type ListCompetences = ImmutableMap<{ competences: ListCompetencesResponse } & ApiReducer>;
+  export type ListCompetences = ImmutableMap<
+    { competences: ListCompetencesResponse } & ApiReducer
+  >;
   export type DeleteCompetence = ImmutableMap<ApiReducer>;
   export type PatchCompetence = ImmutableMap<ApiReducer>;
   export type CreateCompetence = ImmutableMap<ApiReducer>;
@@ -192,7 +202,9 @@ declare module 'reducers' {
     error: string;
     advisor: Iadvisor;
   }>;
-  export type ListAdvisors = ImmutableMap<{ advisors: ListAdvisorsResponse } & ApiReducer>;
+  export type ListAdvisors = ImmutableMap<
+    { advisors: ListAdvisorsResponse } & ApiReducer
+  >;
   export type DeleteAdvisor = ImmutableMap<ApiReducer>;
   export type PatchAdvisor = ImmutableMap<ApiReducer>;
   export type CreateAdvisor = ImmutableMap<ApiReducer>;
@@ -241,25 +253,44 @@ declare module 'reducers' {
   }>;
 
   export type CreateRank = ImmutableMap<ApiReducer>;
-  export type ListRanks = ImmutableMap<{ ranks: ListRanksResponse } & ApiReducer>;
-  
+  export type ListRanks = ImmutableMap<
+    { ranks: ListRanksResponse } & ApiReducer
+  >;
 
   export type IRanks = ImmutableMap<{
     createRank: CreateRank;
-    listRanks : ListRanks;
-  }>
+    listRanks: ListRanks;
+  }>;
 
-  export type CreateContext = ImmutableMap<ApiReducer>
-  export type GetContext = ImmutableMap<{context: IContext} & ApiReducer>
-  export type PatchContext = ImmutableMap<ApiReducer>
-  export type ListContext = ImmutableMap<{contexts: ListContextResponse} & ApiReducer >;
+  export type CreateContext = ImmutableMap<ApiReducer>;
+  export type GetContext = ImmutableMap<{ context: IContext } & ApiReducer>;
+  export type PatchContext = ImmutableMap<ApiReducer>;
+  export type ListContext = ImmutableMap<
+    { contexts: ListContextResponse } & ApiReducer
+  >;
 
   export type Context = ImmutableMap<{
     createContext: CreateContext;
     getContext: GetContext;
     patchContext: PatchContext;
     listContext: ListContext;
-  }>
+  }>;
+
+  export type CreateEnvironment = ImmutableMap<ApiReducer>;
+  export type GetEnvironment = ImmutableMap<
+    { environment: IEnvironment } & ApiReducer
+  >;
+  export type PatchEnvironment = ImmutableMap<ApiReducer>;
+  export type ListEnvironment = ImmutableMap<
+    { environments: ListEnvironmentResponse } & ApiReducer
+  >;
+
+  export type Environment = ImmutableMap<{
+    createEnvironment: CreateEnvironment;
+    getEnvironment: GetEnvironment;
+    patchEnvironment: PatchEnvironment;
+    listEnvironment: ListEnvironment;
+  }>;
 
   export interface ReduxState {
     config: ConfigState;
@@ -279,7 +310,8 @@ declare module 'reducers' {
     famille: FamilleInteret;
     job: getJobs;
     ranks: IRanks;
-    questions:Questions;
+    questions: Questions;
     Context: Context;
+    Environment: Environment;
   }
 }

@@ -64,11 +64,16 @@ import deleteQuestion from './questions/deleteQuestion';
 import editQuestion from './questions/editQuestions';
 import getQuestion from './questions/getQuestion';
 import listQuestions from './questions/listQuestions';
-
+/* Context */
 import listContext from './context/listContext';
 import getContext from './context/getContext';
 import patchContext from './context/patchContext';
 import createContext from './context/createContext';
+/* Environment */
+import listEnvironment from './environment/listEnvironment';
+import getEnvironment from './environment/getEnvironment';
+import patchEnvironment from './environment/patchEnvironment';
+import createEnvironment from './environment/createEnvironment';
 
 const sagas = [
   configSaga,
@@ -128,8 +133,12 @@ const sagas = [
   getContext,
   patchContext,
   createContext,
+  listEnvironment,
+  getEnvironment,
+  patchEnvironment,
+  createEnvironment
 ];
 
-export default function* () {
+export default function*() {
   yield all(sagas.map(saga => fork(saga)));
 }
