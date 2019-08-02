@@ -6,7 +6,7 @@ import {
   IUser,
   listUsersParams,
   DeleteUserParams,
-  GetUserParams,
+  GetUserParams
 } from 'requests';
 import { isArray } from 'lodash';
 import { ReduxState } from 'reducers';
@@ -30,19 +30,19 @@ const styles = () =>
     center: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     fill: {
       height: '100%',
-      width: '100%',
+      width: '100%'
     },
     absolute: {
       position: 'absolute',
       bottom: 0,
       top: 0,
       left: 0,
-      right: 0,
-    },
+      right: 0
+    }
   });
 
 interface StyleProps extends WithStyles<typeof styles> {
@@ -86,30 +86,36 @@ const customRender = (row: string): string => row || '--';
 class UsersContainer extends Component<Props> {
   state = {
     currentSelectedId: '',
-    openConfirm: false,
+    openConfirm: false
   };
 
   headers = [
     {
       id: 'profile',
       title: 'Nom et prénom',
-      render: (profile: any) => `${profile.firstName}  ${profile.lastName}`,
+      render: (profile: any) => `${profile.firstName}  ${profile.lastName}`
     },
     {
       id: 'role',
-      title: 'Role',
+      title: 'Role'
     },
     {
       id: 'email',
       title: 'Email',
-      render: (row: string) => row || '--',
+      render: (row: string) => row || '--'
     },
     {
       id: 'createdAt',
       title: 'Date de creation',
-      render: (row: string) => moment(row).format('DD/MM/YYYY, HH:mm:ss'),
+      render: (row: string) => moment(row).format('DD/MM/YYYY, HH:mm:ss')
     },
-    { id: 'platform', title: 'Device' },
+    {
+      id: 'context',
+      title: 'Contexte',
+      render: (context: any[]) =>
+        context && context.length ? context[0].title : 'null'
+    },
+    { id: 'platform', title: 'Device' }
   ];
 
   search: string = '';
@@ -126,25 +132,25 @@ class UsersContainer extends Component<Props> {
     ) {
       this.getListUsers();
     }
-  }
+  };
 
   openModalDelete = (id: string) => {
     this.setState({ openConfirm: true, currentSelectedId: id });
-  }
+  };
 
   YesDelete = (id: string) => {
     this.props.deleteUser({ id: this.state.currentSelectedId });
     this.setState({ openConfirm: false });
-  }
+  };
 
   NoDelete = () => {
     this.setState({ openConfirm: false });
-  }
+  };
 
   handleSearch = (value: string) => {
     this.search = value;
     this.getListUsers();
-  }
+  };
 
   handleValue(value: any): any {
     if (typeof value !== 'object' || value === null) {
@@ -175,25 +181,25 @@ class UsersContainer extends Component<Props> {
   resetUsers = () => {
     this.search = '';
     this.getListUsers();
-  }
+  };
   handlePageChange = (page: number) => {
     this.props.history.push({
       pathname: this.props.location.pathname,
-      search: encodeUri({ page }),
+      search: encodeUri({ page })
     });
     this.getListUsers({
-      page,
+      page
     });
-  }
+  };
 
   getListUsers = (params: listUsersParams = {}) => {
     this.props.getListUsers({
       search: this.search,
       page: this.props.currentPage,
       perPage: PER_PAGE,
-      ...params,
+      ...params
     });
-  }
+  };
 
   render(): JSX.Element {
     const users: any = this.props.users.map(item => {
@@ -214,9 +220,7 @@ class UsersContainer extends Component<Props> {
       <>
         {this.props.fetching && (
           <div
-            className={`${this.props.classes.absolute} ${
-              this.props.classes.center
-            }`}
+            className={`${this.props.classes.absolute} ${this.props.classes.center}`}
           >
             <CircularProgress />
           </div>
@@ -264,7 +268,7 @@ function mapStateToProps(state: ReduxState): MapToProps {
     count: listUsers.get('users').count,
     currentPage: listUsers.get('users').currentPage,
     perPage: listUsers.get('users').perPage,
-    totalPages: listUsers.get('users').totalPages,
+    totalPages: listUsers.get('users').totalPages
   };
 }
 
@@ -274,11 +278,11 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
       dispatch(listUserActions.listUsersRequest(payload)),
     deleteUser: payload =>
       dispatch(deleteUserActions.deleteUserRequest(payload)),
-    getUser: payload => dispatch(getUserActions.getUserRequest(payload)),
+    getUser: payload => dispatch(getUserActions.getUserRequest(payload))
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(withStyles(styles)(UsersContainer));

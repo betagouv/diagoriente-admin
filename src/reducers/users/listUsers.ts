@@ -6,13 +6,13 @@ import { listUsers } from 'reducers';
 const INITIAL_STATE: listUsers = Map({
   fetching: false,
   error: '',
-  users: { data: [] },
+  users: { data: [] }
 });
 
 const { Types, Creators } = createActions({
   listUsersRequest: ['payload'],
   listUsersSuccess: ['users'],
-  listUsersFailure: ['error'],
+  listUsersFailure: ['error']
 });
 
 const listUsersRequest = (state: listUsers) =>
@@ -32,5 +32,5 @@ export default Creators;
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.LIST_USERS_REQUEST]: listUsersRequest,
   [Types.LIST_USERS_SUCCESS]: listUsersSuccess,
-  [Types.LIST_USERS_FAILURE]: listUsersFailure,
+  [Types.LIST_USERS_FAILURE]: listUsersFailure
 });

@@ -167,6 +167,7 @@ declare module 'requests' {
       lastName: string;
       institution: string;
     };
+    context: IContext[];
   }
 
   export interface listUsersParams {
@@ -278,6 +279,7 @@ declare module 'requests' {
         email: string;
         institution: string;
       };
+      context?: IContext[];
     };
     completed: boolean;
     skills: [];
@@ -291,6 +293,7 @@ declare module 'requests' {
         lastName: string;
         institution: string;
       };
+      context?: IContext[];
     };
     families: Famille[];
   }
