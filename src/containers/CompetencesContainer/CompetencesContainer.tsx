@@ -9,7 +9,7 @@ import {
   GetCompetenceParams,
   ListCompetencesParams,
   patchCompetenceParams,
-  EditComptenceParams,
+  EditComptenceParams
 } from 'requests';
 import { ReduxState } from 'reducers';
 import { RouteComponentProps, matchPath } from 'react-router-dom';
@@ -44,23 +44,23 @@ const styles = () =>
     center: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     fill: {
       height: '100%',
-      width: '100%',
+      width: '100%'
     },
     absolute: {
       position: 'absolute',
       bottom: 0,
       top: 0,
       left: 0,
-      right: 0,
+      right: 0
     },
     RowContainer1: {
       height: '100%',
       width: '60%',
-      overflow: 'scroll',
+      overflow: 'scroll'
     },
     RowContainer2: {
       display: 'flex',
@@ -70,15 +70,15 @@ const styles = () =>
       width: '35%',
       margin: 0,
       height: '100%',
-      padding: 25,
+      padding: 25
     },
     leftModalContainer: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
       flex: '1 1 50%',
-      paddingLeft: 15,
-    },
+      paddingLeft: 15
+    }
   });
 
 interface StyleProps extends WithStyles<typeof styles> {
@@ -131,15 +131,15 @@ class CompetencesContainer extends Component<Props, State> {
   state: State = {
     open: false,
     openConfirm: false,
-    currentSelectedId: '',
+    currentSelectedId: ''
   };
 
   headers = [
     {
       id: 'rank',
-      title: 'Rang',
+      title: 'Rang'
     },
-    { id: 'title', title: 'Titre' },
+    { id: 'title', title: 'Titre' }
   ];
 
   search: string = '';
@@ -170,7 +170,7 @@ class CompetencesContainer extends Component<Props, State> {
       this.getListCompetences();
       this.props.history.push({
         pathname: '/competences',
-        search: this.props.location.search,
+        search: this.props.location.search
       });
     }
 
@@ -186,91 +186,91 @@ class CompetencesContainer extends Component<Props, State> {
   }
   handleClickOpen = () => {
     this.setState({
-      open: true,
+      open: true
     });
-  }
+  };
 
   handleClose = () => {
     this.setState({ open: false });
-  }
+  };
   isEdit = (location: Location<any>) =>
     matchPath(location.pathname, {
       path: '/competences/:id',
-      exact: true,
-    })
+      exact: true
+    });
   openCreateModal = () => {
     this.setState({ open: true });
-  }
+  };
 
   closeCreateModal = () => {
     this.setState({ open: false });
-  }
+  };
 
   openEditModal = (id: string) => {
     this.props.history.push({
       pathname: `/competences/${id}`,
-      search: this.props.location.search,
+      search: this.props.location.search
     });
-  }
+  };
 
   closeEditModal = () => {
     this.props.history.push({
       pathname: '/competences',
-      search: this.props.location.search,
+      search: this.props.location.search
     });
-  }
+  };
 
   delete = (id: string) => {
     this.props.deleteCompetence({ id });
-  }
+  };
 
   edit = (params: EditComptenceParams) => {
     const id = this.props.competence._id;
     this.props.editCompetence({ id, ...params });
-  }
+  };
 
   create = (params: CreateComptenceParams) => {
     this.props.createCompetence(params);
-  }
+  };
 
   openModalDelete = (id: string) => {
     this.setState({ openConfirm: true, currentSelectedId: id });
-  }
+  };
 
   YesDelete = (id: string) => {
     this.props.deleteCompetence({ id: this.state.currentSelectedId });
     this.setState({ openConfirm: false });
-  }
+  };
 
   NoDelete = () => {
     this.setState({ openConfirm: false });
-  }
+  };
 
   handlePageChange = (page: number) => {
     this.props.history.push({
       pathname: this.props.location.pathname,
-      search: encodeUri({ page }),
+      search: encodeUri({ page })
     });
     this.getListCompetences({
-      page,
+      page
     });
-  }
+  };
 
   handleSearch = (value: string) => {
     this.search = value;
     this.getListCompetences();
-  }
+  };
 
   resetInterests = () => {
     this.search = '';
     this.getListCompetences();
-  }
+  };
 
   getListCompetences = (params: ListCompetencesParams = {}) => {
     this.props.getListCompetences({
-      ...params,
+      ...params
     });
-  }
+  };
 
   renderModalContent = () => {
     if (this.props.getCompetenceFetching) {
@@ -319,22 +319,21 @@ class CompetencesContainer extends Component<Props, State> {
             ? this.props.competence.niveau[0].sub_title
             : ''
         }
-        color ={ this.props.competence.color && this.props.competence.color}
+        color={this.props.competence.color && this.props.competence.color}
         onSubmitHandler={this.edit}
         requestClose={() => {}}
         submitText="Modifier Competence"
       />
     );
-  }
+  };
 
   render() {
     return (
       <>
         {this.props.fetching && (
           <div
-            className={`${this.props.classes.absolute} ${
-              this.props.classes.center
-            }`}>
+            className={`${this.props.classes.absolute} ${this.props.classes.center}`}
+          >
             <CircularProgress />
           </div>
         )}
@@ -363,7 +362,8 @@ class CompetencesContainer extends Component<Props, State> {
           open={!!this.isEdit(this.props.location)}
           handleClose={this.closeEditModal}
           title="Modifier Compétence"
-          fullScreen>
+          fullScreen
+        >
           <div className={this.props.classes.center}>
             {this.renderModalContent()}
           </div>
@@ -402,26 +402,26 @@ function mapStateToProps(state: ReduxState): MapToProps {
     count: listCompetences.get('competences').count,
     currentPage: listCompetences.get('competences').currentPage,
     perPage: listCompetences.get('competences').perPage,
-    totalPages: listCompetences.get('competences').totalPages,
+    totalPages: listCompetences.get('competences').totalPages
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
   return {
-    getListCompetences: (payload) =>
+    getListCompetences: payload =>
       dispatch(listCompetencesActions.listCompetencesRequest(payload)),
-    deleteCompetence: (payload) =>
+    deleteCompetence: payload =>
       dispatch(deleteCompetenceActions.deleteCompetenceRequest(payload)),
-    getCompetence: (payload) =>
+    getCompetence: payload =>
       dispatch(getCompetenceActions.getCompetenceRequest(payload)),
-    editCompetence: (payload) =>
+    editCompetence: payload =>
       dispatch(patchCompetenceActions.patchCompetenceRequest(payload)),
-    createCompetence: (payload) =>
-      dispatch(createCompetenceActions.createCompetenceRequest(payload)),
+    createCompetence: payload =>
+      dispatch(createCompetenceActions.createCompetenceRequest(payload))
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(withStyles(styles)(CompetencesContainer));

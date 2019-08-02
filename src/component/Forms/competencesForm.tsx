@@ -58,7 +58,7 @@ class CompetencesForm extends React.Component<Props, State> {
   static defaultProps = {
     header: 'Créer Activité',
     submitText: 'Créer Activité',
-    showInterest: true,
+    showInterest: true
   };
 
   constructor(props: Props) {
@@ -81,7 +81,7 @@ class CompetencesForm extends React.Component<Props, State> {
       n2desc: this.props.n2desc || '',
       n3desc: this.props.n3desc || '',
       n4desc: this.props.n4desc || '',
-      background: this.props.color || '',
+      background: this.props.color || ''
     };
   }
 
@@ -103,9 +103,9 @@ class CompetencesForm extends React.Component<Props, State> {
       n1desc: '',
       n2desc: '',
       n3desc: '',
-      n4desc: '',
+      n4desc: ''
     });
-  }
+  };
 
   // handle errors
   validateNiveau = (value: string) => {
@@ -114,7 +114,7 @@ class CompetencesForm extends React.Component<Props, State> {
       return 'vous devez inserer une description pour ce niveau';
     }
     return '';
-  }
+  };
 
   // handle niveau changes
   handleChangeN1 = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,48 +122,48 @@ class CompetencesForm extends React.Component<Props, State> {
     this.setState({
       n1Error,
       n1Value: e.currentTarget.value,
-      errorForN1: !!n1Error,
+      errorForN1: !!n1Error
     });
-  }
+  };
   handleChangeN2 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const n2Error = this.validateNiveau(e.currentTarget.value);
     this.setState({
       n2Error,
       n2Value: e.currentTarget.value,
-      errorForN2: !!n2Error,
+      errorForN2: !!n2Error
     });
-  }
+  };
   handleChangeN3 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const n3Error = this.validateNiveau(e.currentTarget.value);
     this.setState({
       n3Error,
       n3Value: e.currentTarget.value,
-      errorForN3: !!n3Error,
+      errorForN3: !!n3Error
     });
-  }
+  };
   handleChangeN4 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const n4Error = this.validateNiveau(e.currentTarget.value);
     this.setState({
       n4Error,
       n4Value: e.currentTarget.value,
-      errorForN4: !!n4Error,
+      errorForN4: !!n4Error
     });
-  }
+  };
   handlechangeN1desc = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ n1desc: e.target.value });
-  }
+  };
   handlechangeN2desc = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ n2desc: e.target.value });
-  }
+  };
   handlechangeN3desc = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ n3desc: e.target.value });
-  }
+  };
   handlechangeN4desc = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ n4desc: e.target.value });
-  }
+  };
   handleChangeComplete = (color: any) => {
     this.setState({ background: color.hex });
-  }
+  };
 
   // oncreate theme handler
   onSubmitHandler = (e: MouseEvent<HTMLInputElement>) => {
@@ -179,12 +179,12 @@ class CompetencesForm extends React.Component<Props, State> {
           { title: this.state.n1Value, sub_title: this.state.n1desc },
           { title: this.state.n2Value, sub_title: this.state.n2desc },
           { title: this.state.n3Value, sub_title: this.state.n3desc },
-          { title: this.state.n4Value, sub_title: this.state.n4desc },
+          { title: this.state.n4Value, sub_title: this.state.n4desc }
         ],
-        color: this.state.background,
+        color: this.state.background
       });
     }
-  }
+  };
 
   public render(): JSX.Element {
     const { classes } = this.props;
@@ -193,17 +193,15 @@ class CompetencesForm extends React.Component<Props, State> {
       <div className={classes.container}>
         {this.props.fetching && (
           <div
-            className={`${this.props.classes.absolute} ${
-              this.props.classes.center
-            }`}
+            className={`${this.props.classes.absolute} ${this.props.classes.center}`}
           >
             <CircularProgress />
           </div>
         )}
         <Card className={classes.card}>
           <Grid container spacing={8} justify="center">
-            <Grid container spacing={8} justify="center">
-              <Grid item sm={8}>
+            <Grid container spacing={8} justify="space-between" direction="row">
+              <Grid item sm={6}>
                 <Paper className={classes.paper}>
                   <Input
                     placeholder="Niveau 1"
@@ -277,7 +275,7 @@ class CompetencesForm extends React.Component<Props, State> {
                   />
                 </Paper>
               </Grid>
-              <Grid item sm={8}>
+              <Grid item sm={6}>
                 <Paper className={classes.sketchContainer}>
                   <SketchPicker
                     color={this.state.background}
@@ -314,7 +312,7 @@ const styles = () =>
     container: {
       paddingBottom: 15,
       width: '100%',
-      position: 'relative',
+      position: 'relative'
     },
     card: {
       width: '100%',
@@ -322,48 +320,48 @@ const styles = () =>
       flex: '0 0 auto',
       display: 'flex',
       flexDirection: 'column',
-      padding: 15,
+      padding: 15
     },
     formTitle: {
-      margin: 25,
+      margin: 25
     },
     button: {
       marginBottom: 30,
       marginRight: 'auto',
       marginLeft: 'auto',
-      display: 'block',
+      display: 'block'
     },
     close: {
       position: 'absolute',
       right: 15,
-      top: 20,
+      top: 20
     },
     absolute: {
       position: 'absolute',
       bottom: 0,
       top: 0,
       left: 0,
-      right: 0,
+      right: 0
     },
     center: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     paper: {
       padding: 25,
-      margin: 10,
+      margin: 10
     },
     colorContainer: {
       width: 100,
       height: 100,
-      borderRadius: 10,
+      borderRadius: 10
     },
     sketchContainer: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-evenly',
-    },
+      justifyContent: 'space-evenly'
+    }
   });
 
 export default withStyles(styles)(CompetencesForm);
