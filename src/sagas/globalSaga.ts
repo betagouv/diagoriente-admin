@@ -71,6 +71,7 @@ import patchContext from './context/patchContext';
 import createContext from './context/createContext';
 /* Environment */
 import listEnvironment from './environment/listEnvironment';
+import deleteEnvironment from './environment/deleteEnvironment';
 import getEnvironment from './environment/getEnvironment';
 import patchEnvironment from './environment/patchEnvironment';
 import createEnvironment from './environment/createEnvironment';
@@ -134,6 +135,7 @@ const sagas = [
   patchContext,
   createContext,
   listEnvironment,
+  deleteEnvironment,
   getEnvironment,
   patchEnvironment,
   createEnvironment

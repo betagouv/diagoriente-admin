@@ -6,6 +6,7 @@ import {
   CreateEnvironmentParams,
   GetEnvironmentParams,
   ListEnvironmentsParams,
+  DeleteEnvironmentParams,
   PatchEnvironmentparams,
   ListEnvironmentResponse,
   Response
@@ -23,6 +24,7 @@ import Table from '../../component/Table/Tables';
 
 // actions
 import listEnvironmentActions from '../../reducers/environment/listEnvironment';
+import deleteEnvironmentActions from '../../reducers/environment/deleteEnvironment';
 import getEnvironmentActions from '../../reducers/environment/getEnvironment';
 import editEnvironmentActions from '../../reducers/environment/patchEnvironment';
 import createEnvironmentActions from '../../reducers/environment/createEnvironment';
@@ -90,6 +92,8 @@ interface StyleProps extends WithStyles<typeof styles> {
 interface MapToProps {
   fetching: boolean;
   environments: IEnvironment[];
+  deleteFetching: boolean;
+  deleteError: string;
   getEnvironmentFetching: boolean;
   Environment: IEnvironment;
   getEnvironmentError: string;
@@ -105,6 +109,7 @@ interface MapToProps {
 
 interface DispatchToProps {
   getListEnvironment: (payload: ListEnvironmentsParams) => void;
+  deleteEnvironment: (payload: DeleteEnvironmentParams) => void;
   getEnvironment: (payload: GetEnvironmentParams) => void;
   editEnvironment: (payload: PatchEnvironmentparams) => void;
   createEnvironment: (payload: CreateEnvironmentParams) => void;
@@ -156,6 +161,14 @@ class EnvironmentContainer extends Component<Props, State> {
   }
 
   componentDidUpdate(props: Props) {
+    if (
+      !this.props.deleteFetching &&
+      props.deleteFetching &&
+      !this.props.deleteError
+    ) {
+      this.getListEnvironment();
+    }
+
     const edit = this.isEdit(this.props.location);
     if (!this.isEdit(props.location) && edit) {
       this.props.getEnvironment({ id: (edit.params as any).id });
@@ -209,6 +222,17 @@ class EnvironmentContainer extends Component<Props, State> {
       pathname: '/environment',
       search: this.props.location.search
     });
+  };
+
+  openModalDelete = (id: string) => {
+    this.setState({ openConfirm: true, currentSelectedId: id });
+  };
+  YesDelete = (id: string) => {
+    this.props.deleteEnvironment({ id: this.state.currentSelectedId });
+    this.setState({ openConfirm: false });
+  };
+  NoDelete = () => {
+    this.setState({ openConfirm: false });
   };
 
   edit = (params: CreateEnvironmentParams) => {
@@ -317,6 +341,7 @@ class EnvironmentContainer extends Component<Props, State> {
         <Table
           headers={this.headers}
           rows={this.props.environments}
+          delete={this.openModalDelete}
           edit={this.openEditModal}
           add={this.openCreateModal}
           /* onChangeType={this.onChangeType} */
@@ -328,7 +353,7 @@ class EnvironmentContainer extends Component<Props, State> {
           currentPage={this.props.currentPage}
           count={this.props.count}
           handlePageChange={this.handlePageChange}
-          hasDelete={false}
+          hasDelete={true}
         />
 
         {/* <div>
@@ -364,6 +389,13 @@ class EnvironmentContainer extends Component<Props, State> {
             {this.renderModalContent()}
           </Grid>
         </FullModal>
+
+        <ConfirmModal
+          open={this.state.openConfirm}
+          YesButton={this.YesDelete}
+          NoButton={this.NoDelete}
+          close={this.NoDelete}
+        />
       </>
     );
   }
@@ -371,6 +403,7 @@ class EnvironmentContainer extends Component<Props, State> {
 
 function mapStateToProps(state: ReduxState): MapToProps {
   const getEnvironment = state.Environment.get('getEnvironment');
+  const deleteEnvironment = state.Environment.get('deleteEnvironment');
   const editEnvironment = state.Environment.get('patchEnvironment');
   const createEnvironment = state.Environment.get('createEnvironment');
   const listEnvironment = state.Environment.get('listEnvironment');
@@ -378,6 +411,8 @@ function mapStateToProps(state: ReduxState): MapToProps {
   return {
     fetching: listEnvironment.get('fetching'),
     environments: listEnvironment.get('environments').data,
+    deleteFetching: deleteEnvironment.get('fetching'),
+    deleteError: deleteEnvironment.get('error'),
     getEnvironmentFetching: getEnvironment.get('fetching'),
     Environment: getEnvironment.get('environment'),
     getEnvironmentError: getEnvironment.get('error'),
@@ -396,6 +431,8 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
   return {
     getListEnvironment: payload =>
       dispatch(listEnvironmentActions.listEnvironmentRequest(payload)),
+    deleteEnvironment: payload =>
+      dispatch(deleteEnvironmentActions.deleteEnvironmentRequest(payload)),
     getEnvironment: payload =>
       dispatch(getEnvironmentActions.getEnvironmentRequest(payload)),
     editEnvironment: payload =>

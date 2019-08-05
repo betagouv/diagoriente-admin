@@ -5,6 +5,7 @@ import {
   ListEnvironmentsParams,
   GetEnvironmentParams,
   CreateEnvironmentParams,
+  DeleteEnvironmentParams,
   PatchEnvironmentparams,
   ListEnvironmentResponse
 } from 'requests';
@@ -22,6 +23,11 @@ export const getEnvironment = ({
 export const createEnvironment = (
   data: CreateEnvironmentParams
 ): Promise<Response<IEnvironment>> => axiosPost('v1/environments', { data });
+
+export const deleteEnvironment = ({
+  id
+}: DeleteEnvironmentParams): Promise<Response<{}>> =>
+  axiosDelete(`v1/environments/${id}`);
 
 export const patchEnvironment = ({
   id,

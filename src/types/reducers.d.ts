@@ -281,6 +281,7 @@ declare module 'reducers' {
     { environment: IEnvironment } & ApiReducer
   >;
   export type PatchEnvironment = ImmutableMap<ApiReducer>;
+  export type DeleteEnvironment = ImmutableMap<ApiReducer>;
   export type ListEnvironment = ImmutableMap<
     { environments: ListEnvironmentResponse } & ApiReducer
   >;
@@ -290,6 +291,7 @@ declare module 'reducers' {
     getEnvironment: GetEnvironment;
     patchEnvironment: PatchEnvironment;
     listEnvironment: ListEnvironment;
+    deleteEnvironment: DeleteEnvironment;
   }>;
 
   export interface ReduxState {

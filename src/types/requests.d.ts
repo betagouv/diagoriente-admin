@@ -440,6 +440,7 @@ declare module 'requests' {
 
   export type ListEnvironmentResponse = ListResponse<IEnvironment>;
   export type GetEnvironmentParams = DeleteOrGetParams;
+  export type DeleteEnvironmentParams = DeleteOrGetParams;
   export interface CreateEnvironmentParams {
     title: string;
   }
