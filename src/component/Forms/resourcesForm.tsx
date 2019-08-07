@@ -63,7 +63,7 @@ class ResourcesForm extends React.Component<Props, State> {
               placeholder="Add profile picture"
               onChange={this.handleChangeIcon}
               style={{ marginBottom: 25 }}
-              accept=".png"
+              accept=".svg"
             />
             <Card className={classes.demo}>
               <CardContent className={classes.content}>
