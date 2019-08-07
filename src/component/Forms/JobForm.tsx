@@ -6,11 +6,17 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from '../inputs/input';
+import AutoComplete from '../inputs/autoComplete';
 import { CreateJobData } from 'requests';
 
-import { listInterests, listCompetences } from '../../requests';
+import {
+  listInterests,
+  listCompetences,
+  listEnvironment
+} from '../../requests';
 import JobAutoComplete from '../inputs/JobAutoComplete';
 import SelectInput from '../inputs/selectInput';
+import environment from '../../reducers/environment';
 
 interface Props {
   classes: { [key: string]: string };
@@ -25,6 +31,7 @@ interface Props {
   selectedSecteur?: string;
   selectedSecteurId?: string;
   secteur: { _id: string; title: string }[];
+  environments: { _id: string; title: string }[];
   Acceccible?: string;
 }
 
@@ -48,6 +55,8 @@ interface State {
   secteur?: string;
   Acceccible: string;
   AcceccibleProps?: string;
+  environmentsProps: { _id: string; title: string }[];
+  environments: { label: string; value: string }[];
 }
 
 const formatInterests = (
@@ -70,12 +79,20 @@ const formatCompétence = (
   }));
 };
 
+const formatEnvironment = (environments: { _id: string; title: string }[]) => {
+  return environments.map(environment => ({
+    value: environment._id,
+    label: environment.title
+  }));
+};
+
 class JobForm extends React.Component<Props, State> {
   static defaultProps = {
     submitText: 'Créer Emplois',
     onSubmit: () => {},
     interests: [],
-    competences: []
+    competences: [],
+    environments: []
   };
 
   static getDerivedStateFromProps(props: Props, state: State) {
@@ -130,6 +147,16 @@ class JobForm extends React.Component<Props, State> {
         : AccecciblePart;
     }
 
+    if (!isEqual(state.environmentsProps, props.environments)) {
+      const environmentPart = {
+        environments: formatEnvironment(props.environments),
+        environmentsProps: props.environments
+      };
+      returnValue = returnValue
+        ? { ...returnValue, ...environmentPart }
+        : environmentPart;
+    }
+
     return returnValue;
   }
 
@@ -146,6 +173,8 @@ class JobForm extends React.Component<Props, State> {
     competencesProps: this.props.competences,
     secteurProps: this.props.selectedSecteur,
     secteur: this.props.selectedSecteur || '',
+    environmentsProps: this.props.environments,
+    environments: formatEnvironment(this.props.environments),
     Acceccible: this.props.Acceccible || '',
     AcceccibleProps: this.props.Acceccible
   };
@@ -157,14 +186,24 @@ class JobForm extends React.Component<Props, State> {
       description,
       descriptionError,
       competences,
-      interests
+      interests,
+      environments
     } = this.state;
 
     const titleValid = !!title && !titleError;
     const descriptionValid = !!description && !descriptionError;
     const interestsValid = this.isWeightValid(interests);
     const competencesValid = this.isWeightValid(competences);
-    return titleValid && descriptionValid && interestsValid && competencesValid;
+    const environmentsValid =
+      (environments instanceof Array && !environment.length) ||
+      environments.filter(env => env.label && env.value).length;
+    return (
+      titleValid &&
+      descriptionValid &&
+      interestsValid &&
+      competencesValid &&
+      environmentsValid
+    );
   };
 
   isWeightValid = (
@@ -204,9 +243,49 @@ class JobForm extends React.Component<Props, State> {
     this.setState({ competences });
   };
 
+  EnvironmentsChange = (environments: { label: string; value: string }[]) => {
+    this.setState({
+      environments
+    });
+  };
+
+  handleSuggestionEnvironments = async (value: string) => {
+    try {
+      const response: any = await listEnvironment({
+        search: value,
+        perPage: 10
+      });
+
+      if (response.code === 200 && response.data) {
+        return response.data.data.map((suggestion: any) => ({
+          value: suggestion._id,
+          label: suggestion.title
+        }));
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  };
+
   getCompetence = async (value: string) => {
     try {
       const response: any = await listCompetences({ search: value });
+      if (response.code === 200 && response.data) {
+        return response.data.map((d: any) => ({
+          label: d.title,
+          value: d._id
+        }));
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  getEnvironment = async (value: string) => {
+    try {
+      const response: any = await listEnvironment({ search: value });
       if (response.code === 200 && response.data) {
         return response.data.map((d: any) => ({
           label: d.title,
@@ -246,7 +325,7 @@ class JobForm extends React.Component<Props, State> {
       formations: [],
       secteur: [this.state.secteur],
       accessibility: this.state.Acceccible,
-      environments: []
+      environments: this.state.environments.map(({ value }) => value)
     });
   };
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -335,6 +414,17 @@ class JobForm extends React.Component<Props, State> {
                   label={'Compétences'}
                   onValuesChange={this.handleCompetenceChange}
                   values={this.state.competences}
+                />
+              </Grid>
+            </Grid>
+            <Grid alignItems="stretch" container spacing={24} direction={'row'}>
+              <Grid item sm={6}>
+                <AutoComplete
+                  placeholder="Environnements"
+                  handleChange={this.EnvironmentsChange}
+                  value={this.state.environments}
+                  title={'Environements'}
+                  handleInputChange={this.handleSuggestionEnvironments}
                 />
               </Grid>
             </Grid>

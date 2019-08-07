@@ -11,9 +11,10 @@ import {
   createJob,
   deleteJob,
   getJob,
-  patchJob,
+  patchJob
 } from '../../requests/jobs';
 import { getListSecteurs } from '../../requests/secteur';
+import { listEnvironment } from '../../requests/environment';
 
 import classes from './jobsContainer.module.css';
 import {
@@ -22,7 +23,7 @@ import {
   ListResponse,
   Response,
   CreateJobData,
-  ISecteur,
+  ISecteur
 } from 'requests';
 
 import withApi, { ApiComponentProps } from '../../hoc/withApis';
@@ -46,6 +47,7 @@ type Props = RouteComponentProps &
     details: Job;
     edit: Job;
     secteurs: ListResponse<{ _id: string; title: string }>;
+    environments: ListResponse<{ _id: string; title: string }>;
   }>;
 
 const PER_PAGE = 5;
@@ -66,16 +68,16 @@ class JobsContainer extends React.Component<Props, State> {
       open: false,
       title: '',
       openConfirm: false,
-      currentSelectedId: '',
+      currentSelectedId: ''
     };
   }
 
   headers = [
     {
       id: 'title',
-      title: 'Titre',
+      title: 'Titre'
     },
-    { id: 'description', title: 'Description' },
+    { id: 'description', title: 'Description' }
   ];
 
   search: string = '';
@@ -86,6 +88,7 @@ class JobsContainer extends React.Component<Props, State> {
     const { page } = decodeUri(this.props.location.search);
     this.getList({ page });
     this.getSecteurs();
+    this.getEnvironments();
   }
 
   componentDidUpdate(props: Props) {
@@ -108,100 +111,102 @@ class JobsContainer extends React.Component<Props, State> {
     const currentItems = this.props[api];
     const prevItems = prevProps[api];
     return !currentItems.fetching && prevItems.fetching && !currentItems.error;
-  }
+  };
 
   checkEdit = () => {
     const { location } = this.props;
     return matchPath(location.pathname, {
       path: '/jobs/edit/:id',
-      exact: true,
+      exact: true
     });
-  }
+  };
 
   checkCreate = () => {
     const { location } = this.props;
     return matchPath(location.pathname, {
       path: '/jobs/create',
-      exact: true,
+      exact: true
     });
-  }
+  };
 
   openAdd = () => {
     this.handleAdd();
     this.props.history.push('/jobs/create');
-  }
+  };
 
   handleAdd = () => {
     this.title = 'Ajouter un métier';
-  }
+  };
 
   openEdit = (id: string) => {
     this.handleEdit(id);
     this.props.history.push(`/jobs/edit/${id}`);
-  }
+  };
 
   handleEdit = (id: string) => {
     this.title = 'Modifier métier';
     this.props.details.call(id);
-  }
+  };
 
   closeModal = () => {
     this.props.history.push('/jobs');
-  }
+  };
 
   edit = (values: CreateJobData) => {
     const editMatch = this.checkEdit();
     if (editMatch) {
       this.props.edit.call({
         id: (editMatch.params as { id: string }).id,
-        ...values,
+        ...values
       });
     }
-  }
+  };
 
   searchRequest = (search: string) => {
     this.search = search;
     this.getList({ search });
-  }
+  };
 
   getList = (params: ListParams = {}) => {
     this.props.list.call({ perPage: PER_PAGE, ...params });
-  }
+  };
   getSecteurs = (params: ListParams = {}) => {
     this.props.secteurs.call({ perPage: 100, type: 'secteur', ...params });
-  }
+  };
+  getEnvironments = (params: ListParams = {}) => {
+    this.props.environments.call({ perPage: 100, ...params });
+  };
 
   handlePageChange = (page: number) => {
     const params: ListParams = { page };
     if (this.search) params.search = this.search;
     this.props.history.push({
       pathname: this.props.location.pathname,
-      search: encodeUri({ page }),
+      search: encodeUri({ page })
     });
     this.getList(params);
-  }
+  };
 
   openModalDelete = (id: string) => {
     this.setState({ openConfirm: true, currentSelectedId: id });
-  }
+  };
 
   YesDelete = (id: string) => {
     this.props.delete.call(this.state.currentSelectedId);
     this.setState({ openConfirm: false });
-  }
+  };
 
   NoDelete = () => {
     this.setState({ openConfirm: false });
-  }
+  };
 
   render() {
-
     const {
       data,
       totalPages,
       currentPage,
       count,
-      perPage,
+      perPage
     } = this.props.list.data;
     return (
       <>
@@ -244,6 +249,7 @@ class JobsContainer extends React.Component<Props, State> {
               onSubmit={this.props.create.call}
               error={this.props.create.error}
               secteur={this.props.secteurs.data.data}
+              environments={this.props.environments.data.data}
             />
           )}
         </FullModal>
@@ -252,6 +258,7 @@ class JobsContainer extends React.Component<Props, State> {
           handleClose={this.closeModal}
           open={!!this.checkEdit()}
           maxWidth={'md'}
+          fullScreen
         >
           {this.props.secteurs.data.data && this.props.details.data.secteur && (
             <JobForm
@@ -264,10 +271,13 @@ class JobsContainer extends React.Component<Props, State> {
               interests={this.props.details.data.interests}
               competences={this.props.details.data.competences}
               secteur={this.props.secteurs.data.data}
+              environments={this.props.environments.data.data}
               Acceccible={this.props.details.data.accessibility}
               selectedSecteur={
-                this.props.details.data.secteur && this.props.details.data.secteur.length  ?
-                this.props.details.data.secteur[0]._id : ''
+                this.props.details.data.secteur &&
+                this.props.details.data.secteur.length
+                  ? this.props.details.data.secteur[0]._id
+                  : ''
               }
             />
           )}
@@ -290,4 +300,5 @@ export default withApi({
   details: getJob,
   edit: patchJob,
   secteurs: getListSecteurs,
+  environments: listEnvironment
 })(JobsContainer);

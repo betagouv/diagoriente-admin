@@ -396,7 +396,7 @@ declare module 'requests' {
     formations: any;
     secteur: any;
     accessibility?: string;
-    environments: IEnvironment[];
+    environments: string[];
   }
 
   export interface Rank {
