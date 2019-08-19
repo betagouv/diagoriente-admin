@@ -3,7 +3,7 @@ import {
   axiosPost,
   axiosDelete,
   axiosPatch,
-  axiosPostFilesData,
+  axiosPostFilesData
 } from './http';
 import {
   Response,
@@ -14,25 +14,25 @@ import {
   DeleteFamilleParams,
   PatchFamilleParams,
   ListFamillesResponse,
-  DeletePhotoParams,
+  DeletePhotoParams
 } from 'requests';
 
 export const listFamilles = (
-  params?: ListFamillesParams,
+  params?: ListFamillesParams
 ): Promise<Response<ListFamillesResponse>> =>
-  axiosGet('v1/families', { params });
+  axiosGet('v1/families/admin', { params });
 
 export const getFamille = ({
-  id,
+  id
 }: GetFamilleParams): Promise<Response<Famille>> =>
   axiosGet(`v1/families/${id}`);
 
 export const createFamille = (
-  data: CreateFamilleParams,
+  data: CreateFamilleParams
 ): Promise<Response<Famille>> => axiosPost('v1/families', { data });
 
 export const deleteFamille = ({
-  id,
+  id
 }: DeleteFamilleParams): Promise<Response<{}>> =>
   axiosDelete(`v1/families/${id}`);
 
@@ -45,6 +45,8 @@ export const patchFamille = ({
 export const uploadPhotos = (id: string, data: any): Promise<Response<{}>> =>
   axiosPostFilesData(`v1/families/addUploads/${id}`, { data });
 
-export const deleteFamillePhoto = (
-   { id , ...data }:DeletePhotoParams): Promise<Response<Famille>> =>
+export const deleteFamillePhoto = ({
+  id,
+  ...data
+}: DeletePhotoParams): Promise<Response<Famille>> =>
   axiosPost(`v1/families/removeUploads/${id}`, { data });
