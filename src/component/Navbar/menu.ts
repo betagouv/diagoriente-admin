@@ -13,6 +13,7 @@ import Layers from '@material-ui/icons/LayersOutlined';
 import question_answer from '@material-ui/icons/FeedbackOutlined';
 import context from '@material-ui/icons/VerifiedUserOutlined';
 import environment from '@material-ui/icons/EventNoteOutlined';
+import questionJob from '@material-ui/icons/HelpOutline';
 
 const menu = [
   {
@@ -98,6 +99,12 @@ const menu = [
     url: '/environment',
     icon: environment,
     id: 13
+  },
+  {
+    nom: 'Question Métier',
+    url: '/questionJob',
+    icon: questionJob,
+    id: 14
   }
 ];
 

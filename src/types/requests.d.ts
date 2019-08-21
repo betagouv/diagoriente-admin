@@ -425,6 +425,11 @@ declare module 'requests' {
     title: string;
   }
 
+  export interface IQuestionJob {
+    _id: string;
+    label: string;
+  }
+
   export type ListContextResponse = ListResponse<IContext>;
   export type GetContextParams = DeleteOrGetParams;
   export interface CreateContextParams {
@@ -446,6 +451,19 @@ declare module 'requests' {
   }
   export type PatchEnvironmentparams = CreateEnvironmentParams & { id: string };
   export interface ListEnvironmentsParams {
+    page?: number;
+    perPage?: number;
+    search?: string;
+  }
+
+  export type ListQuestionJobResponse = ListResponse<IQuestionJob>;
+  export type GetQuestionJobParams = DeleteOrGetParams;
+  export type DeleteQuestionJobParams = DeleteOrGetParams;
+  export interface CreateQuestionJobParams {
+    label: string;
+  }
+  export type PatchQuestionJobparams = CreateQuestionJobParams & { id: string };
+  export interface ListQuestionJobsParams {
     page?: number;
     perPage?: number;
     search?: string;

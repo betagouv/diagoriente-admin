@@ -23,6 +23,7 @@ import JobsContainer from '../JobsContainer';
 import ConstContainer from '../familleConstContainer';
 import ContextContainer from '../ContextContainer';
 import EnvironmentContainer from '../EnvironmentContainer';
+import QuestionJobContainer from '../QuestionJobContainer';
 
 interface MapToProps {
   language: Language;
@@ -72,6 +73,7 @@ class HomeContainer extends React.Component<Props> {
                 <Route path="/familleRank" component={ConstContainer} />
                 <Route path="/context" component={ContextContainer} />
                 <Route path="/environment" component={EnvironmentContainer} />
+                <Route path="/questionJob" component={QuestionJobContainer} />
               </>
             )}
             <Route path="/parcours" component={ParcoursContainer} />

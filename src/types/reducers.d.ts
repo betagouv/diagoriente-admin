@@ -22,7 +22,9 @@ declare module 'reducers' {
     IContext,
     IEnvironment,
     ListEnvironmentResponse,
-    ListContextResponse
+    ListContextResponse,
+    IQuestionJob,
+    ListQuestionJobResponse
   } from 'requests';
 
   export interface ImmutableMap<T> extends Map<string, any> {
@@ -294,6 +296,24 @@ declare module 'reducers' {
     deleteEnvironment: DeleteEnvironment;
   }>;
 
+  export type CreateQuestionJob = ImmutableMap<ApiReducer>;
+  export type GetQuestionJob = ImmutableMap<
+    { questionJob: IQuestionJob } & ApiReducer
+  >;
+  export type PatchQuestionJob = ImmutableMap<ApiReducer>;
+  export type DeleteQuestionJob = ImmutableMap<ApiReducer>;
+  export type ListQuestionJob = ImmutableMap<
+    { questionJobs: ListQuestionJobResponse } & ApiReducer
+  >;
+
+  export type QuestionJob = ImmutableMap<{
+    createQuestionJob: CreateQuestionJob;
+    getQuestionJob: GetQuestionJob;
+    patchQuestionJob: PatchQuestionJob;
+    listQuestionJob: ListQuestionJob;
+    deleteQuestionJob: DeleteQuestionJob;
+  }>;
+
   export interface ReduxState {
     config: ConfigState;
     router: RouterState;
@@ -315,5 +335,6 @@ declare module 'reducers' {
     questions: Questions;
     Context: Context;
     Environment: Environment;
+    QuestionJob: QuestionJob;
   }
 }

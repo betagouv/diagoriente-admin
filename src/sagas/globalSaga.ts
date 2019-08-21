@@ -75,6 +75,12 @@ import deleteEnvironment from './environment/deleteEnvironment';
 import getEnvironment from './environment/getEnvironment';
 import patchEnvironment from './environment/patchEnvironment';
 import createEnvironment from './environment/createEnvironment';
+/* QuestionJob */
+import listQuestionJob from './questionJob/listQuestionJob';
+import deleteQuestionJob from './questionJob/deleteQuestionJob';
+import getQuestionJob from './questionJob/getQuestionJob';
+import patchQuestionJob from './questionJob/patchQuestionJob';
+import createQuestionJob from './questionJob/createQuestionJob';
 
 const sagas = [
   configSaga,
@@ -138,7 +144,12 @@ const sagas = [
   deleteEnvironment,
   getEnvironment,
   patchEnvironment,
-  createEnvironment
+  createEnvironment,
+  listQuestionJob,
+  deleteQuestionJob,
+  getQuestionJob,
+  patchQuestionJob,
+  createQuestionJob
 ];
 
 export default function*() {
