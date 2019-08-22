@@ -15,6 +15,7 @@ import {
   listEnvironment
 } from '../../requests';
 import JobAutoComplete from '../inputs/JobAutoComplete';
+import JobCompetencesAutoComplete from '../inputs/JobCompetencesAutoComplete';
 import SelectInput from '../inputs/selectInput';
 import environment from '../../reducers/environment';
 
@@ -89,7 +90,7 @@ const formatEnvironment = (environments: { _id: string; title: string }[]) => {
 class JobForm extends React.Component<Props, State> {
   static defaultProps = {
     submitText: 'Créer Emplois',
-    onSubmit: () => {},
+    onSubmit: () => { },
     interests: [],
     competences: [],
     environments: []
@@ -344,103 +345,103 @@ class JobForm extends React.Component<Props, State> {
             <CircularProgress />
           </div>
         ) : (
-          <div className={classes.card}>
-            <Grid container spacing={24} direction={'row'}>
-              <Grid item sm={6}>
-                <Input
-                  placeholder="Titre"
-                  id="1"
-                  label="Titre"
-                  value={this.state.title}
-                  onChangeInput={this.handleTitleChange}
-                  InputIndication={
-                    this.state.titleError
-                      ? 'Titre doit contenir au moins 3 caractère'
-                      : ''
-                  }
-                />
+            <div className={classes.card}>
+              <Grid container spacing={24} direction={'row'}>
+                <Grid item sm={6}>
+                  <Input
+                    placeholder="Titre"
+                    id="1"
+                    label="Titre"
+                    value={this.state.title}
+                    onChangeInput={this.handleTitleChange}
+                    InputIndication={
+                      this.state.titleError
+                        ? 'Titre doit contenir au moins 3 caractère'
+                        : ''
+                    }
+                  />
+                </Grid>
+                <Grid item sm={6}>
+                  <Input
+                    multiline
+                    placeholder="Description"
+                    id="2"
+                    label="Description"
+                    value={this.state.description}
+                    onChangeInput={this.handleDescriptionChange}
+                    InputIndication={
+                      this.state.descriptionError
+                        ? 'Description doit contenir au moins 3 caractère'
+                        : ''
+                    }
+                  />
+                </Grid>
               </Grid>
-              <Grid item sm={6}>
-                <Input
-                  multiline
-                  placeholder="Description"
-                  id="2"
-                  label="Description"
-                  value={this.state.description}
-                  onChangeInput={this.handleDescriptionChange}
-                  InputIndication={
-                    this.state.descriptionError
-                      ? 'Description doit contenir au moins 3 caractère'
-                      : ''
-                  }
-                />
+              <Grid container spacing={24} direction={'row'}>
+                <Grid item sm={6}>
+                  <SelectInput
+                    label="Secteur"
+                    Selectvalue={this.state.secteur}
+                    handleChange={this.handleSecteurChange}
+                    id="3"
+                    choice={this.props.secteur}
+                    defaultValue={this.props.selectedSecteur}
+                    defaultValueID={this.props.selectedSecteurId}
+                  />
+                </Grid>
+                <Grid item sm={6}>
+                  <Input
+                    placeholder="Accessible"
+                    id="4"
+                    label="Accessible"
+                    value={this.state.Acceccible}
+                    onChangeInput={this.handleAccecibleChange}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={24} direction={'row'}>
-              <Grid item sm={6}>
-                <SelectInput
-                  label="Secteur"
-                  Selectvalue={this.state.secteur}
-                  handleChange={this.handleSecteurChange}
-                  id="3"
-                  choice={this.props.secteur}
-                  defaultValue={this.props.selectedSecteur}
-                  defaultValueID={this.props.selectedSecteurId}
-                />
-              </Grid>
-              <Grid item sm={6}>
-                <Input
-                  placeholder="Accessible"
-                  id="4"
-                  label="Accessible"
-                  value={this.state.Acceccible}
-                  onChangeInput={this.handleAccecibleChange}
-                />
-              </Grid>
-            </Grid>
 
-            <Grid alignItems="stretch" container spacing={24} direction={'row'}>
-              <Grid item sm={6}>
-                <JobAutoComplete
-                  handleInputChange={this.getInterest}
-                  label={'Intérêts'}
-                  onValuesChange={this.handleInterestChange}
-                  values={this.state.interests}
-                />
+              <Grid alignItems="stretch" container spacing={24} direction={'row'}>
+                <Grid item sm={6}>
+                  <JobAutoComplete
+                    handleInputChange={this.getInterest}
+                    label={'Intérêts'}
+                    onValuesChange={this.handleInterestChange}
+                    values={this.state.interests}
+                  />
+                </Grid>
+                <Grid item sm={6}>
+                  <JobCompetencesAutoComplete
+                    handleInputChange={this.getCompetence}
+                    label={'Compétences'}
+                    onValuesChange={this.handleCompetenceChange}
+                    values={this.state.competences}
+                  />
+                </Grid>
               </Grid>
-              <Grid item sm={6}>
-                <JobAutoComplete
-                  handleInputChange={this.getCompetence}
-                  label={'Compétences'}
-                  onValuesChange={this.handleCompetenceChange}
-                  values={this.state.competences}
-                />
+              <Grid alignItems="stretch" container spacing={24} direction={'row'}>
+                <Grid item sm={6}>
+                  <AutoComplete
+                    placeholder="Environnements"
+                    handleChange={this.EnvironmentsChange}
+                    value={this.state.environments}
+                    title={'Environements'}
+                    handleInputChange={this.handleSuggestionEnvironments}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid alignItems="stretch" container spacing={24} direction={'row'}>
-              <Grid item sm={6}>
-                <AutoComplete
-                  placeholder="Environnements"
-                  handleChange={this.EnvironmentsChange}
-                  value={this.state.environments}
-                  title={'Environements'}
-                  handleInputChange={this.handleSuggestionEnvironments}
-                />
-              </Grid>
-            </Grid>
 
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className={classes.button}
-              onClick={this.submit}
-              disabled={!this.isValid()}
-            >
-              {submitText}
-            </Button>
-          </div>
-        )}
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                className={classes.button}
+                onClick={this.submit}
+                disabled={!this.isValid()}
+              >
+                {submitText}
+              </Button>
+            </div>
+          )}
       </div>
     );
   }
@@ -505,6 +506,6 @@ const styles = createStyles({
   }
 });
 
-export interface JobFormComponent extends JobForm {}
+export interface JobFormComponent extends JobForm { }
 
 export default withStyles(styles)(JobForm);
