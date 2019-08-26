@@ -386,6 +386,7 @@ declare module 'requests' {
     accessibility: string;
     interested: boolean;
     environments: IEnvironment[];
+    link: string;
   }
 
   export interface CreateJobData {
@@ -397,6 +398,7 @@ declare module 'requests' {
     secteur: any;
     accessibility?: string;
     environments: string[];
+    link: string;
   }
 
   export interface Rank {

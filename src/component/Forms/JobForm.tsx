@@ -34,6 +34,7 @@ interface Props {
   secteur: { _id: string; title: string }[];
   environments: { _id: string; title: string }[];
   Acceccible?: string;
+  link?: string;
 }
 
 interface State {
@@ -58,6 +59,8 @@ interface State {
   AcceccibleProps?: string;
   environmentsProps: { _id: string; title: string }[];
   environments: { label: string; value: string }[];
+  link: string;
+  linkProps?: string;
 }
 
 const formatInterests = (
@@ -148,6 +151,16 @@ class JobForm extends React.Component<Props, State> {
         : AccecciblePart;
     }
 
+    if (state.linkProps !== props.link) {
+      const linkPart = {
+        link: props.link,
+        linkProps: props.link
+      };
+      returnValue = returnValue
+        ? { ...returnValue, ...linkPart }
+        : linkPart;
+    }
+
     if (!isEqual(state.environmentsProps, props.environments)) {
       const environmentPart = {
         environments: formatEnvironment(props.environments),
@@ -177,7 +190,9 @@ class JobForm extends React.Component<Props, State> {
     environmentsProps: this.props.environments,
     environments: formatEnvironment(this.props.environments),
     Acceccible: this.props.Acceccible || '',
-    AcceccibleProps: this.props.Acceccible
+    AcceccibleProps: this.props.Acceccible,
+    link: this.props.link || '',
+    linkProps: this.props.link
   };
 
   isValid = () => {
@@ -223,6 +238,10 @@ class JobForm extends React.Component<Props, State> {
   };
   handleAccecibleChange = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({ Acceccible: e.target.value });
+  };
+
+  handleLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ link: e.target.value });
   };
 
   handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -326,7 +345,8 @@ class JobForm extends React.Component<Props, State> {
       formations: [],
       secteur: [this.state.secteur],
       accessibility: this.state.Acceccible,
-      environments: this.state.environments.map(({ value }) => value)
+      environments: this.state.environments.map(({ value }) => value),
+      link: this.state.link
     });
   };
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -426,6 +446,15 @@ class JobForm extends React.Component<Props, State> {
                     value={this.state.environments}
                     title={'Environements'}
                     handleInputChange={this.handleSuggestionEnvironments}
+                  />
+                </Grid>
+                <Grid item sm={6}>
+                  <Input
+                    placeholder="Lien vidéo"
+                    id="5"
+                    label="Lien vidéo"
+                    value={this.state.link}
+                    onChangeInput={this.handleLinkChange}
                   />
                 </Grid>
               </Grid>
