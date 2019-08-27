@@ -201,7 +201,6 @@ class JobsContainer extends React.Component<Props, State> {
   };
 
   render() {
-    console.log('***', this.props);
     const {
       data,
       totalPages,
@@ -272,7 +271,7 @@ class JobsContainer extends React.Component<Props, State> {
               interests={this.props.details.data.interests}
               competences={this.props.details.data.competences}
               secteur={this.props.secteurs.data.data}
-              environments={this.props.environments.data.data}
+              environments={this.props.details.data.environments}
               Acceccible={this.props.details.data.accessibility}
               selectedSecteur={
                 this.props.details.data.secteur &&
