@@ -61,6 +61,7 @@ interface State {
   environments: { label: string; value: string }[];
   link: string;
   linkProps?: string;
+  questionJobs: [];
 }
 
 const formatInterests = (
@@ -192,7 +193,8 @@ class JobForm extends React.Component<Props, State> {
     Acceccible: this.props.Acceccible || '',
     AcceccibleProps: this.props.Acceccible,
     link: this.props.link || '',
-    linkProps: this.props.link
+    linkProps: this.props.link,
+    questionJobs: []
   };
 
   isValid = () => {
@@ -346,7 +348,8 @@ class JobForm extends React.Component<Props, State> {
       secteur: [this.state.secteur],
       accessibility: this.state.Acceccible,
       environments: this.state.environments.map(({ value }) => value),
-      link: this.state.link
+      link: this.state.link,
+      questionJobs: []
     });
   };
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -355,7 +358,6 @@ class JobForm extends React.Component<Props, State> {
 
   public render(): JSX.Element {
     const { classes, error, submitText, fetching } = this.props;
-
     return (
       <div className={classes.container}>
         <h1 className={classes.title}>{submitText}</h1>

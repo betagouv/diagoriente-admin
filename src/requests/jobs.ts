@@ -5,11 +5,11 @@ import {
   ListResponse,
   Job,
   CreateJobData,
-  getParcoursParams,
+  getParcoursParams
 } from 'requests';
 
 export const listJobs = (
-  params: ListParams,
+  params: ListParams
 ): Promise<Response<ListResponse<Job>>> => axiosGet('v1/jobs', { params });
 
 export const createJob = (data: CreateJobData): Promise<Response<Job>> =>
@@ -28,5 +28,7 @@ export const patchJob = ({
   axiosPatch(`v1/jobs/${id}`, { data });
 
 export const getMyJob = (
-  parcourId: getParcoursParams, algoType: string,
-): Promise<Response<Job>> => axiosGet(`v1/jobs/myJobs?parcourId=${parcourId}&algoType=${algoType}`);
+  parcourId: getParcoursParams,
+  algoType: string
+): Promise<Response<Job>> =>
+  axiosGet(`v1/jobs/myJobs?parcourId=${parcourId}&algoType=${algoType}`);

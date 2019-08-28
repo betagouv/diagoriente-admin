@@ -387,6 +387,7 @@ declare module 'requests' {
     interested: boolean;
     environments: IEnvironment[];
     link: string;
+    questionJobs: { _id: string; label: string }[];
   }
 
   export interface CreateJobData {
@@ -399,6 +400,12 @@ declare module 'requests' {
     accessibility?: string;
     environments: string[];
     link: string;
+    questionJobs: { _id?: string; label: string }[];
+  }
+
+
+  export interface CreateQuestionJobData {
+    questionJobs: { _id?: string; label: string }[];
   }
 
   export interface Rank {
