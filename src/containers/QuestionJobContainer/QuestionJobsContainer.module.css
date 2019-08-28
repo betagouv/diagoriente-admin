@@ -1,0 +1,28 @@
+.loader_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 120px);
+  width: 100%;
+  color: rgb(225, 0, 80);
+  font-size: 22px;
+  margin: 0;
+  text-align: center;
+}
+
+.center {
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'center';
+}
