@@ -26,7 +26,16 @@ interface State {
   currentSelectedId: string;
 }
 
-type Props = any;
+type Props = RouteComponentProps &
+  ApiComponentProps<{
+    list: typeof listJobs;
+    create: typeof createJob;
+    delete: typeof deleteJob;
+    details: typeof getJob;
+    edit: typeof patchJob;
+    secteurs: typeof getListSecteurs;
+    environments: typeof listEnvironment;
+  }>;
 
 const PER_PAGE = 5;
 
@@ -231,7 +240,9 @@ class JobsContainer extends React.Component<Props, State> {
               environments={this.props.details.data.environments}
               Acceccible={this.props.details.data.accessibility}
               selectedSecteur={
-                this.props.details.data.secteur && this.props.details.data.secteur.length ? this.props.details.data.secteur[0]._id : ''
+                this.props.details.data.secteur && this.props.details.data.secteur.length
+                  ? this.props.details.data.secteur[0]._id
+                  : ''
               }
               link={this.props.details.data.link}
             />

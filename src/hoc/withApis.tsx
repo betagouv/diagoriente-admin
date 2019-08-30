@@ -3,18 +3,27 @@ import { RouteComponentProps } from 'react-router-dom';
 import { pickBy, identity } from 'lodash';
 import { Response } from 'requests';
 
-type Request<T> = (...params: any[]) => Promise<Response<T>>;
+export type ReturnPromiseType<T> = T extends (...args: any[]) => Promise<Response<infer ReturnType>>
+  ? ReturnType
+  : any;
 
-type Requests<T extends object> = { [key in keyof T]: Request<T[key]> };
+interface IApiState<T> {
+  fetching: boolean;
+  error: string;
+  data: T;
+  errors: any[];
+}
 
-export type ApiComponentProps<R extends object> = {
+export type ApiComponentProps<
+  R extends { [key: string]: (...args: any[]) => Promise<Response<any>> }
+> = {
   [K in keyof R]: {
     fetching: boolean;
     error: string;
-    data: R[K];
+    data: ReturnPromiseType<R[K]>;
     errors: any[];
-    call: Requests<R>[K];
-  }
+    call: R[K];
+  };
 };
 
 type State = {
@@ -26,16 +35,14 @@ type State = {
   };
 };
 
-function withApis<R extends object, T extends Requests<R>>(
-  requests: { [key in keyof R]: Request<R[key]> },
+function withApis<R extends { [key: string]: (...args: any[]) => Promise<Response<any>> }>(
+  requests: R,
 ) {
-  return <P, S>(
-    WrappedComponent: React.ComponentType<
-      ApiComponentProps<R> & RouteComponentProps & P
-    >,
-  ): React.ComponentType<RouteComponentProps & P> => {
-    return class extends React.Component<RouteComponentProps & P, State> {
-      constructor(props: RouteComponentProps & P) {
+  return <P extends ApiComponentProps<R>, S>(
+    WrappedComponent: React.ComponentType<P>,
+  ): React.ComponentType<Omit<P, keyof ApiComponentProps<R>>> => {
+    return class extends React.Component<Omit<P, keyof ApiComponentProps<R>>, State> {
+      constructor(props: Omit<P, keyof ApiComponentProps<R>>) {
         super(props);
         const state: any = {};
         const calls: any = {};
@@ -52,7 +59,7 @@ function withApis<R extends object, T extends Requests<R>>(
         this.calls = calls;
       }
 
-      calls: { [K in keyof T]: (params?: any) => Promise<Response<any>> };
+      calls: any;
 
       callApi = (key: string) => async (...params: any[]) => {
         try {
@@ -68,7 +75,7 @@ function withApis<R extends object, T extends Requests<R>>(
               [key]: { ...state[key], fetching: false, data: response.data },
             }));
           } else if (response.code === 401) {
-            this.props.history.push('/login');
+            // this.props.history.push('/login');
           } else {
             const errors: { error?: string; errors?: any[] } = {};
             if (response.message) errors.error = response.message;
@@ -87,7 +94,7 @@ function withApis<R extends object, T extends Requests<R>>(
             },
           }));
         }
-      }
+      };
 
       render() {
         const keys = Object.keys(requests);
@@ -96,7 +103,7 @@ function withApis<R extends object, T extends Requests<R>>(
             ...result,
             [key]: { ...this.state[key], call: this.calls[key as keyof R] },
           };
-        },                                     {});
+        }, {});
 
         return <WrappedComponent {...injectedProps} {...this.props} />;
       }
