@@ -6,25 +6,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '../../component/Table/Tables';
 import FullModal from '../../component/fullScreenModal/fullModal';
 
-import {
-  listJobs,
-  createJob,
-  deleteJob,
-  getJob,
-  patchJob
-} from '../../requests/jobs';
+import { listJobs, createJob, deleteJob, getJob, patchJob } from '../../requests/jobs';
 import { getListSecteurs } from '../../requests/secteur';
 import { listEnvironment } from '../../requests/environment';
 
 import classes from './jobsContainer.module.css';
-import {
-  ListParams,
-  Job,
-  ListResponse,
-  Response,
-  CreateJobData,
-  ISecteur
-} from 'requests';
+import { ListParams, Job, ListResponse, Response, CreateJobData, ISecteur } from 'requests';
 
 import withApi, { ApiComponentProps } from '../../hoc/withApis';
 import JobForm from '../../component/Forms/JobForm';
@@ -39,16 +26,7 @@ interface State {
   currentSelectedId: string;
 }
 
-type Props = RouteComponentProps &
-  ApiComponentProps<{
-    list: ListResponse<Job>;
-    create: Job;
-    delete: void;
-    details: Job;
-    edit: Job;
-    secteurs: ListResponse<{ _id: string; title: string }>;
-    environments: ListResponse<{ _id: string; title: string }>;
-  }>;
+type Props = any;
 
 const PER_PAGE = 5;
 
@@ -68,16 +46,16 @@ class JobsContainer extends React.Component<Props, State> {
       open: false,
       title: '',
       openConfirm: false,
-      currentSelectedId: ''
+      currentSelectedId: '',
     };
   }
 
   headers = [
     {
       id: 'title',
-      title: 'Titre'
+      title: 'Titre',
     },
-    { id: 'description', title: 'Description' }
+    { id: 'description', title: 'Description' },
   ];
 
   search: string = '';
@@ -96,9 +74,7 @@ class JobsContainer extends React.Component<Props, State> {
     if (
       this.checkSuccess('create', props) ||
       this.checkSuccess('edit', props) ||
-      (props.list.fetching &&
-        !this.props.list.fetching &&
-        this.props.list.data.totalPages < page)
+      (props.list.fetching && !this.props.list.fetching && this.props.list.data.totalPages < page)
     ) {
       this.props.history.push('/jobs');
       this.getList({ search: this.search });
@@ -117,7 +93,7 @@ class JobsContainer extends React.Component<Props, State> {
     const { location } = this.props;
     return matchPath(location.pathname, {
       path: '/jobs/edit/:id',
-      exact: true
+      exact: true,
     });
   };
 
@@ -125,7 +101,7 @@ class JobsContainer extends React.Component<Props, State> {
     const { location } = this.props;
     return matchPath(location.pathname, {
       path: '/jobs/create',
-      exact: true
+      exact: true,
     });
   };
 
@@ -157,7 +133,7 @@ class JobsContainer extends React.Component<Props, State> {
     if (editMatch) {
       this.props.edit.call({
         id: (editMatch.params as { id: string }).id,
-        ...values
+        ...values,
       });
     }
   };
@@ -182,7 +158,7 @@ class JobsContainer extends React.Component<Props, State> {
     if (this.search) params.search = this.search;
     this.props.history.push({
       pathname: this.props.location.pathname,
-      search: encodeUri({ page })
+      search: encodeUri({ page }),
     });
     this.getList(params);
   };
@@ -201,13 +177,7 @@ class JobsContainer extends React.Component<Props, State> {
   };
 
   render() {
-    const {
-      data,
-      totalPages,
-      currentPage,
-      count,
-      perPage
-    } = this.props.list.data;
+    const { data, totalPages, currentPage, count, perPage } = this.props.list.data;
     return (
       <>
         {this.props.list.fetching && (
@@ -232,16 +202,9 @@ class JobsContainer extends React.Component<Props, State> {
           />
         )}
         {!this.props.list.fetching && (!data || data.length === 0) && (
-          <p className={classes.empty}>
-            {this.props.list.error || 'Aucune piste métier a afficher...'}
-          </p>
+          <p className={classes.empty}>{this.props.list.error || 'Aucune piste métier a afficher...'}</p>
         )}
-        <FullModal
-          title={this.title}
-          handleClose={this.closeModal}
-          open={!!this.checkCreate()}
-          maxWidth={'md'}
-        >
+        <FullModal title={this.title} handleClose={this.closeModal} open={!!this.checkCreate()} maxWidth={'md'}>
           {this.props.secteurs.data.data && (
             <JobForm
               submitText={this.title}
@@ -253,13 +216,7 @@ class JobsContainer extends React.Component<Props, State> {
             />
           )}
         </FullModal>
-        <FullModal
-          title={this.title}
-          handleClose={this.closeModal}
-          open={!!this.checkEdit()}
-          maxWidth={'md'}
-          fullScreen
-        >
+        <FullModal title={this.title} handleClose={this.closeModal} open={!!this.checkEdit()} maxWidth={'md'} fullScreen>
           {this.props.secteurs.data.data && this.props.details.data.secteur && (
             <JobForm
               submitText={this.title}
@@ -274,21 +231,13 @@ class JobsContainer extends React.Component<Props, State> {
               environments={this.props.details.data.environments}
               Acceccible={this.props.details.data.accessibility}
               selectedSecteur={
-                this.props.details.data.secteur &&
-                  this.props.details.data.secteur.length
-                  ? this.props.details.data.secteur[0]._id
-                  : ''
+                this.props.details.data.secteur && this.props.details.data.secteur.length ? this.props.details.data.secteur[0]._id : ''
               }
               link={this.props.details.data.link}
             />
           )}
         </FullModal>
-        <ConfirmModal
-          open={this.state.openConfirm}
-          YesButton={this.YesDelete}
-          NoButton={this.NoDelete}
-          close={this.NoDelete}
-        />
+        <ConfirmModal open={this.state.openConfirm} YesButton={this.YesDelete} NoButton={this.NoDelete} close={this.NoDelete} />
       </>
     );
   }
@@ -301,5 +250,5 @@ export default withApi({
   details: getJob,
   edit: patchJob,
   secteurs: getListSecteurs,
-  environments: listEnvironment
+  environments: listEnvironment,
 })(JobsContainer);

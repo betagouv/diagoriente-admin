@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
-import {
-  IParcour,
-  listParcoursParams,
-  getParcoursParams,
-  getJobsParams,
-  ListCompetencesParams,
-  DeleteParcourParams,
-  ICompetence,
-} from 'requests';
+import { IParcour, listParcoursParams, getParcoursParams, getJobsParams, ListCompetencesParams, DeleteParcourParams, ICompetence } from 'requests';
 import moment from 'moment';
 import { isArray } from 'lodash';
 import { getUser } from '../../requests';
@@ -158,8 +150,7 @@ const styles = () =>
       marginRight: 10,
       marginBottom: 30,
       marginTop: 5,
-      boxShadow:
-        '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
+      boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
       borderRadius: 5,
     },
     interestTitle: {
@@ -330,11 +321,7 @@ class ParcoursContainer extends Component<Props> {
   }
 
   componentDidUpdate(props: Props, prevState: any) {
-    if (
-      !this.props.deleteFetching &&
-      props.deleteFetching &&
-      !this.props.deleteError
-    ) {
+    if (!this.props.deleteFetching && props.deleteFetching && !this.props.deleteError) {
       this.getListParcours();
     }
     if (this.state.hideLayout && !prevState.hideLayout) {
@@ -357,11 +344,11 @@ class ParcoursContainer extends Component<Props> {
       perPage: PER_PAGE,
       ...params,
     });
-  }
+  };
   handleSearch = (value: string) => {
     this.search = value;
     this.getListParcours();
-  }
+  };
   handlePageChange = (page: number) => {
     this.props.history.push({
       pathname: this.props.location.pathname,
@@ -370,18 +357,18 @@ class ParcoursContainer extends Component<Props> {
     this.getListParcours({
       page,
     });
-  }
+  };
   resetParcours = () => {
     this.search = '';
     this.getListParcours();
-  }
+  };
   closeTestModal = () => {
     this.props.history.push({
       pathname: '/parcours',
       search: this.props.location.search,
     });
     this.setState({ openModal: false });
-  }
+  };
   getListCompetences = (params: ListCompetencesParams = {}) => {
     this.props.listCompetences({
       search: this.search,
@@ -389,7 +376,7 @@ class ParcoursContainer extends Component<Props> {
       perPage: 10,
       ...params,
     });
-  }
+  };
   showVisualisation = (id: string) => {
     this.props.getParcours({ id });
     this.props.getJobs({ parcourId: id, algoType: 'interest' });
@@ -398,28 +385,28 @@ class ParcoursContainer extends Component<Props> {
       search: this.props.location.search,
     }); */
     this.setState({ currentSelectedId: id });
-  }
+  };
   sortInterests = (a: any, b: any) => {
     return b.count - a.count;
-  }
+  };
   openModalDelete = (id: string) => {
     this.setState({ openConfirm: true, currentSelectedId: id });
-  }
+  };
   YesDelete = (id: string) => {
     this.props.deleteParcour({ id: this.state.currentSelectedId });
     this.setState({ openConfirm: false });
-  }
+  };
 
   NoDelete = () => {
     this.setState({ openConfirm: false });
-  }
+  };
 
   handleValue(value: any): any {
     if (typeof value !== 'object' || value === null) {
       return value;
     }
     if (isArray(value)) {
-      return value.map(item => this.handleValue(item));
+      return value.map((item) => this.handleValue(item));
     }
     return { ...this.deepObject(value) };
   }
@@ -429,7 +416,7 @@ class ParcoursContainer extends Component<Props> {
 
     const keys = Object.keys(obj);
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const value = this.handleValue(obj[key]);
       if (typeof value !== 'object' || value === null) {
         result[key] = value;
@@ -442,7 +429,7 @@ class ParcoursContainer extends Component<Props> {
 
   handleLegend = () => {
     this.setState({ hideLayout: true });
-  }
+  };
 
   handleClick = async () => {
     try {
@@ -463,9 +450,7 @@ class ParcoursContainer extends Component<Props> {
 
       firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
       lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
-      const competences = this.props.competences.map(
-        (el: ICompetence) => el.title,
-      );
+      const competences = this.props.competences.map((el: ICompetence) => el.title);
       const doc = new jsPDF('p', 'pt', '', true as any);
       const width = doc.internal.pageSize.getWidth();
       const height = doc.internal.pageSize.getHeight();
@@ -502,7 +487,7 @@ class ParcoursContainer extends Component<Props> {
           .split('(')[1]
           .split(')')[0]
           .split(',')
-          .map(el => (el.trim() as any) - 0);
+          .map((el) => (el.trim() as any) - 0);
         const alpha = 1 - rgba[3];
         const rgb = [];
         rgb.push(Math.round((rgba[3] * (rgba[0] / 255) + alpha * 0.5) * 255));
@@ -518,12 +503,7 @@ class ParcoursContainer extends Component<Props> {
       doc.setTextColor('#fefefe' as any);
       doc.setFontSize(11.5);
 
-      const etapes = [
-        'je débute',
-        'je le fais de temps en temps',
-        'je le fais souvent',
-        'je le fais tout le temps',
-      ];
+      const etapes = ['je débute', 'je le fais de temps en temps', 'je le fais souvent', 'je le fais tout le temps'];
       for (let i = 0; i < 4; i++) {
         doc.setFillColor('#4472c4');
         const recty = 220 + i * 90;
@@ -534,13 +514,9 @@ class ParcoursContainer extends Component<Props> {
           maxWidth: '70',
         });
       }
-      const parcoursPerso = this.props.parcour.skills
-        .filter((el: any) => el.theme.type === 'personal')
-        .map((al: any) => al.theme.title);
+      const parcoursPerso = this.props.parcour.skills.filter((el: any) => el.theme.type === 'personal').map((al: any) => al.theme.title);
 
-      const parcoursPro = this.props.parcour.skills
-        .filter((el: any) => el.theme.type === 'professional')
-        .map((al: any) => al.theme.title);
+      const parcoursPro = this.props.parcour.skills.filter((el: any) => el.theme.type === 'professional').map((al: any) => al.theme.title);
 
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(12);
@@ -569,20 +545,17 @@ class ParcoursContainer extends Component<Props> {
         console.error('oops, something went wrong!', error);
       };
     }
-  }
+  };
 
   handleTabChange = (e: any, tabIndex: number) => {
     this.setState({ tabIndex });
-  }
+  };
 
-  handleChange = (panel: string | boolean) => (
-    event: React.ChangeEvent<{}>,
-    expanded: boolean,
-  ) => {
+  handleChange = (panel: string | boolean) => (event: React.ChangeEvent<{}>, expanded: boolean) => {
     this.setState({
       expanded: expanded ? panel : false,
     });
-  }
+  };
 
   handleChangeJobs = (e: any) => {
     this.setState({ value: e.target.value }, () =>
@@ -591,30 +564,28 @@ class ParcoursContainer extends Component<Props> {
         algoType: this.state.value,
       }),
     );
-  }
+  };
 
   render(): JSX.Element {
-    const parcours = this.props.parcours.map(parcour => {
+    const parcours = this.props.parcours.map((parcour) => {
       const advisorId = parcour.advisorId;
       const userId = parcour.userId;
       let advisorName = '';
       let userName = '';
       let userEmail = '';
-      let userInstitution = '';
       if (advisorId && advisorId.profile) {
         const profile: any = advisorId.profile;
         advisorName = Object.keys(profile)
-          .filter(key => key !== 'pseudo' && profile[key])
-          .map(key => profile[key])
+          .filter((key) => key !== 'pseudo' && profile[key])
+          .map((key) => profile[key])
           .join(' ');
       }
+
       if (userId && userId.profile) {
         const profile: any = userId.profile;
         userName = Object.keys(profile)
-          .filter(
-            key => (key === 'firstName' || key === 'lastName') && profile[key],
-          )
-          .map(key => profile[key])
+          .filter((key) => (key === 'firstName' || key === 'lastName') && profile[key])
+          .map((key) => profile[key])
           .join(' ');
         if (userId.email) {
           userEmail = userId.email;
@@ -623,22 +594,15 @@ class ParcoursContainer extends Component<Props> {
             userEmail = userId.profile.email;
           }
         }
-        if (userId.profile.institution) {
-          userInstitution = userId.profile.institution;
-        }
       }
 
-      return { ...parcour, advisorName, userName, userEmail, userInstitution };
+      return { ...parcour, advisorName, userName, userEmail };
     });
 
     return (
       <>
         {this.props.fetching && this.props.getCompetenceFetching && (
-          <div
-            className={`${this.props.classes.absolute} ${
-              this.props.classes.center
-            }`}
-          >
+          <div className={`${this.props.classes.absolute} ${this.props.classes.center}`}>
             <CircularProgress />
           </div>
         )}
@@ -677,13 +641,10 @@ class ParcoursContainer extends Component<Props> {
             <Grid
               container
               justify="space-between"
-              className={`${this.props.classes.center} & ${
-                this.props.classes.fill
-              } & ${this.props.classes.modalContainer}`}
+              className={`${this.props.classes.center} & ${this.props.classes.fill} & ${this.props.classes.modalContainer}`}
             >
               <div className={this.props.classes.RowContainer1}>
-                {this.props.parcour.skills &&
-                this.props.parcour.skills.length === 0 ? (
+                {this.props.parcour.skills && this.props.parcour.skills.length === 0 ? (
                   <div className={this.props.classes.noContent}>
                     <ErrorOutline className={this.props.classes.errorIcon} />
                     <h4>Ce parcour ne contient aucune donnée </h4>
@@ -692,15 +653,8 @@ class ParcoursContainer extends Component<Props> {
                   this.props.parcour.skills &&
                   this.props.parcour.skills.map((skill: any, id: number) => {
                     return (
-                      <div
-                        className={this.props.classes.skiillContainer}
-                        key={id}
-                      >
-                        <Collapse
-                          avitivities={skill.activities}
-                          theme={skill.theme.title}
-                          type={skill.type}
-                        />
+                      <div className={this.props.classes.skiillContainer} key={id}>
+                        <Collapse avitivities={skill.activities} theme={skill.theme.title} type={skill.type} />
                         <div
                           style={{
                             position: 'relative',
@@ -709,25 +663,11 @@ class ParcoursContainer extends Component<Props> {
                             marginRight: 'auto',
                           }}
                         >
-                          <CompetencesChart
-                            competences={this.props.competences}
-                            parcours={skill.competences}
-                            displayLegend={false}
-                          />
+                          <CompetencesChart competences={this.props.competences} parcours={skill.competences} displayLegend={false} />
                         </div>
                         <div className={this.props.classes.intersetContainer}>
-                          {format(
-                            this.props.competences,
-                            skill.competences,
-                          ).map((item: any, index: number) => {
-                            return (
-                              <Chartlabels
-                                label={item.title}
-                                number={item.value}
-                                backgroundColor={item.color}
-                                key={index}
-                              />
-                            );
+                          {format(this.props.competences, skill.competences).map((item: any, index: number) => {
+                            return <Chartlabels label={item.title} number={item.value} backgroundColor={item.color} key={index} />;
                           })}
                         </div>
                       </div>
@@ -735,10 +675,7 @@ class ParcoursContainer extends Component<Props> {
                   })
                 )}
               </div>
-              <div
-                className={this.props.classes.RowContainer3}
-                id="global-competence"
-              >
+              <div className={this.props.classes.RowContainer3} id="global-competence">
                 {/*  <div>
                 <h3 className={this.props.classes.chartTitle}>
                   Carte de compétences Globale
@@ -769,15 +706,9 @@ class ParcoursContainer extends Component<Props> {
                       }}
                       // style={{ width: 200 }}
                     >
-                      <MenuItem value={'interest'}>
-                        Les pistes issues de l'expérience
-                      </MenuItem>
-                      <MenuItem value={'family'}>
-                        Les pistes issues des intérêts
-                      </MenuItem>
-                      <MenuItem value={'interest_family'}>
-                        Le mix entre les expériences et les intérêts
-                      </MenuItem>
+                      <MenuItem value={'interest'}>Les pistes issues de l'expérience</MenuItem>
+                      <MenuItem value={'family'}>Les pistes issues des intérêts</MenuItem>
+                      <MenuItem value={'interest_family'}>Le mix entre les expériences et les intérêts</MenuItem>
                     </Select>
                   </FormControl>
                 </div>
@@ -785,55 +716,58 @@ class ParcoursContainer extends Component<Props> {
                   {this.props.jobs.length ? (
                     this.props.jobs.map((item, index) => {
                       return (
-                        <ExpansionPanel
-                          expanded={this.state.expanded === `panel${index}`}
-                          onChange={this.handleChange(`panel${index}`)}
-                          style={{ width: '100%' }}
-                        >
-                          <ExpansionPanelSummary
-                            classes={{
-                              content: this.props.classes.jobContainer,
-                            }}
-                            expandIcon={<ExpandMoreIcon />}
+                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                          <ExpansionPanel
+                            expanded={this.state.expanded === `panel${index}`}
+                            onChange={this.handleChange(`panel${index}`)}
+                            style={{ width: '88%' }}
                           >
-                            <Typography
-                              className={
-                                !item.interested ? this.props.classes.fav : ''
-                              }
+                            <ExpansionPanelSummary
+                              classes={{
+                                content: this.props.classes.jobContainer,
+                              }}
+                              expandIcon={<ExpandMoreIcon />}
                             >
-                              {item.interested && (
-                                <img
-                                  src={require('../../assets/images/png/favourites.png')}
-                                  style={{
-                                    width: 20,
-                                    paddingTop: 4,
-                                    marginRight: 5,
-                                  }}
-                                />
-                              )}
-                              {item.title}
-                            </Typography>
-                            <Typography
-                              className={
-                                item.jobRank < getRankAverage(this.props.jobs)
-                                  ? this.props.classes.redRank
-                                  : this.props.classes.blueRank
-                              }
-                            >
-                              {item.jobRank.toFixed(3)}
-                            </Typography>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            <Typography>{item.description}</Typography>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                              <Typography className={!item.interested ? this.props.classes.fav : ''}>
+                                {item.interested && (
+                                  <img
+                                    src={require('../../assets/images/png/favourites.png')}
+                                    style={{
+                                      width: 20,
+                                      paddingTop: 4,
+                                      marginRight: 5,
+                                    }}
+                                  />
+                                )}
+
+                                {item.title}
+                              </Typography>
+
+                              <Typography
+                                className={item.jobRank < getRankAverage(this.props.jobs) ? this.props.classes.redRank : this.props.classes.blueRank}
+                              >
+                                {item.jobRank.toFixed(3)}
+                              </Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                              <Typography>{item.description}</Typography>
+                            </ExpansionPanelDetails>
+                          </ExpansionPanel>
+                          <img
+                            src={require('../../assets/images/conversation.svg')}
+                            style={{
+                              width: 20,
+                              paddingTop: 4,
+                              marginRight: 5,
+                            }}
+                            /*                             className={this.props.classes.questionButton}
+                             */
+                          />
+                        </div>
                       );
                     })
                   ) : (
-                    <div
-                      className={this.props.classes.noContent}
-                      style={{ height: '50vh', width: '100%' }}
-                    >
+                    <div className={this.props.classes.noContent} style={{ height: '50vh', width: '100%' }}>
                       <ErrorOutline className={this.props.classes.errorIcon} />
                       <h4> aucune donnée disponible </h4>
                     </div>
@@ -845,12 +779,7 @@ class ParcoursContainer extends Component<Props> {
             <VueGlobale hideLayout={this.state.hideLayout} />
           )}
         </FullModal>
-        <ConfirmModal
-          open={this.state.openConfirm}
-          YesButton={this.YesDelete}
-          NoButton={this.NoDelete}
-          close={this.NoDelete}
-        />
+        <ConfirmModal open={this.state.openConfirm} YesButton={this.YesDelete} NoButton={this.NoDelete} close={this.NoDelete} />
       </>
     );
   }
@@ -884,15 +813,11 @@ function mapStateToProps(state: ReduxState): MapToProps {
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
   return {
-    getListParcours: payload =>
-      dispatch(listParcoursActions.listParcoursRequest(payload)),
-    getParcours: payload =>
-      dispatch(getParcoursActions.getParcoursRequest(payload)),
-    getJobs: payload => dispatch(getJobsActions.getJobsRequest(payload)),
-    listCompetences: payload =>
-      dispatch(listCompetencesActions.listCompetencesRequest(payload)),
-    deleteParcour: payload =>
-      dispatch(deleteParcourActions.deleteParcourRequest(payload)),
+    getListParcours: (payload) => dispatch(listParcoursActions.listParcoursRequest(payload)),
+    getParcours: (payload) => dispatch(getParcoursActions.getParcoursRequest(payload)),
+    getJobs: (payload) => dispatch(getJobsActions.getJobsRequest(payload)),
+    listCompetences: (payload) => dispatch(listCompetencesActions.listCompetencesRequest(payload)),
+    deleteParcour: (payload) => dispatch(deleteParcourActions.deleteParcourRequest(payload)),
   };
 }
 
