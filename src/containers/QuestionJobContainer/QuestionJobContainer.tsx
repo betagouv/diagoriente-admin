@@ -7,11 +7,7 @@ import { isEmpty } from 'lodash';
 import Table from '../../component/Table/Tables';
 import FullModal from '../../component/fullScreenModal/fullModal';
 
-import {
-  listJobs,
-  getJob,
-  patchJob
-} from '../../requests/jobs';
+import { listJobs, getJob, patchJob } from '../../requests/jobs';
 import classes from './QuestionJobsContainer.module.css';
 import {
   ListParams,
@@ -19,7 +15,7 @@ import {
   ListResponse,
   Response,
   CreateJobData,
-  CreateQuestionJobData
+  CreateQuestionJobData,
 } from 'requests';
 
 import withApi, { ApiComponentProps } from '../../hoc/withApis';
@@ -37,9 +33,9 @@ interface State {
 
 type Props = RouteComponentProps &
   ApiComponentProps<{
-    list: ListResponse<Job>;
-    details: Job;
-    edit: Job;
+    list: typeof listJobs;
+    details: typeof getJob;
+    edit: typeof patchJob;
   }>;
 
 const PER_PAGE = 5;
@@ -57,16 +53,16 @@ class QuestionJobContainer extends React.Component<Props, State> {
       open: false,
       title: '',
       openConfirm: false,
-      currentSelectedId: ''
+      currentSelectedId: '',
     };
   }
 
   headers = [
     {
       id: 'title',
-      title: 'Titre'
+      title: 'Titre',
     },
-    { id: 'description', title: 'Description' }
+    { id: 'description', title: 'Description' },
   ];
 
   search: string = '';
@@ -82,9 +78,7 @@ class QuestionJobContainer extends React.Component<Props, State> {
     const { page } = decodeUri(this.props.location.search);
     if (
       this.checkSuccess('edit', props) ||
-      (props.list.fetching &&
-        !this.props.list.fetching &&
-        this.props.list.data.totalPages < page)
+      (props.list.fetching && !this.props.list.fetching && this.props.list.data.totalPages < page)
     ) {
       this.props.history.push('/questionJob');
       this.getList({ search: this.search });
@@ -101,7 +95,7 @@ class QuestionJobContainer extends React.Component<Props, State> {
     const { location } = this.props;
     return matchPath(location.pathname, {
       path: '/questionJob/edit/:id',
-      exact: true
+      exact: true,
     });
   };
 
@@ -124,7 +118,7 @@ class QuestionJobContainer extends React.Component<Props, State> {
     if (editMatch) {
       this.props.edit.call({
         id: (editMatch.params as { id: string }).id,
-        questionJobs
+        questionJobs,
       });
     }
   };
@@ -143,14 +137,14 @@ class QuestionJobContainer extends React.Component<Props, State> {
     if (this.search) params.search = this.search;
     this.props.history.push({
       pathname: this.props.location.pathname,
-      search: encodeUri({ page })
+      search: encodeUri({ page }),
     });
     this.getList(params);
   };
   /** */
   handleClickOpen = () => {
     this.setState({
-      open: true
+      open: true,
     });
   };
 
@@ -168,7 +162,7 @@ class QuestionJobContainer extends React.Component<Props, State> {
   openEditModal = (id: string) => {
     this.props.history.push({
       pathname: `/questionJob/edit/${id}`,
-      search: this.props.location.search
+      search: this.props.location.search,
     });
   };
 
@@ -182,48 +176,44 @@ class QuestionJobContainer extends React.Component<Props, State> {
       return <CircularProgress />;
     }
 
-    return (<QuestionJobForm
-      questionJobs={data.questionJobs}
-      onSubmitHandler={this.edit}
-      requestClose={() => { }}
-    />);
+    return (
+      <QuestionJobForm
+        questionJobs={data.questionJobs}
+        onSubmitHandler={this.edit}
+        requestClose={() => {}}
+      />
+    );
   };
 
   render() {
-    const {
-      data,
-      totalPages,
-      currentPage,
-      count,
-      perPage
-    } = this.props.list.data;
+    const { data, totalPages, currentPage, count, perPage } = this.props.list.data;
 
     return (
       <>
         {this.props.list.fetching && (
-          <div
-            className={classes.loader_container}
-          >
+          <div className={classes.loader_container}>
             <CircularProgress />
           </div>
         )}
 
-        {data && (<Table
-          rows={data}
-          headers={this.headers}
-          totalPages={totalPages}
-          count={count}
-          currentPage={currentPage}
-          rowsPerPage={perPage}
-          handlePageChange={this.handlePageChange}
-          search={this.searchRequest}
-          reset={this.getList}
-          edit={this.openEdit}
-          typeFilter={false}
-          hasEdit={true}
-          hasDelete={false}
-          hasAdd={false}
-        />)}
+        {data && (
+          <Table
+            rows={data}
+            headers={this.headers}
+            totalPages={totalPages}
+            count={count}
+            currentPage={currentPage}
+            rowsPerPage={perPage}
+            handlePageChange={this.handlePageChange}
+            search={this.searchRequest}
+            reset={this.getList}
+            edit={this.openEdit}
+            typeFilter={false}
+            hasEdit={true}
+            hasDelete={false}
+            hasAdd={false}
+          />
+        )}
         {!this.props.list.fetching && (!data || data.length === 0) && (
           <p className={classes.empty}>
             {this.props.list.error || 'Aucune piste métier a afficher...'}
@@ -235,9 +225,7 @@ class QuestionJobContainer extends React.Component<Props, State> {
           title="Modifier Métier"
           fullScreen
         >
-          <div className={classes.center}>
-            {this.renderModalContent()}
-          </div>
+          <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
       </>
     );
@@ -247,5 +235,5 @@ class QuestionJobContainer extends React.Component<Props, State> {
 export default withApi({
   list: listJobs,
   details: getJob,
-  edit: patchJob
+  edit: patchJob,
 })(QuestionJobContainer);
