@@ -37,7 +37,7 @@ import format from '../../utils/formatChartData';
 import formatOcc from '../../utils/competencesOcc';
 import Collapse from '../../component/CollaplseList/collpase';
 import Paper from '@material-ui/core/Paper';
-import { Rowing } from '@material-ui/icons';
+import { Rowing, FullscreenExit } from '@material-ui/icons';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import betagouvfr from '../../assets/images/png/betagouvfr.png';
@@ -57,6 +57,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import { string } from 'prop-types';
 
 const colors = [
   'rgba(255, 0, 0, 0.5)',
@@ -81,6 +82,11 @@ const styles = () =>
     fill: {
       height: '100%',
       width: '100%',
+    },
+    questionContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '92%',
     },
     absolute: {
       position: 'absolute',
@@ -163,6 +169,7 @@ const styles = () =>
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      padding: '0 13px 0 3px',
     },
     RowContainer3: {
       display: 'flex',
@@ -196,6 +203,7 @@ const styles = () =>
 interface StyleProps extends WithStyles<typeof styles> {
   classes: {
     fill: string;
+    questionContainer: string;
     center: string;
     absolute: string;
     RowContainer2: string;
@@ -248,23 +256,33 @@ interface DispatchToProps {
 interface State {
   currentSelectedId: string;
   openModal: boolean;
-  search: string;
-  openConfirm: boolean;
-  expanded: boolean;
-  hideLayout: boolean;
-  value: string;
-}
+  openModalQuestion: boolean;
+  currentJob: any;
 
+  openConfirm: boolean;
+  expanded: boolean | string;
+  value: string;
+  tabIndex: number;
+  hideLayout: boolean;
+}
+interface questionJobs {
+  _id: string;
+
+  label: string;
+  response: boolean;
+}
 type Props = MapToProps & DispatchToProps & RouteComponentProps & StyleProps;
 
 const customRender = (row: string): string => row || '--';
 
-class ParcoursContainer extends Component<Props> {
-  state = {
+class ParcoursContainer extends Component<Props, State> {
+  state: State = {
     currentSelectedId: '',
     openModal: false,
+    openModalQuestion: false,
+    currentJob: {},
     openConfirm: false,
-    expanded: null,
+    expanded: '',
     hideLayout: false,
     tabIndex: 0,
     value: '',
@@ -321,6 +339,7 @@ class ParcoursContainer extends Component<Props> {
   }
 
   componentDidUpdate(props: Props, prevState: any) {
+    console.log('hello', props);
     if (!this.props.deleteFetching && props.deleteFetching && !this.props.deleteError) {
       this.getListParcours();
     }
@@ -368,6 +387,12 @@ class ParcoursContainer extends Component<Props> {
       search: this.props.location.search,
     });
     this.setState({ openModal: false });
+  };
+  openModalQuestions = (item: Job) => {
+    this.setState({ openModalQuestion: true, currentJob: item }, () => console.log('state', this.state));
+  };
+  closeModalQuestions = () => {
+    this.setState({ openModalQuestion: false });
   };
   getListCompetences = (params: ListCompetencesParams = {}) => {
     this.props.listCompetences({
@@ -565,7 +590,29 @@ class ParcoursContainer extends Component<Props> {
       }),
     );
   };
+  renderModalContent = (question: questionJobs) => {
+    if (question) {
+      /*       return questions.map((question: any, index: number) => <span style={{ backgroundColor: 'red' }}>azertyui</span>);
+       */
 
+      return (
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', margin: '10px 0px' }}>
+          <span>{question.label}</span>
+          <img
+            src={question.response ? require('../../assets/images/check.svg') : require('../../assets/images/no-stopping.svg')}
+            style={{
+              width: 20,
+              paddingTop: 4,
+              marginRight: 5,
+
+              alignSelf: 'center',
+            }}
+          />
+        </div>
+      );
+    }
+    return;
+  };
   render(): JSX.Element {
     const parcours = this.props.parcours.map((parcour) => {
       const advisorId = parcour.advisorId;
@@ -715,12 +762,13 @@ class ParcoursContainer extends Component<Props> {
                 <Grid container spacing={16}>
                   {this.props.jobs.length ? (
                     this.props.jobs.map((item, index) => {
+                      console.log('map 1');
                       return (
                         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                           <ExpansionPanel
                             expanded={this.state.expanded === `panel${index}`}
                             onChange={this.handleChange(`panel${index}`)}
-                            style={{ width: '88%' }}
+                            style={{ width: '92%', margin: ' 5px 0px' }}
                           >
                             <ExpansionPanelSummary
                               classes={{
@@ -754,14 +802,20 @@ class ParcoursContainer extends Component<Props> {
                             </ExpansionPanelDetails>
                           </ExpansionPanel>
                           <img
-                            src={require('../../assets/images/conversation.svg')}
+                            src={
+                              item.questionJobs.length > 0
+                                ? require('../../assets/images/conversation.svg')
+                                : require('../../assets/images/conversationGrisé.svg')
+                            }
                             style={{
                               width: 20,
                               paddingTop: 4,
                               marginRight: 5,
+                              cursor: item.questionJobs.length > 0 ? 'pointer' : 'not-allowed',
                             }}
-                            /*                             className={this.props.classes.questionButton}
-                             */
+                            onClick={() => {
+                              item.questionJobs.length > 0 ? this.openModalQuestions(item) : null;
+                            }}
                           />
                         </div>
                       );
@@ -779,6 +833,29 @@ class ParcoursContainer extends Component<Props> {
             <VueGlobale hideLayout={this.state.hideLayout} />
           )}
         </FullModal>
+
+        {this.state.openModalQuestion && (
+          <FullModal open={this.state.openModalQuestion} handleClose={this.closeModalQuestions} title={this.state.currentJob.title} maxWidth={'sm'}>
+            <div
+              className={this.props.classes.fill}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <div className={this.props.classes.questionContainer}>
+                {this.state.currentJob.questionJobs.map((question: questionJobs, index: number) => {
+                  if (index === 0) {
+                    console.log('all question job', this.state.currentJob.questionJobs);
+                  }
+                  console.log(`question n:${index}`, question);
+                  return <Paper style={{ margin: '5px 0px' }}>{this.renderModalContent(question)}</Paper>;
+                })}
+              </div>
+            </div>
+          </FullModal>
+        )}
         <ConfirmModal open={this.state.openConfirm} YesButton={this.YesDelete} NoButton={this.NoDelete} close={this.NoDelete} />
       </>
     );

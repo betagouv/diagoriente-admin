@@ -240,9 +240,7 @@ class JobsContainer extends React.Component<Props, State> {
               environments={this.props.details.data.environments}
               Acceccible={this.props.details.data.accessibility}
               selectedSecteur={
-                this.props.details.data.secteur && this.props.details.data.secteur.length
-                  ? this.props.details.data.secteur[0]._id
-                  : ''
+                this.props.details.data.secteur && this.props.details.data.secteur.length ? this.props.details.data.secteur[0]._id : ''
               }
               link={this.props.details.data.link}
             />

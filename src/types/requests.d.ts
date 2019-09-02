@@ -296,6 +296,21 @@ declare module 'requests' {
       context?: IContext[];
     };
     families: Famille[];
+    jobs: {
+      _id: string;
+      title: string;
+      questionJobs: {
+        createdAt: string;
+        jobId: string;
+        parcourId: string;
+        questionJobId: string;
+        questionJobLabel: string;
+        response: boolean;
+        updatedAt: string;
+
+        _id: string;
+      }[];
+    }[];
   }
 
   export interface listLoginParams {
@@ -387,7 +402,12 @@ declare module 'requests' {
     interested: boolean;
     environments: IEnvironment[];
     link: string;
-    questionJobs: { _id: string; label: string }[];
+    questionJobs: {
+      _id: string;
+
+      label: string;
+      response: boolean;
+    }[];
   }
 
   export interface CreateJobData {
@@ -402,7 +422,6 @@ declare module 'requests' {
     link: string;
     questionJobs: { _id?: string; label: string }[];
   }
-
 
   export interface CreateQuestionJobData {
     questionJobs: { _id?: string; label: string }[];
