@@ -5,7 +5,7 @@ import { IParcour, listParcoursParams, getParcoursParams, getJobsParams, ListCom
 import moment from 'moment';
 import { isArray } from 'lodash';
 import { getUser } from '../../requests';
-import { IUser, GetUserParams, Response, Job } from 'requests';
+import { Job } from 'requests';
 
 import { ReduxState } from 'reducers';
 import { RouteComponentProps } from 'react-router-dom';
@@ -339,7 +339,6 @@ class ParcoursContainer extends Component<Props, State> {
   }
 
   componentDidUpdate(props: Props, prevState: any) {
-    console.log('hello', props);
     if (!this.props.deleteFetching && props.deleteFetching && !this.props.deleteError) {
       this.getListParcours();
     }
@@ -389,7 +388,7 @@ class ParcoursContainer extends Component<Props, State> {
     this.setState({ openModal: false });
   };
   openModalQuestions = (item: Job) => {
-    this.setState({ openModalQuestion: true, currentJob: item }, () => console.log('state', this.state));
+    this.setState({ openModalQuestion: true, currentJob: item });
   };
   closeModalQuestions = () => {
     this.setState({ openModalQuestion: false });
@@ -597,7 +596,7 @@ class ParcoursContainer extends Component<Props, State> {
 
       return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', margin: '10px 0px' }}>
-          <span>{question.label}</span>
+          <span style={{ width: '75%' }}>{question.label}</span>
           <img
             src={question.response ? require('../../assets/images/check.svg') : require('../../assets/images/no-stopping.svg')}
             style={{
@@ -762,7 +761,6 @@ class ParcoursContainer extends Component<Props, State> {
                 <Grid container spacing={16}>
                   {this.props.jobs.length ? (
                     this.props.jobs.map((item, index) => {
-                      console.log('map 1');
                       return (
                         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                           <ExpansionPanel
@@ -805,7 +803,7 @@ class ParcoursContainer extends Component<Props, State> {
                             src={
                               item.questionJobs.length > 0
                                 ? require('../../assets/images/conversation.svg')
-                                : require('../../assets/images/conversationGrisé.svg')
+                                : require('../../assets/images/conversationGrise.svg')
                             }
                             style={{
                               width: 20,
@@ -846,10 +844,6 @@ class ParcoursContainer extends Component<Props, State> {
             >
               <div className={this.props.classes.questionContainer}>
                 {this.state.currentJob.questionJobs.map((question: questionJobs, index: number) => {
-                  if (index === 0) {
-                    console.log('all question job', this.state.currentJob.questionJobs);
-                  }
-                  console.log(`question n:${index}`, question);
                   return <Paper style={{ margin: '5px 0px' }}>{this.renderModalContent(question)}</Paper>;
                 })}
               </div>
