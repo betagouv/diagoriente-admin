@@ -65,6 +65,8 @@ interface BaseProps {
   hasTabs?: boolean;
   handleChange(event: React.ChangeEvent<{}>, value: number): void;
   tabIndex: number;
+  tabLabel1?: string;
+  tabLabel2?: string;
 }
 interface StyleProps {
   classes: {
@@ -117,8 +119,8 @@ class FullModal extends React.Component<Props> {
                   indicatorColor="primary"
                   variant="fullWidth"
                 >
-                  <Tab label="liste des pistes" className={classes.tabLabel} />
-                  <Tab label="Vue Global" className={classes.tabLabel} />
+                  <Tab label={this.props.tabLabel1} className={classes.tabLabel} />
+                  <Tab label={this.props.tabLabel2} className={classes.tabLabel} />
                 </Tabs>
               )}
               {this.props.hasDownload && tabIndex === 1 ? (

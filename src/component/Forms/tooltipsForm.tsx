@@ -1,0 +1,237 @@
+import React from 'react'
+import Input from '@material-ui/core/Input/Input'
+import { ICompetence, Theme, Activity } from 'requests'
+import Button from '@material-ui/core/Button/Button'
+import { withStyles } from "@material-ui/core/styles";
+import createStyles from "@material-ui/core/styles/createStyles";
+
+interface Props {
+	competences: ICompetence[];
+	submitText: string;
+	onSubmitHandler: (params: SubmitParamsTootltip) => void;
+	theme:Theme;
+	classes: any;
+}
+
+export interface SubmitParamsTootltip {
+    title?: string;
+    description?: string;
+    type?: string;
+    verified?: boolean;
+    activities?: Activity[];
+    parentId?: string;
+    required?: {_id: string, title: string}[];
+    tooltips?: any[];
+  }
+
+interface State {
+	comp1: { competenceId: string; tooltip: string }
+	comp2: { competenceId: string; tooltip: string }
+	comp3: { competenceId: string; tooltip: string }
+	comp4: { competenceId: string; tooltip: string }
+	comp5: { competenceId: string; tooltip: string }
+	comp6: { competenceId: string; tooltip: string }
+	comp7: { competenceId: string; tooltip: string }
+	comp8: { competenceId: string; tooltip: string }
+	comp9: { competenceId: string; tooltip: string }
+	comp10: { competenceId: string; tooltip: string }
+}
+
+class TooltipForm extends React.Component<Props, State> {
+	state = {
+		comp1: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[0]._id, tooltip: '' },
+		comp2: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[1]._id, tooltip: '' },
+		comp3: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[2]._id, tooltip: '' },
+		comp4: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[3]._id, tooltip: '' },
+		comp5: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[4]._id, tooltip: '' },
+		comp6: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[5]._id, tooltip: '' },
+		comp7: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[6]._id, tooltip: '' },
+		comp8: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[7]._id, tooltip: '' },
+		comp9: this.props.theme.tooltips && this.props.theme.tooltips[0] ||{ competenceId: this.props.competences[8]._id, tooltip: '' },
+		comp10:this.props.theme.tooltips && this.props.theme.tooltips[0] || { competenceId: this.props.competences[9]._id, tooltip: '' }
+	}
+	handleChange1 = (e: any) => {
+		this.setState({ comp1: { ...this.state.comp1, tooltip: e.target.value } })
+	}
+	handleChange2 = (e: any) => {
+		this.setState({ comp2: { ...this.state.comp2, tooltip: e.target.value } })
+	}
+	handleChange3 = (e: any) => {
+		this.setState({ comp3: { ...this.state.comp3, tooltip: e.target.value } })
+	}
+	handleChange4 = (e: any) => {
+		this.setState({ comp4: { ...this.state.comp4, tooltip: e.target.value } })
+	}
+	handleChange5 = (e: any) => {
+		this.setState({ comp5: { ...this.state.comp5, tooltip: e.target.value } })
+	}
+	handleChange6 = (e: any) => {
+		this.setState({ comp6: { ...this.state.comp6, tooltip: e.target.value } })
+	}
+	handleChange7 = (e: any) => {
+		this.setState({ comp7: { ...this.state.comp7, tooltip: e.target.value } })
+	}
+	handleChange8 = (e: any) => {
+		this.setState({ comp8: { ...this.state.comp8, tooltip: e.target.value } })
+	}
+	handleChange9 = (e: any) => {
+		this.setState({ comp9: { ...this.state.comp9, tooltip: e.target.value } })
+	}
+	handleChange10 = (e: any) => {
+		this.setState({ comp10: { ...this.state.comp10, tooltip: e.target.value } })
+	}
+	onSubmitHandler = (e: React.MouseEvent<HTMLInputElement>) => {
+		e.preventDefault()
+		if (
+			this.state.comp1.tooltip !== '' &&
+			this.state.comp2.tooltip !== '' &&
+			this.state.comp3.tooltip !== '' &&
+			this.state.comp4.tooltip !== '' &&
+			this.state.comp5.tooltip !== '' &&
+			this.state.comp6.tooltip !== '' &&
+			this.state.comp7.tooltip !== '' &&
+			this.state.comp8.tooltip !== '' &&
+			this.state.comp9.tooltip !== '' &&
+			this.state.comp10.tooltip !== ''
+		) {
+            
+			this.props.onSubmitHandler({
+				tooltips: [
+					this.state.comp1,
+					this.state.comp2,
+					this.state.comp3,
+					this.state.comp4,
+					this.state.comp5,
+					this.state.comp6,
+					this.state.comp7,
+					this.state.comp8,
+					this.state.comp9,
+					this.state.comp10
+				]
+			})
+		}
+            
+	}
+
+	render() {
+		const { competences } = this.props
+		const { classes } = this.props
+		return (
+			<div className={classes.container}>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[0].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp1.tooltip}
+						onChange={this.handleChange1}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[1].title}</label>
+					<Input
+					    className={classes.input} 
+						value={this.state.comp2.tooltip}
+						onChange={this.handleChange2}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[2].title}</label>
+					<Input 
+					    className={classes.input}
+						value={this.state.comp3.tooltip}
+						onChange={this.handleChange3}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[3].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp4.tooltip}
+						onChange={this.handleChange4}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[4].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp5.tooltip}
+						onChange={this.handleChange5}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[5].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp6.tooltip}
+						onChange={this.handleChange6}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[6].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp7.tooltip}
+						onChange={this.handleChange7}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[7].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp8.tooltip}
+						onChange={this.handleChange8}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[8].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp9.tooltip}
+						onChange={this.handleChange9}
+					/>
+				</div>
+				<div className= {classes.inputWrapper}>
+					<label className={classes.label} htmlFor="">{competences[9].title}</label>
+					<Input
+					    className={classes.input}
+						value={this.state.comp10.tooltip}
+						onChange={this.handleChange10}
+					/>
+				</div>
+				<Button
+					variant="contained"
+					color="primary"
+					type="submit"
+					onClick={this.onSubmitHandler}
+				>
+					{this.props.submitText}
+				</Button>
+			</div>
+		)
+	}
+}
+const styles = () =>
+  createStyles({
+    container: {
+      width: '100%',
+      height: "100%",
+	  display: 'flex',
+	  flexDirection: 'column',
+	  justifyContent: 'space-evenly',
+	  alignItems: 'center',
+	},
+	inputWrapper : {
+		display: 'flex',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		width: '80%',
+	},
+	input: {
+		width: '80%'
+	},
+	label : {
+		width: 350
+	}
+  });
+
+export default withStyles(styles)(TooltipForm)

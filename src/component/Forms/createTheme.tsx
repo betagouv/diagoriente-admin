@@ -1,25 +1,25 @@
-import React, { MouseEvent } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import createStyles from '@material-ui/core/styles/createStyles';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '../inputs/input';
-import SelectInput from '../inputs/selectInput';
-import Typography from '@material-ui/core/Typography';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import AutoComplete from '../inputs/autoComplete';
-import Close from '../Icons/Close';
-import { listActivities, listCompetences } from '../../requests';
+import React, { MouseEvent } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import createStyles from "@material-ui/core/styles/createStyles";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Input from "../inputs/input";
+import SelectInput from "../inputs/selectInput";
+import Typography from "@material-ui/core/Typography";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import AutoComplete from "../inputs/autoComplete";
+import Close from "../Icons/Close";
+import { listActivities, listCompetences } from "../../requests";
 import {
   Activity,
   ListActivitiesResponse,
   Response,
   ListCompetencesResponse,
-  ICompetence,
-} from 'requests';
+  ICompetence
+} from "requests";
 
 export interface SubmitParams {
   title: string;
@@ -29,6 +29,7 @@ export interface SubmitParams {
   activities: string[];
   parentId?: string;
   required?: any[];
+  tooltips?: any[];
 }
 
 interface Props {
@@ -50,143 +51,143 @@ interface Props {
 
 class CreateTheme extends React.Component<Props> {
   static defaultProps = {
-    header: 'Créer Théme',
-    submitText: 'Créer Théme',
+    header: "Créer Théme",
+    submitText: "Créer Théme"
   };
 
   state = {
-    titleValue: this.props.title || '',
+    titleValue: this.props.title || "",
     errorForTitle: false,
-    titleError: '',
-    descriptionValue: this.props.description || '',
-    descriptionError: '',
+    titleError: "",
+    descriptionValue: this.props.description || "",
+    descriptionError: "",
     errorForDescription: false,
-    role: this.props.type || '',
+    role: this.props.type || "",
     emptyRole: false,
-    roleError: '',
-    activity: '',
+    roleError: "",
+    activity: "",
     verified: this.props.verified || false,
     submit: false,
-    secteur: '' || this.props.selectedSecteur,
+    secteur: "" || this.props.selectedSecteur,
     activities: this.props.activities
       ? this.props.activities.map(activity => ({
-        label: activity.title,
-        value: activity._id,
-      }))
+          label: activity.title,
+          value: activity._id
+        }))
       : [],
     required: this.props.required
       ? this.props.required.map(competence => ({
-        label: competence.title,
-        value: competence._id,
-      }))
-      : [],
+          label: competence.title,
+          value: competence._id
+        }))
+      : []
   };
   // handle errors
   validateTitle = (value: string) => {
-    return value ? '' : 'vous devez inserer un titre';
-  }
+    return value ? "" : "vous devez inserer un titre";
+  };
   validateDescription = (value: string) => {
-    return value ? '' : 'vous devez inserer une description';
-  }
+    return value ? "" : "vous devez inserer une description";
+  };
   validateRole = (value: string) => {
-    return value ? '' : 'vous devez selectionner un role';
-  }
+    return value ? "" : "vous devez selectionner un role";
+  };
 
   // handle checkbok change
   handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ verified: event.target.checked });
-  }
+  };
   // handle title changes
   handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const titleError = this.validateTitle(e.currentTarget.value);
     this.setState({
       titleError,
       titleValue: e.currentTarget.value,
-      errorForTitle: !!titleError,
+      errorForTitle: !!titleError
     });
-  }
+  };
   // handle change for description
   onChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
     const descriptionError = this.validateDescription(e.currentTarget.value);
     this.setState({
       descriptionError,
       descriptionValue: e.currentTarget.value,
-      errorForDescription: !!descriptionError,
+      errorForDescription: !!descriptionError
     });
-  }
+  };
   // handle select input changes
   handleSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const roleError = this.validateRole(e.target.value);
     this.setState({ roleError, role: e.target.value, emptyRole: !!roleError });
-  }
+  };
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ secteur: e.target.value });
-  }
+  };
 
   handleSuggestion = async (value: string) => {
     try {
       const response: Response<ListActivitiesResponse> = await listActivities({
         search: value,
-        perPage: 10,
+        perPage: 10
       });
 
       if (response.code === 200 && response.data) {
         return response.data.data.map(suggestion => ({
           value: suggestion._id,
-          label: suggestion.title,
+          label: suggestion.title
         }));
       }
       return [];
     } catch (e) {
       return [];
     }
-  }
+  };
 
   activitiesChange = (activities: { label: string; value: string }[]) => {
     this.setState({
-      activities,
+      activities
     });
-  }
+  };
 
   handleSuggestionCompetences = async (value: string) => {
     try {
       const response: Response<any> = await listCompetences({
         search: value,
-        perPage: 10,
+        perPage: 10
       });
 
       if (response.code === 200 && response.data) {
         return response.data.map((suggestion: any) => ({
           value: suggestion._id,
-          label: suggestion.title,
+          label: suggestion.title
         }));
       }
       return [];
     } catch (e) {
       return [];
     }
-  }
+  };
 
   CompetencesChange = (Competences: { label: string; value: string }[]) => {
     this.setState({
-      required: Competences,
+      required: Competences
     });
-  }
+  };
 
   // oncreate theme handler
   onSubmitHandler = (e: MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (
-      this.validateTitle(this.state.titleValue) !== '' ||
-      this.validateDescription(this.state.descriptionValue) !== '' ||
-      this.validateRole(this.state.role) !== ''
+      this.validateTitle(this.state.titleValue) !== "" ||
+      this.validateDescription(this.state.descriptionValue) !== "" ||
+      this.validateRole(this.state.role) !== ""
     ) {
       this.setState({
         titleError: this.validateTitle(this.state.titleValue),
         error: true,
         descriptionError: this.validateDescription(this.state.descriptionValue),
         errorForTitle: true,
-        roleError: this.validateRole(this.state.role),
+        roleError: this.validateRole(this.state.role)
       });
     } else {
       this.props.onSubmitHandler({
@@ -196,10 +197,10 @@ class CreateTheme extends React.Component<Props> {
         verified: this.state.verified,
         activities: this.state.activities.map(activity => activity.value),
         parentId: this.state.secteur,
-        required: this.state.required.map(required => required.value),
+        required: this.state.required.map(required => required.value)
       });
     }
-  }
+  };
 
   public render(): JSX.Element {
     const { classes } = this.props;
@@ -235,7 +236,7 @@ class CreateTheme extends React.Component<Props> {
               }
               label="Verified"
             />
-            <FormHelperText style={{ color: 'red' }} />
+            <FormHelperText style={{ color: "red" }} />
             <SelectInput
               label="Role"
               Selectvalue={this.state.role}
@@ -244,11 +245,11 @@ class CreateTheme extends React.Component<Props> {
               indication={this.state.roleError}
               id="1"
               choice={[
-                { _id: 'professional', title: 'professional' },
-                { _id: 'personal', title: 'personal' },
+                { _id: "professional", title: "professional" },
+                { _id: "personal", title: "personal" }
               ]}
             />
-            {this.state.role === 'professional' ? (
+            {this.state.role === "professional" ? (
               <SelectInput
                 label="Secteur"
                 Selectvalue={this.state.secteur}
@@ -263,14 +264,14 @@ class CreateTheme extends React.Component<Props> {
               placeholder="activité"
               handleChange={this.activitiesChange}
               value={this.state.activities}
-              title={'activities'}
+              title={"activities"}
               handleInputChange={this.handleSuggestion}
             />
             <AutoComplete
               placeholder="Compétences"
               handleChange={this.CompetencesChange}
               value={this.state.required}
-              title={'Competences'}
+              title={"Competences"}
               handleInputChange={this.handleSuggestionCompetences}
             />
 
@@ -294,38 +295,38 @@ const styles = () =>
   createStyles({
     container: {
       paddingBottom: 15,
-      flex: '1 1 50%',
-      paddingLeft: 15,
+      flex: "1 1 50%",
+      paddingLeft: 15
     },
     card: {
-      position: 'relative',
-      width: '100%',
+      position: "relative",
+      width: "100%",
       padding: 30,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      height: '100%',
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      height: "100%"
     },
     formTitle: {},
     button: {
       marginBottom: 30,
-      marginRight: 'auto',
-      marginLeft: 'auto',
-      display: 'block',
+      marginRight: "auto",
+      marginLeft: "auto",
+      display: "block"
     },
     close: {
-      position: 'absolute',
+      position: "absolute",
       right: 15,
-      top: 20,
+      top: 20
     },
     contentContainer: {
-      width: '80%',
-      height: '100%',
-      flex: '0 0 auto',
-      alignItems: 'stretch',
-      display: 'flex',
-      flexDirection: 'column',
-    },
+      width: "80%",
+      height: "100%",
+      flex: "0 0 auto",
+      alignItems: "stretch",
+      display: "flex",
+      flexDirection: "column"
+    }
   });
 
 export default withStyles(styles)(CreateTheme);

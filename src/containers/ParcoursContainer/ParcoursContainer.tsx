@@ -672,6 +672,8 @@ class ParcoursContainer extends Component<Props> {
           hasTabs
           handleChange={this.handleTabChange}
           tabIndex={this.state.tabIndex}
+          tabLabel1={'liste des pistes'}
+          tabLabel2={'vue global'}
         >
           {!this.state.tabIndex ? (
             <Grid

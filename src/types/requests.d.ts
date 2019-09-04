@@ -124,7 +124,8 @@ declare module 'requests' {
     activities: Activity[];
     resources: { color: string; backgroundColor: string; icon: string };
     parentId: string;
-    required?: string[];
+    required?: {_id: string, title: string}[] ;
+    tooltips?: {_id: string; competenceId: string; tooltip: string}[];
   }
   export interface ListThemesParams {
     page?: number;
@@ -147,7 +148,8 @@ declare module 'requests' {
     };
     icon?: File;
     parentId?: string;
-    required?: string[];
+    required?: string[] | {_id: string, title: string}[];
+    tooltips?: any[];
   }
   export type GetThemeParams = DeleteOrGetParams;
   export type DeleteThemeParams = DeleteOrGetParams;

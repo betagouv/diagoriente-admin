@@ -1,604 +1,696 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Dispatch, AnyAction } from 'redux';
-import { isEmpty } from 'lodash';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Dispatch, AnyAction } from 'redux'
+import { isEmpty } from 'lodash'
 import {
-  ListThemesParams,
-  Theme,
-  DeleteThemeParams,
-  GetThemeParams,
-  PatchThemeParams,
-  CreateThemeParams,
-  CreateActivityParams,
-  ISecteur,
-  ListSecteursParams,
-} from 'requests';
-import { ReduxState } from 'reducers';
-import { RouteComponentProps, matchPath } from 'react-router-dom';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import createStyles from '@material-ui/core/styles/createStyles';
-import { Location } from 'history';
-import Grid from '@material-ui/core/Grid';
+	ListThemesParams,
+	Theme,
+	DeleteThemeParams,
+	GetThemeParams,
+	PatchThemeParams,
+	CreateThemeParams,
+	CreateActivityParams,
+	ISecteur,
+	ListSecteursParams,
+	ListCompetencesParams,
+	ICompetence,
+	Activity
+} from 'requests'
+import { ReduxState } from 'reducers'
+import { RouteComponentProps, matchPath } from 'react-router-dom'
+import { withStyles, WithStyles } from '@material-ui/core/styles'
+import createStyles from '@material-ui/core/styles/createStyles'
+import { Location } from 'history'
+import Grid from '@material-ui/core/Grid'
 
 // components
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Table from '../../component/Table/Tables';
-import CreateTheme, { SubmitParams } from '../../component/Forms/createTheme';
-import IconVerified from '../../component/Icons/IconVerified';
-import IconNotVerified from '../../component/Icons/IconNotVerified';
-import ConfirmModal from '../../component/ConfirmModal/ConfirmModal';
-import FullModal from '../../component/fullScreenModal/fullModal';
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Table from '../../component/Table/Tables'
+import CreateTheme, { SubmitParams } from '../../component/Forms/createTheme'
+import IconVerified from '../../component/Icons/IconVerified'
+import IconNotVerified from '../../component/Icons/IconNotVerified'
+import ConfirmModal from '../../component/ConfirmModal/ConfirmModal'
+import FullModal from '../../component/fullScreenModal/fullModal'
 import ActivityForm, {
-  ActivityFormComponent,
-} from '../../component/Forms/activityForm';
+	ActivityFormComponent
+} from '../../component/Forms/activityForm'
 import ResourcesForm, {
-  ResourcesFormComponent,
-} from '../../component/Forms/resourcesForm';
+	ResourcesFormComponent
+} from '../../component/Forms/resourcesForm'
+import TooltipForm, {
+	SubmitParamsTootltip
+} from '../../component/Forms/tooltipsForm'
 
 // actions
-import listThemesActions from '../../reducers/themes/listThemes';
-import deleteThemeActions from '../../reducers/themes/deleteTheme';
-import getThemeActions from '../../reducers/themes/getTheme';
-import editThemeActions from '../../reducers/themes/patchTheme';
-import createThemeActions from '../../reducers/themes/createTheme';
-import createActivityActions from '../../reducers/activities/createActivity';
-import listSecteursActions from '../../reducers/secteur/listSecteurs';
+import listThemesActions from '../../reducers/themes/listThemes'
+import deleteThemeActions from '../../reducers/themes/deleteTheme'
+import getThemeActions from '../../reducers/themes/getTheme'
+import editThemeActions from '../../reducers/themes/patchTheme'
+import createThemeActions from '../../reducers/themes/createTheme'
+import createActivityActions from '../../reducers/activities/createActivity'
+import listSecteursActions from '../../reducers/secteur/listSecteurs'
+import listCompetencesActions from '../../reducers/competences/listCompetences'
 
 // utils
-import { encodeUri, decodeUri } from '../../utils/url';
-import classNames from '../../utils/classNames';
+import { encodeUri, decodeUri } from '../../utils/url'
+import classNames from '../../utils/classNames'
+import Paper from '@material-ui/core/Paper/Paper'
+import themes from '../../reducers/themes';
 
 const styles = () =>
-  createStyles({
-    center: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    fill: {
-      width: '100%',
-    },
-    absolute: {
-      position: 'absolute',
-      bottom: 0,
-      top: 0,
-      left: 0,
-      right: 0,
-      overflow: 'hidden',
-    },
-    RowContainer: {
-      flexDirection: 'row',
-      padding: '15px 40px',
-      width: '100%',
-      margin: 0,
-    },
-    ColumnContainer: {
-      margin: 25,
-    },
-    leftModalContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch',
-      flex: '1 1 50%',
-      paddingLeft: 15,
-    },
-    absoluteFill: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    },
-  });
+	createStyles({
+		center: {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		fill: {
+			width: '100%'
+		},
+		absolute: {
+			position: 'absolute',
+			bottom: 0,
+			top: 0,
+			left: 0,
+			right: 0,
+			overflow: 'hidden'
+		},
+		RowContainer: {
+			flexDirection: 'row',
+			padding: '15px 40px',
+			width: '100%',
+			margin: 0
+		},
+		ColumnContainer: {
+			margin: 25
+		},
+		leftModalContainer: {
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'stretch',
+			flex: '1 1 50%',
+			paddingLeft: 15
+		},
+		absoluteFill: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0
+		},
+		tooltipModal: {
+			display: 'flex',
+			height: '100%',
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		paper: {
+			width: '95%',
+			height: '95%',
+			padding: '30px',
+		}
+	})
 
 interface StyleProps extends WithStyles<typeof styles> {
-  classes: {
-    fill: string;
-    center: string;
-    absolute: string;
-    ColumnContainer: string;
-    RowContainer: string;
-    leftModalContainer: string;
-    absoluteFill: string;
-  };
+	classes: {
+		fill: string
+		center: string
+		absolute: string
+		ColumnContainer: string
+		RowContainer: string
+		leftModalContainer: string
+		absoluteFill: string
+		tooltipModal: string
+		paper: string
+	}
 }
 
 interface MapToProps {
-  fetching: boolean;
-  themes: Theme[];
-  deleteFetching: boolean;
-  deleteError: string;
-  getThemeFetching: boolean;
-  theme: Theme;
-  getThemeError: string;
-  editThemeFetching: boolean;
-  editThemeError: string;
-  createThemeFetching: boolean;
-  createThemeError: string;
-  count: number;
-  currentPage: number;
-  perPage: number;
-  totalPages: number;
-  createActivityFetching: boolean;
-  createActivityError: string;
-  secteurs: { _id: string; title: string }[];
+	fetching: boolean
+	themes: Theme[]
+	deleteFetching: boolean
+	deleteError: string
+	getThemeFetching: boolean
+	theme: Theme
+	getThemeError: string
+	editThemeFetching: boolean
+	editThemeError: string
+	createThemeFetching: boolean
+	createThemeError: string
+	count: number
+	currentPage: number
+	perPage: number
+	totalPages: number
+	createActivityFetching: boolean
+	createActivityError: string
+	secteurs: { _id: string; title: string }[]
+	competences: ICompetence[]
 }
 
 interface DispatchToProps {
-  getListThemes: (payload: ListThemesParams) => void;
-  deleteTheme: (payload: DeleteThemeParams) => void;
-  getTheme: (payload: GetThemeParams) => void;
-  editTheme: (payload: PatchThemeParams) => void;
-  createTheme: (payload: CreateThemeParams) => void;
-  createActivity: (payload: CreateActivityParams) => void;
-  listSecteurs: (payload: ListSecteursParams) => void;
+	getListThemes: (payload: ListThemesParams) => void
+	deleteTheme: (payload: DeleteThemeParams) => void
+	getTheme: (payload: GetThemeParams) => void
+	editTheme: (payload: PatchThemeParams) => void
+	createTheme: (payload: CreateThemeParams) => void
+	createActivity: (payload: CreateActivityParams) => void
+	listSecteurs: (payload: ListSecteursParams) => void
+	getListCompetences: (payload: ListCompetencesParams) => void
 }
 
-type Props = MapToProps & DispatchToProps & RouteComponentProps & StyleProps;
+type Props = MapToProps & DispatchToProps & RouteComponentProps & StyleProps
 
 interface State {
-  open: boolean;
-  openConfirm: boolean;
-  currentSelectedId: string;
-  openActivities: boolean;
+	open: boolean
+	openConfirm: boolean
+	currentSelectedId: string
+	openActivities: boolean
+	tabIndex: number
 }
 
-export const PER_PAGE = 20;
+export const PER_PAGE = 20
 
 class ThemesContainer extends Component<Props, State> {
-  state: State = {
-    open: false,
-    openConfirm: false,
-    currentSelectedId: '',
-    openActivities: false,
-  };
+	state: State = {
+		open: false,
+		openConfirm: false,
+		currentSelectedId: '',
+		openActivities: false,
+		tabIndex: 0
+	}
 
-  headers = [
-    {
-      id: 'title',
-      title: 'Titre',
-    },
-    { id: 'type', title: 'Type' },
-    {
-      id: 'verified',
-      title: 'Visible',
-      render: (value: boolean) => {
-        if (value) {
-          return <IconVerified />;
-        }
-        return <IconNotVerified />;
-      },
-    },
-    {
-      id: 'description',
-      title: 'Description',
-    },
-    {
-      id: 'activities',
-      title: 'Nombre activités',
-      render: (row: any) => row.length || 0,
-    },
-  ];
+	headers = [
+		{
+			id: 'title',
+			title: 'Titre'
+		},
+		{ id: 'type', title: 'Type' },
+		{
+			id: 'verified',
+			title: 'Visible',
+			render: (value: boolean) => {
+				if (value) {
+					return <IconVerified />
+				}
+				return <IconNotVerified />
+			}
+		},
+		{
+			id: 'description',
+			title: 'Description'
+		},
+		{
+			id: 'activities',
+			title: 'Nombre activités',
+			render: (row: any) => row.length || 0
+		}
+	]
 
-  resourcesForm: ResourcesFormComponent | null = null;
-  activityForm: ActivityFormComponent | null = null;
+	resourcesForm: ResourcesFormComponent | null = null
+	activityForm: ActivityFormComponent | null = null
 
-  search: string = '';
-  type: string =  'personal' || 'professional';
+	search: string = ''
+	type: string = 'personal' || 'professional'
 
-  componentDidMount() {
-    const { page } = decodeUri(this.props.location.search);
-    this.getListThemes({ page, type:'' });
-    const edit = this.isEdit(this.props.location);
-    if (edit) {
-      this.props.getTheme({ id: (edit.params as any).id });
-    }
-    this.props.listSecteurs({
-      type: 'secteur',
-    });
-  }
+	componentDidMount() {
+		const { page } = decodeUri(this.props.location.search)
+		this.getListThemes({ page, type: '' })
+		const edit = this.isEdit(this.props.location)
+		if (edit) {
+			this.props.getTheme({ id: (edit.params as any).id })
+		}
+		this.props.listSecteurs({
+			type: 'secteur'
+		})
+		this.getListCompetences()
+	}
 
-  componentDidUpdate(props: Props) {
-    if (
-      !this.props.deleteFetching &&
-      props.deleteFetching &&
-      !this.props.deleteError
-    ) {
-      this.getListThemes();
-    }
+	getListCompetences = (params: ListCompetencesParams = {}) => {
+		this.props.getListCompetences({
+			...params
+		})
+	}
 
-    const edit = this.isEdit(this.props.location);
-    if (edit && !this.isEdit(props.location)) {
-      this.props.getTheme({ id: (edit.params as any).id });
-    }
+	componentDidUpdate(props: Props, prevState: State) {
+		if (
+			!this.props.deleteFetching &&
+			props.deleteFetching &&
+			!this.props.deleteError
+		) {
+			this.getListThemes()
+		}
 
-    const showActiv = this.showActivities(this.props.location);
-    if (showActiv && !this.showActivities(props.location)) {
-      this.props.getTheme({ id: (showActiv.params as any).id });
-    }
+		const edit = this.isEdit(this.props.location)
+		if (edit && !this.isEdit(props.location)) {
+			this.props.getTheme({ id: (edit.params as any).id })
+		}
 
-    if (
-      !this.props.editThemeFetching &&
-      props.editThemeFetching &&
-      !this.props.editThemeError
-    ) {
-      this.getListThemes();
-      this.props.history.push({
-        pathname: '/themes',
-        search: this.props.location.search,
-      });
-    }
+		const showActiv = this.showActivities(this.props.location)
+		if (showActiv && !this.showActivities(props.location)) {
+			this.props.getTheme({ id: (showActiv.params as any).id })
+		}
 
-    if (
-      !this.props.createThemeFetching &&
-      props.createThemeFetching &&
-      !this.props.createThemeError
-    ) {
-      this.handleReset();
-      this.setState({ open: false });
-    }
+		if (
+			!this.props.editThemeFetching &&
+			props.editThemeFetching &&
+			!this.props.editThemeError
+		) {
+			this.getListThemes()
+			this.props.history.push({
+				pathname: '/themes',
+				search: this.props.location.search
+			})
+		}
 
-    if (
-      !this.props.createActivityFetching &&
-      props.createActivityFetching &&
-      !this.props.createActivityError &&
-      this.activityForm
-    ) {
-      this.activityForm.resetValues();
-    }
-  }
+		if (
+			!this.props.createThemeFetching &&
+			props.createThemeFetching &&
+			!this.props.createThemeError
+		) {
+			this.handleReset()
+			this.setState({ open: false })
+		}
 
-  isEdit = (location: Location) =>
-    matchPath(location.pathname, {
-      path: '/themes/:id',
-      exact: true,
-    })
-  showActivities = (location: Location) =>
-    matchPath(location.pathname, {
-      path: '/themes/activity/:id',
-      exact: true,
-    })
-  openCreateModal = () => {
-    this.setState({ open: true });
-  }
+		if (
+			!this.props.createActivityFetching &&
+			props.createActivityFetching &&
+			!this.props.createActivityError &&
+			this.activityForm
+		) {
+			this.activityForm.resetValues()
+		}
 
-  closeCreateModal = () => {
-    this.setState({ open: false });
-  }
+		if (this.state.open !== prevState.open) {
+			this.setState({ tabIndex: 0 })
+		}
+	}
 
-  openEditModal = (id: string) => {
-    this.props.history.push({
-      pathname: `/themes/${id}`,
-      search: this.props.location.search,
-    });
-  }
+	handleTabChange = (e: any, tabIndex: number) => {
+		this.setState({ tabIndex })
+	}
 
-  closeEditModal = () => {
-    this.props.history.push({
-      pathname: '/themes',
-      search: this.props.location.search,
-    });
-  }
-  openActivitiesModal = (id: string) => {
-    this.setState({ openActivities: true });
-    this.props.history.push({
-      pathname: `/themes/activity/${id}`,
-      search: this.props.location.search,
-    });
-  }
-  handleCloseActivities = () => {
-    this.setState({ openActivities: false });
-    this.props.history.push({
-      pathname: '/themes',
-      search: this.props.location.search,
-    });
-  }
+	isEdit = (location: Location) =>
+		matchPath(location.pathname, {
+			path: '/themes/:id',
+			exact: true
+		})
+	showActivities = (location: Location) =>
+		matchPath(location.pathname, {
+			path: '/themes/activity/:id',
+			exact: true
+		})
+	openCreateModal = () => {
+		this.setState({ open: true, tabIndex: 0 })
+	}
 
-  openModalDelete = (id: string) => {
-    this.setState({ openConfirm: true, currentSelectedId: id });
-  }
-  YesDelete = (id: string) => {
-    this.props.deleteTheme({ id: this.state.currentSelectedId });
-    this.setState({ openConfirm: false });
-  }
-  NoDelete = () => {
-    this.setState({ openConfirm: false });
-  }
+	closeCreateModal = () => {
+		this.setState({ open: false })
+	}
 
-  edit = ({
-    title,
-    description,
-    type,
-    verified,
-    activities,
-    parentId,
-    required,
-  }: SubmitParams) => {
-    const id = this.props.theme._id;
-    const node = this.resourcesForm;
-    if (node) {
-      const backgroundColor = node.state.background;
-      const icon = node.state.file;
-      /*  const formData = new FormData();
+	openEditModal = (id: string) => {
+		this.props.history.push({
+			pathname: `/themes/${id}`,
+			search: this.props.location.search
+		})
+		this.setState({ tabIndex: 0 })
+	}
+
+	closeEditModal = () => {
+		this.props.history.push({
+			pathname: '/themes',
+			search: this.props.location.search
+		})
+	}
+	openActivitiesModal = (id: string) => {
+		this.setState({ openActivities: true })
+		this.props.history.push({
+			pathname: `/themes/activity/${id}`,
+			search: this.props.location.search
+		})
+	}
+	handleCloseActivities = () => {
+		this.setState({ openActivities: false })
+		this.props.history.push({
+			pathname: '/themes',
+			search: this.props.location.search
+		})
+	}
+
+	openModalDelete = (id: string) => {
+		this.setState({ openConfirm: true, currentSelectedId: id })
+	}
+	YesDelete = (id: string) => {
+		this.props.deleteTheme({ id: this.state.currentSelectedId })
+		this.setState({ openConfirm: false })
+	}
+	NoDelete = () => {
+		this.setState({ openConfirm: false })
+	}
+
+	edit = ({
+		title,
+		description,
+		type,
+		verified,
+		activities,
+		parentId,
+		required,
+		tooltips
+	}: SubmitParams) => {
+		const id = this.props.theme._id
+		const node = this.resourcesForm
+		if (node) {
+			const backgroundColor = node.state.background
+			const icon = node.state.file
+			/*  const formData = new FormData();
       formData.append('color', backgroundColor);
       formData.append('backgroundColor', backgroundColor); */
-      this.props.editTheme({
-        id,
-        type,
-        icon,
-        parentId,
-        verified,
-        required,
-        title,
-        description,
-        activities,
-        resources: {
-          backgroundColor,
-          color: backgroundColor,
-        },
-      });
-    }
-  }
-  create = ({
-    title,
-    description,
-    type,
-    verified,
-    activities,
-    parentId,
-    required,
-  }: SubmitParams) => {
-    const node = this.resourcesForm;
-    if (node) {
-      const backgroundColor = node.state.background;
-      const icon = node.state.file;
-      this.props.createTheme({
-        title,
-        description,
-        type,
-        parentId,
-        verified,
-        activities,
-        icon,
-        required,
-        resources: {
-          color: backgroundColor,
-          backgroundColor,
-        },
-      });
-    }
-  }
+			this.props.editTheme({
+				id,
+				type,
+				icon,
+				parentId,
+				verified,
+				required,
+				title,
+				description,
+				activities,
+				resources: {
+					backgroundColor,
+					color: backgroundColor
+				},
+				tooltips
+			})
+		}
+	}
 
-  handlePageChange = (page: number) => {
-    this.props.history.push({
-      pathname: this.props.location.pathname,
-      search: encodeUri({ page }),
-    });
-    this.getListThemes({
-      page,
-    });
-  }
+	editTooltiops = ({ title,
+		description,
+		type,
+		verified,
+		activities,
+		parentId,
+		required,
+		tooltips }: SubmitParamsTootltip) => {
+		this.props.editTheme({
+			id: this.props.theme._id,
+			type: this.props.theme.type,
+			icon : undefined,
+			parentId : this.props.theme.parentId,
+			verified: this.props.theme.verified,
+			required : this.props.theme.required && this.props.theme.required.map(el => el._id),
+			title : this.props.theme.title,
+			description : this.props.theme.description,
+			activities: this.props.theme.activities.map(el => el._id),
+			resources: {
+				backgroundColor: this.props.theme.resources.backgroundColor,
+				color: this.props.theme.resources.color
+			},
+			tooltips
+		})
+	}
+	create = ({
+		title,
+		description,
+		type,
+		verified,
+		activities,
+		parentId,
+		required
+	}: SubmitParams) => {
+		const node = this.resourcesForm
+		if (node) {
+			const backgroundColor = node.state.background
+			const icon = node.state.file
+			this.props.createTheme({
+				title,
+				description,
+				type,
+				parentId,
+				verified,
+				activities,
+				icon,
+				required,
+				resources: {
+					color: backgroundColor,
+					backgroundColor
+				}
+			})
+		}
+	}
 
-  handleClickOpen = () => {
-    this.setState({
-      open: true,
-    });
-  }
+	handlePageChange = (page: number) => {
+		this.props.history.push({
+			pathname: this.props.location.pathname,
+			search: encodeUri({ page })
+		})
+		this.getListThemes({
+			page
+		})
+	}
 
-  handleClose = () => {
-    this.setState({ open: false });
-  }
-  searchThemes = () => {
-    const searchResult = this.getListThemes();
-    return searchResult;
-  }
-  onChangeType = (type: string) => {
-    this.props.history.push({
-      pathname: `/themes/filter/${type}`,
-      search: this.props.location.search,
-    });
-    this.type = type;
-    this.getListThemes();
-  }
+	handleClickOpen = () => {
+		this.setState({
+			open: true
+		})
+	}
 
-  handleSearch = (value: string) => {
-    this.search = value;
-    this.getListThemes();
-  }
+	handleClose = () => {
+		this.setState({ open: false })
+	}
+	searchThemes = () => {
+		const searchResult = this.getListThemes()
+		return searchResult
+	}
+	onChangeType = (type: string) => {
+		this.props.history.push({
+			pathname: `/themes/filter/${type}`,
+			search: this.props.location.search
+		})
+		this.type = type
+		this.getListThemes()
+	}
 
-  handleReset = () => {
-    this.search = '';
-    this.type = '';
-    this.getListThemes({ page: 1 });
-  }
+	handleSearch = (value: string) => {
+		this.search = value
+		this.getListThemes()
+	}
 
-  createActivity = (params: CreateActivityParams) => {
-    this.props.createActivity(params);
-  }
+	handleReset = () => {
+		this.search = ''
+		this.type = ''
+		this.getListThemes({ page: 1 })
+	}
 
-  getListThemes = (params: ListThemesParams = {}) => {
-    this.props.getListThemes({
-      perPage: PER_PAGE,
-      search: this.search,
-      page: this.props.currentPage,
-      type: this.type,
-      ...params,
-    });
-  }
-  captureResourceFormRef = (ref: any) => {
-    this.resourcesForm = ref;
-  }
+	createActivity = (params: CreateActivityParams) => {
+		this.props.createActivity(params)
+	}
 
-  captureActivityFormRef = (ref: ActivityFormComponent) => {
-    this.activityForm = ref;
-  }
+	getListThemes = (params: ListThemesParams = {}) => {
+		this.props.getListThemes({
+			perPage: PER_PAGE,
+			search: this.search,
+			page: this.props.currentPage,
+			type: this.type,
+			...params
+		})
+	}
+	captureResourceFormRef = (ref: any) => {
+		this.resourcesForm = ref
+	}
 
-  renderModalContent = () => {
-    if (this.props.getThemeFetching) {
-      return (
-        <div
-          className={classNames(
-            this.props.classes.absoluteFill,
-            this.props.classes.center,
-          )}
-        >
-          <CircularProgress />
-        </div>
-      );
-    }
-    const isEdit = !!this.isEdit(this.props.location);
-    const initialValues = isEdit ? { ...this.props.theme } : {};
-    const resourcesInitialValues = isEdit
-      ? { ...this.props.theme.resources }
-      : {};
-    return (
-      <Grid
-        container
-        spacing={16}
-        className={`${this.props.classes.RowContainer}`}
-        justify="space-between"
-      >
-        <CreateTheme
-          header={isEdit ? 'Modifier Theme' : 'Crée Theme'}
-          submitText={isEdit ? 'Modifier Theme' : 'Crée Theme'}
-          onSubmitHandler={isEdit ? this.edit : this.create}
-          requestClose={this.closeEditModal}
-          {...initialValues}
-          secteur={this.props.secteurs}
-          selectedSecteur={this.props.theme.parentId}
-          required={this.props.theme.required}
-        />
-        <div className={this.props.classes.leftModalContainer}>
-          <ResourcesForm
-            innerRef={this.captureResourceFormRef}
-            {...resourcesInitialValues}
-          />
-          <ActivityForm
-            header={'Crée Activité'}
-            submitText={'Crée Activité'}
-            onSubmitHandler={this.createActivity}
-            requestClose={this.closeEditModal}
-            verified={true}
-            innerRef={this.captureActivityFormRef}
-            fetching={this.props.createActivityFetching}
-            showInterest={false}
-          />
-        </div>
-      </Grid>
-    );
-  }
+	captureActivityFormRef = (ref: ActivityFormComponent) => {
+		this.activityForm = ref
+	}
 
-  render() {
-    return (
-      <>
-        {this.props.fetching && (
-          <div
-            className={`${this.props.classes.absolute} ${
-              this.props.classes.center
-            }`}
-          >
-            <CircularProgress />
-          </div>
-        )}
-        <Table
-          headers={this.headers}
-          rows={this.props.themes}
-          delete={this.openModalDelete}
-          edit={this.openEditModal}
-          add={this.openCreateModal}
-          search={this.handleSearch}
-          onChangeType={this.onChangeType}
-          typeFilter
-          rowsPerPage={this.props.perPage}
-          totalPages={this.props.totalPages}
-          currentPage={this.props.currentPage}
-          count={this.props.count}
-          handlePageChange={this.handlePageChange}
-          reset={this.handleReset}
-        />
-        {/* // edit theme modal */}
-        <FullModal
-          open={!!this.isEdit(this.props.location)}
-          handleClose={this.closeEditModal}
-          title="Modifier thème"
-          fullScreen
-        >
-          <div className={this.props.classes.fill}>
-            {this.renderModalContent()}
-          </div>
-        </FullModal>
-        {/*  cree theme modal */}
-        <FullModal
-          open={this.state.open}
-          handleClose={this.handleClose}
-          title="Créer Des thèmes"
-          fullScreen
-        >
-          <div className={this.props.classes.fill}>
-            {this.renderModalContent()}
-          </div>
-        </FullModal>
+	renderModalContent = () => {
+		if (this.props.getThemeFetching) {
+			return (
+				<div
+					className={classNames(
+						this.props.classes.absoluteFill,
+						this.props.classes.center
+					)}
+				>
+					<CircularProgress />
+				</div>
+			)
+		}
+		const isEdit = !!this.isEdit(this.props.location)
+		const initialValues = isEdit ? { ...this.props.theme } : {}
+		const resourcesInitialValues = isEdit
+			? { ...this.props.theme.resources }
+			: {}
+		return (
+			<Grid
+				container
+				spacing={16}
+				className={`${this.props.classes.RowContainer}`}
+				justify="space-between"
+			>
+				<CreateTheme
+					header={isEdit ? 'Modifier Theme' : 'Crée Theme'}
+					submitText={isEdit ? 'Modifier Theme' : 'Crée Theme'}
+					onSubmitHandler={isEdit ? this.edit : this.create}
+					requestClose={this.closeEditModal}
+					{...initialValues}
+					secteur={this.props.secteurs}
+					selectedSecteur={this.props.theme.parentId}
+					required={this.props.theme.required}
+				/>
+				<div className={this.props.classes.leftModalContainer}>
+					<ResourcesForm
+						innerRef={this.captureResourceFormRef}
+						{...resourcesInitialValues}
+					/>
+					<ActivityForm
+						header={'Crée Activité'}
+						submitText={'Crée Activité'}
+						onSubmitHandler={this.createActivity}
+						requestClose={this.closeEditModal}
+						verified={true}
+						innerRef={this.captureActivityFormRef}
+						fetching={this.props.createActivityFetching}
+						showInterest={false}
+					/>
+				</div>
+			</Grid>
+		)
+	}
 
-        <ConfirmModal
-          open={this.state.openConfirm}
-          YesButton={this.YesDelete}
-          NoButton={this.NoDelete}
-          close={this.NoDelete}
-        />
-      </>
-    );
-  }
+	render() {
+		return (
+			<>
+				{this.props.fetching && (
+					<div
+						className={`${this.props.classes.absolute} ${
+							this.props.classes.center
+						}`}
+					>
+						<CircularProgress />
+					</div>
+				)}
+				<Table
+					headers={this.headers}
+					rows={this.props.themes}
+					delete={this.openModalDelete}
+					edit={this.openEditModal}
+					add={this.openCreateModal}
+					search={this.handleSearch}
+					onChangeType={this.onChangeType}
+					typeFilter
+					rowsPerPage={this.props.perPage}
+					totalPages={this.props.totalPages}
+					currentPage={this.props.currentPage}
+					count={this.props.count}
+					handlePageChange={this.handlePageChange}
+					reset={this.handleReset}
+				/>
+				{/* // edit theme modal */}
+				<FullModal
+					open={!!this.isEdit(this.props.location)}
+					handleClose={this.closeEditModal}
+					title="Modifier thème"
+					fullScreen
+					hasTabs
+					handleChange={this.handleTabChange}
+					tabIndex={this.state.tabIndex}
+					tabLabel1={'themes'}
+					tabLabel2={'tooltips'}
+				>
+					{!this.state.tabIndex ? (
+						<div className={this.props.classes.fill}>
+							{this.renderModalContent()}
+						</div>
+					) : (
+						<div className={this.props.classes.tooltipModal}>
+							<Paper className={this.props.classes.paper}>
+								<TooltipForm
+									competences={this.props.competences}
+									submitText={'Modifier thème'}
+									onSubmitHandler={this.editTooltiops}
+									theme={this.props.theme}
+								/>
+							</Paper>
+						</div>
+					)}
+				</FullModal>
+				{/*  cree theme modal */}
+				<FullModal
+					open={this.state.open}
+					handleClose={this.handleClose}
+					title="Créer Des thèmes"
+					fullScreen
+				>
+					<div className={this.props.classes.fill}>
+						{this.renderModalContent()}
+					</div>
+				</FullModal>
+
+				<ConfirmModal
+					open={this.state.openConfirm}
+					YesButton={this.YesDelete}
+					NoButton={this.NoDelete}
+					close={this.NoDelete}
+				/>
+			</>
+		)
+	}
 }
 
 function mapStateToProps(state: ReduxState): MapToProps {
-  const listThemes = state.themes.get('listThemes');
-  const deleteThemes = state.themes.get('deleteTheme');
-  const getThemes = state.themes.get('getTheme');
-  const editTheme = state.themes.get('patchTheme');
-  const createTheme = state.themes.get('createTheme');
-  const createActivity = state.activities.get('createActivity');
-  const listSecteurs = state.secteur.get('listSecteurs');
+	const listThemes = state.themes.get('listThemes')
+	const deleteThemes = state.themes.get('deleteTheme')
+	const getThemes = state.themes.get('getTheme')
+	const editTheme = state.themes.get('patchTheme')
+	const createTheme = state.themes.get('createTheme')
+	const createActivity = state.activities.get('createActivity')
+	const listSecteurs = state.secteur.get('listSecteurs')
+	const competences = state.competences.get('listCompetences')
 
-  return {
-    fetching: listThemes.get('fetching'),
-    themes: listThemes.get('themes').data,
-    deleteFetching: deleteThemes.get('fetching'),
-    deleteError: deleteThemes.get('error'),
-    getThemeFetching: getThemes.get('fetching'),
-    theme: getThemes.get('theme'),
-    getThemeError: getThemes.get('error'),
-    editThemeFetching: editTheme.get('fetching'),
-    editThemeError: editTheme.get('error'),
-    createThemeFetching: createTheme.get('fetching'),
-    createThemeError: createTheme.get('error'),
-    count: listThemes.get('themes').count,
-    currentPage: listThemes.get('themes').currentPage,
-    perPage: listThemes.get('themes').perPage,
-    totalPages: listThemes.get('themes').totalPages,
-    createActivityFetching: createActivity.get('fetching'),
-    createActivityError: createActivity.get('error'),
-    secteurs: listSecteurs.get('secteurs').data,
-  };
+	return {
+		fetching: listThemes.get('fetching'),
+		themes: listThemes.get('themes').data,
+		deleteFetching: deleteThemes.get('fetching'),
+		deleteError: deleteThemes.get('error'),
+		getThemeFetching: getThemes.get('fetching'),
+		theme: getThemes.get('theme'),
+		getThemeError: getThemes.get('error'),
+		editThemeFetching: editTheme.get('fetching'),
+		editThemeError: editTheme.get('error'),
+		createThemeFetching: createTheme.get('fetching'),
+		createThemeError: createTheme.get('error'),
+		count: listThemes.get('themes').count,
+		currentPage: listThemes.get('themes').currentPage,
+		perPage: listThemes.get('themes').perPage,
+		totalPages: listThemes.get('themes').totalPages,
+		createActivityFetching: createActivity.get('fetching'),
+		createActivityError: createActivity.get('error'),
+		secteurs: listSecteurs.get('secteurs').data,
+		competences: competences.get('competences')
+	}
 }
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
-  return {
-    getListThemes: (payload: ListThemesParams) =>
-      dispatch(listThemesActions.listThemesRequest(payload)),
-    deleteTheme: payload =>
-      dispatch(deleteThemeActions.deleteThemeRequest(payload)),
-    getTheme: payload => dispatch(getThemeActions.getThemeRequest(payload)),
-    editTheme: payload => dispatch(editThemeActions.patchThemeRequest(payload)),
-    createTheme: payload =>
-      dispatch(createThemeActions.createThemeRequest(payload)),
-    createActivity: payload =>
-      dispatch(createActivityActions.createActivityRequest(payload)),
-    listSecteurs: payload =>
-      dispatch(listSecteursActions.listSecteursRequest(payload)),
-  };
+	return {
+		getListThemes: (payload: ListThemesParams) =>
+			dispatch(listThemesActions.listThemesRequest(payload)),
+		deleteTheme: payload =>
+			dispatch(deleteThemeActions.deleteThemeRequest(payload)),
+		getTheme: payload => dispatch(getThemeActions.getThemeRequest(payload)),
+		editTheme: payload => dispatch(editThemeActions.patchThemeRequest(payload)),
+		createTheme: payload =>
+			dispatch(createThemeActions.createThemeRequest(payload)),
+		createActivity: payload =>
+			dispatch(createActivityActions.createActivityRequest(payload)),
+		listSecteurs: payload =>
+			dispatch(listSecteursActions.listSecteursRequest(payload)),
+		getListCompetences: payload =>
+			dispatch(listCompetencesActions.listCompetencesRequest(payload))
+	}
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withStyles(styles)(ThemesContainer));
+	mapStateToProps,
+	mapDispatchToProps
+)(withStyles(styles)(ThemesContainer))
