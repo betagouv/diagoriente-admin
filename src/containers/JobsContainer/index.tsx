@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 const JobsContainer = React.lazy(() => import('./JobsContainer'));
 
-export default (props: RouteComponentProps) => {
+export default (props: any) => {
   return (
     <React.Suspense fallback={<div />}>
       <JobsContainer {...props} />

@@ -211,16 +211,9 @@ class JobsContainer extends React.Component<Props, State> {
           />
         )}
         {!this.props.list.fetching && (!data || data.length === 0) && (
-          <p className={classes.empty}>
-            {this.props.list.error || 'Aucune piste métier a afficher...'}
-          </p>
+          <p className={classes.empty}>{this.props.list.error || 'Aucune piste métier a afficher...'}</p>
         )}
-        <FullModal
-          title={this.title}
-          handleClose={this.closeModal}
-          open={!!this.checkCreate()}
-          maxWidth={'md'}
-        >
+        <FullModal title={this.title} handleClose={this.closeModal} open={!!this.checkCreate()} maxWidth={'md'}>
           {this.props.secteurs.data.data && (
             <JobForm
               submitText={this.title}
@@ -232,13 +225,7 @@ class JobsContainer extends React.Component<Props, State> {
             />
           )}
         </FullModal>
-        <FullModal
-          title={this.title}
-          handleClose={this.closeModal}
-          open={!!this.checkEdit()}
-          maxWidth={'md'}
-          fullScreen
-        >
+        <FullModal title={this.title} handleClose={this.closeModal} open={!!this.checkEdit()} maxWidth={'md'} fullScreen>
           {this.props.secteurs.data.data && this.props.details.data.secteur && (
             <JobForm
               submitText={this.title}
@@ -253,20 +240,13 @@ class JobsContainer extends React.Component<Props, State> {
               environments={this.props.details.data.environments}
               Acceccible={this.props.details.data.accessibility}
               selectedSecteur={
-                this.props.details.data.secteur && this.props.details.data.secteur.length
-                  ? this.props.details.data.secteur[0]._id
-                  : ''
+                this.props.details.data.secteur && this.props.details.data.secteur.length ? this.props.details.data.secteur[0]._id : ''
               }
               link={this.props.details.data.link}
             />
           )}
         </FullModal>
-        <ConfirmModal
-          open={this.state.openConfirm}
-          YesButton={this.YesDelete}
-          NoButton={this.NoDelete}
-          close={this.NoDelete}
-        />
+        <ConfirmModal open={this.state.openConfirm} YesButton={this.YesDelete} NoButton={this.NoDelete} close={this.NoDelete} />
       </>
     );
   }
