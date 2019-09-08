@@ -125,7 +125,7 @@ declare module 'requests' {
     resources: { color: string; backgroundColor: string; icon: string };
     parentId: string;
     required?: {_id: string, title: string}[] ;
-    tooltips?: {_id: string; competenceId: string; tooltip: string}[];
+    tooltips: {_id: string; competenceId: string; tooltip: string}[];
   }
   export interface ListThemesParams {
     page?: number;

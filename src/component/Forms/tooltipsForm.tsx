@@ -1,14 +1,14 @@
-import React from "react";
-import Input from "@material-ui/core/Input/Input";
-import { ICompetence, Theme, Activity } from "requests";
-import Button from "@material-ui/core/Button/Button";
-import { withStyles } from "@material-ui/core/styles";
-import createStyles from "@material-ui/core/styles/createStyles";
-import Dialog from "@material-ui/core/Dialog/";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
+import React from 'react';
+import Input from '@material-ui/core/Input/Input';
+import { ICompetence, Theme, Activity } from 'requests';
+import Button from '@material-ui/core/Button/Button';
+import { withStyles } from '@material-ui/core/styles';
+import createStyles from '@material-ui/core/styles/createStyles';
+import Dialog from '@material-ui/core/Dialog/';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
 
 interface Props {
   competences: ICompetence[];
@@ -48,110 +48,110 @@ class TooltipForm extends React.Component<Props, State> {
     comp1: (this.props.theme.tooltips && this.props.theme.tooltips[0]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[0].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[0]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[0]._id,
     },
     comp2: (this.props.theme.tooltips && this.props.theme.tooltips[1]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[1].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[1]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[1]._id,
     },
     comp3: (this.props.theme.tooltips && this.props.theme.tooltips[2]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[2].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[2]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[2]._id,
     },
     comp4: (this.props.theme.tooltips && this.props.theme.tooltips[3]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[3].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[3]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[3]._id,
     },
     comp5: (this.props.theme.tooltips && this.props.theme.tooltips[4]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[4].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[4]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[4]._id,
     },
     comp6: (this.props.theme.tooltips && this.props.theme.tooltips[5]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[5].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[5]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[5]._id,
     },
     comp7: (this.props.theme.tooltips && this.props.theme.tooltips[6]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[6].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[6]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[6]._id,
     },
     comp8: (this.props.theme.tooltips && this.props.theme.tooltips[7]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[7].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[7]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[7]._id,
     },
     comp9: (this.props.theme.tooltips && this.props.theme.tooltips[8]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[8].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[8]._id
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[8]._id,
     },
     comp10: (this.props.theme.tooltips && this.props.theme.tooltips[9]) || {
       competenceId:
         this.props.theme.tooltips && this.props.theme.tooltips[9].competenceId,
-      tooltip: "",
-      _id: this.props.theme.tooltips && this.props.theme.tooltips[9]._id
-	},
-	open: false,
+      tooltip: '',
+      _id: this.props.theme.tooltips && this.props.theme.tooltips[9]._id,
+    },
+    open: false,
   };
   handleChange1 = (e: any) => {
     this.setState({ comp1: { ...this.state.comp1, tooltip: e.target.value } });
-  };
+  }
   handleChange2 = (e: any) => {
     this.setState({ comp2: { ...this.state.comp2, tooltip: e.target.value } });
-  };
+  }
   handleChange3 = (e: any) => {
     this.setState({ comp3: { ...this.state.comp3, tooltip: e.target.value } });
-  };
+  }
   handleChange4 = (e: any) => {
     this.setState({ comp4: { ...this.state.comp4, tooltip: e.target.value } });
-  };
+  }
   handleChange5 = (e: any) => {
     this.setState({ comp5: { ...this.state.comp5, tooltip: e.target.value } });
-  };
+  }
   handleChange6 = (e: any) => {
     this.setState({ comp6: { ...this.state.comp6, tooltip: e.target.value } });
-  };
+  }
   handleChange7 = (e: any) => {
     this.setState({ comp7: { ...this.state.comp7, tooltip: e.target.value } });
-  };
+  }
   handleChange8 = (e: any) => {
     this.setState({ comp8: { ...this.state.comp8, tooltip: e.target.value } });
-  };
+  }
   handleChange9 = (e: any) => {
     this.setState({ comp9: { ...this.state.comp9, tooltip: e.target.value } });
-  };
+  }
   handleChange10 = (e: any) => {
     this.setState({
-      comp10: { ...this.state.comp10, tooltip: e.target.value }
+      comp10: { ...this.state.comp10, tooltip: e.target.value },
     });
-  };
+  }
   onSubmitHandler = (e: React.MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (
-      this.state.comp1.tooltip !== "" &&
-      this.state.comp2.tooltip !== "" &&
-      this.state.comp3.tooltip !== "" &&
-      this.state.comp4.tooltip !== "" &&
-      this.state.comp5.tooltip !== "" &&
-      this.state.comp6.tooltip !== "" &&
-      this.state.comp7.tooltip !== "" &&
-      this.state.comp8.tooltip !== "" &&
-      this.state.comp9.tooltip !== "" &&
-      this.state.comp10.tooltip !== ""
+      this.state.comp1.tooltip !== '' &&
+      this.state.comp2.tooltip !== '' &&
+      this.state.comp3.tooltip !== '' &&
+      this.state.comp4.tooltip !== '' &&
+      this.state.comp5.tooltip !== '' &&
+      this.state.comp6.tooltip !== '' &&
+      this.state.comp7.tooltip !== '' &&
+      this.state.comp8.tooltip !== '' &&
+      this.state.comp9.tooltip !== '' &&
+      this.state.comp10.tooltip !== ''
     ) {
       this.props.onSubmitHandler({
         tooltips: [
@@ -164,15 +164,28 @@ class TooltipForm extends React.Component<Props, State> {
           this.state.comp7,
           this.state.comp8,
           this.state.comp9,
-          this.state.comp10
-        ]
+          this.state.comp10,
+        ],
       });
     } else {
-		this.setState({open: true})
-	}
-  };
+      this.setState({ open: true });
+    }
+  }
   handleClose = () => {
-	this.setState({open: false})
+    this.setState({ open: false });
+  }
+
+  findCompetence = (index: number) => {
+
+    const title = this.props.competences.filter(
+      (el: any) => el._id === this.props.theme.tooltips[index].competenceId,
+    );
+   // console.log(title.map(el => el.title));
+    return (title[0].title);
+  }
+
+  componentDidMount() {
+    this.findCompetence(0);
   }
 
   render() {
@@ -181,21 +194,21 @@ class TooltipForm extends React.Component<Props, State> {
     return (
       <div className={classes.container}>
         <Dialog open={this.state.open} onClose={this.handleClose}>
-		<DialogTitle id="alert-dialog-title">{"Avertissement"}</DialogTitle>
-		<DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            vous devez remplir tous les champs des tooltips
-          </DialogContentText>
-        </DialogContent>
-		<DialogActions>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
-            D'accord
-          </Button>
-        </DialogActions>
-		</Dialog>
+          <DialogTitle id="alert-dialog-title">{'Avertissement'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              vous devez remplir tous les champs des tooltips
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary" autoFocus>
+              D'accord
+            </Button>
+          </DialogActions>
+        </Dialog>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[0].title}
+            {this.findCompetence(0)}
           </label>
           <Input
             className={classes.input}
@@ -205,7 +218,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[1].title}
+            {this.findCompetence(1)}
           </label>
           <Input
             className={classes.input}
@@ -215,7 +228,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[2].title}
+            {this.findCompetence(2)}
           </label>
           <Input
             className={classes.input}
@@ -225,7 +238,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[3].title}
+            {this.findCompetence(3)}
           </label>
           <Input
             className={classes.input}
@@ -235,7 +248,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[4].title}
+            {this.findCompetence(4)}
           </label>
           <Input
             className={classes.input}
@@ -245,7 +258,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[5].title}
+            {this.findCompetence(5)}
           </label>
           <Input
             className={classes.input}
@@ -255,7 +268,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[6].title}
+            {this.findCompetence(6)}
           </label>
           <Input
             className={classes.input}
@@ -265,7 +278,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[7].title}
+            {this.findCompetence(7)}
           </label>
           <Input
             className={classes.input}
@@ -275,7 +288,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[8].title}
+            {this.findCompetence(8)}
           </label>
           <Input
             className={classes.input}
@@ -285,7 +298,7 @@ class TooltipForm extends React.Component<Props, State> {
         </div>
         <div className={classes.inputWrapper}>
           <label className={classes.label} htmlFor="">
-            {competences[9].title}
+            {this.findCompetence(9)}
           </label>
           <Input
             className={classes.input}
@@ -308,25 +321,25 @@ class TooltipForm extends React.Component<Props, State> {
 const styles = () =>
   createStyles({
     container: {
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-evenly",
-      alignItems: "center"
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
     },
     inputWrapper: {
-      display: "flex",
-      justifyContent: "space-evenly",
-      alignItems: "center",
-      width: "80%"
+      display: 'flex',
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+      width: '80%',
     },
     input: {
-      width: "80%"
+      width: '80%',
     },
     label: {
-      width: 350
-    }
+      width: 350,
+    },
   });
 
 export default withStyles(styles)(TooltipForm);
