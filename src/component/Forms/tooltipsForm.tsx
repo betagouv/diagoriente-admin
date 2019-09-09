@@ -184,9 +184,9 @@ class TooltipForm extends React.Component<Props, State> {
     return (title[0].title);
   }
 
-  componentDidMount() {
+  /* componentDidMount() {
     this.findCompetence(0);
-  }
+  } */
 
   render() {
     const { competences } = this.props;

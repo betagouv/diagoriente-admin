@@ -306,17 +306,17 @@ class CompetencesContainer extends Component<Props, State> {
         }
         n2desc={
           !isEmpty(this.props.competence.niveau)
-            ? this.props.competence.niveau[0].sub_title
+            ? this.props.competence.niveau[1].sub_title
             : ''
         }
         n3desc={
           !isEmpty(this.props.competence.niveau)
-            ? this.props.competence.niveau[0].sub_title
+            ? this.props.competence.niveau[2].sub_title
             : ''
         }
         n4desc={
           !isEmpty(this.props.competence.niveau)
-            ? this.props.competence.niveau[0].sub_title
+            ? this.props.competence.niveau[3].sub_title
             : ''
         }
         color={this.props.competence.color && this.props.competence.color}
