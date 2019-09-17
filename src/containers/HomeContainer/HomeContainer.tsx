@@ -24,6 +24,7 @@ import ConstContainer from '../familleConstContainer';
 import ContextContainer from '../ContextContainer';
 import EnvironmentContainer from '../EnvironmentContainer';
 import QuestionJobContainer from '../QuestionJobContainer';
+import GroupContainer from '../GroupeContainer'
 
 interface MapToProps {
   language: Language;
@@ -78,6 +79,7 @@ class HomeContainer extends React.Component<Props> {
             )}
             <Route path="/parcours" component={ParcoursContainer} />
             <Route path="/advisor" component={AdvisorContainer} />
+            <Route path="/groupes" component={GroupContainer} />
           </Switch>
         </div>
       </>

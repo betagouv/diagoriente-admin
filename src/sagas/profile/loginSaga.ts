@@ -40,11 +40,14 @@ function* getRequest() {
       err = yield call(callLocalForage, response2.data);
       if (!err) {
         setAuthorizationBearer(response2.data.token.accessToken);
+        console.log('name saga',response2.data.advisor.profile.firstName)
         yield put(
           loginActions.loginSuccess(
             response2.data.token,
             response2.data.advisor.role,
             response2.data.advisor._id,
+            response2.data.advisor.profile.firstName,
+            response2.data.advisor.profile.lastName,
           ),
         );
 

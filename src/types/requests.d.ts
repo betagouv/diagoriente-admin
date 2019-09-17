@@ -498,4 +498,30 @@ declare module 'requests' {
     perPage?: number;
     search?: string;
   }
+
+  export interface IGroup {
+    _id: string;
+    title: string;
+    advisorId: string;
+    code: string;
+    users: any[];
+  }
+
+  export interface createGroup {
+    title: string;
+    advisorId: string;
+    code: string;
+    users?: any[];
+  }
+  export type ListGroupResponse = ListResponse<IGroup>;
+  export type GetGroupParams = DeleteOrGetParams;
+  export type PatchGroupParams = createGroupParams & { id: string }
+  export interface createGroupParams {
+    title: string;
+    advisorId: string;
+    code: string;
+    users: any[];
+  }
+
+
 }

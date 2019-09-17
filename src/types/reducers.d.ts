@@ -1,7 +1,7 @@
-declare module 'reducers' {
-  import { RouterState } from 'connected-react-router';
-  import { PersistState } from 'redux-persist';
-  import { Map } from 'immutable';
+declare module "reducers" {
+  import { RouterState } from "connected-react-router";
+  import { PersistState } from "redux-persist";
+  import { Map } from "immutable";
   import {
     Theme,
     Activity,
@@ -24,15 +24,17 @@ declare module 'reducers' {
     ListEnvironmentResponse,
     ListContextResponse,
     IQuestionJob,
-    ListQuestionJobResponse
-  } from 'requests';
+    ListQuestionJobResponse,
+    IGroup,
+    ListGroupResponse
+  } from "requests";
 
   export interface ImmutableMap<T> extends Map<string, any> {
     get<K extends keyof T>(name: K): T[K];
     merge<O extends Partial<T>>(object: O): this;
   }
 
-  export type Language = 'en' | 'fr' | 'ar';
+  export type Language = "en" | "fr" | "ar";
 
   export type ApiReducer = {
     error: string;
@@ -52,6 +54,8 @@ declare module 'reducers' {
     password: string;
     role: string;
     _id: string;
+    firstName: string;
+    lastName: string;
   }>;
 
   export type LoginStateAdvisor = ImmutableMap<{
@@ -314,6 +318,24 @@ declare module 'reducers' {
     deleteQuestionJob: DeleteQuestionJob;
   }>;
 
+  export type CreateGroup = ImmutableMap<ApiReducer>;
+  export type GetGroup = ImmutableMap<
+    {
+      group: IGroup;
+    } & ApiReducer
+  >;
+  export type PatchGroup = ImmutableMap<ApiReducer>;
+  export type ListGroup = ImmutableMap<
+    { groups: ListGroupResponse } & ApiReducer
+  >;
+
+  export type Group = ImmutableMap<{
+    createGroup: CreateGroup;
+    getGroup: GetGroup;
+    patchGroup: PatchGroup;
+    listGroup: ListGroup;
+  }>;
+
   export interface ReduxState {
     config: ConfigState;
     router: RouterState;
@@ -336,5 +358,6 @@ declare module 'reducers' {
     Context: Context;
     Environment: Environment;
     QuestionJob: QuestionJob;
+    groupe: Group;
   }
 }

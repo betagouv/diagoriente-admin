@@ -23,6 +23,7 @@ import ranks from './familleRank';
 import Context from './context';
 import Environment from './environment';
 import QuestionJob from './questionJob';
+import groupe from './group'
 
 // redux reducers
 export default (history: any) =>
@@ -46,5 +47,6 @@ export default (history: any) =>
     Context,
     Environment,
     QuestionJob,
+    groupe,
     router: connectRouter(history)
   });

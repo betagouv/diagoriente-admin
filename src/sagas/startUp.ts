@@ -11,7 +11,9 @@ import { callLocalForage } from '../utils/callLocalForage';
 function* getRequest() {
   const { login } = yield select();
   const role = login.toJS().role;
-  // console.log('role startup', login.toJS());
+  const firstName = login.toJS().firstName;
+  const lastName = login.toJS().lastName;
+  // console.log('role startup', login.toJS().firstName);
   try {
     const domain =
       process.env.REACT_APP_API_URL || 'https://api3.projetttv.org';
@@ -42,7 +44,7 @@ function* getRequest() {
 
         if (!err) {
           setAuthorizationBearer(response.accessToken);
-          yield put(loginActions.loginSuccess(response, role, payload.userId));
+          yield put(loginActions.loginSuccess(response, role, payload.userId, firstName, lastName));
           // console.log(localforage);
           yield put(startUpActions.startupDone());
           // console.log(authorizationBearer);

@@ -418,7 +418,7 @@ class ActivitiesContainer extends Component<Props, State> {
           currentPage={this.props.currentPage}
           count={this.props.count}
           handlePageChange={this.handlePageChange}
-        />
+        /> 
 
         <FullModal
           open={!!this.isEdit(this.props.location)}

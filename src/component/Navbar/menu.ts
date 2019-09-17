@@ -14,6 +14,7 @@ import question_answer from '@material-ui/icons/FeedbackOutlined';
 import context from '@material-ui/icons/VerifiedUserOutlined';
 import environment from '@material-ui/icons/EventNoteOutlined';
 import questionJob from '@material-ui/icons/HelpOutline';
+import Share from '@material-ui/icons/ShareOutlined';
 
 const menu = [
   {
@@ -120,6 +121,12 @@ export const menuAdvisor = [
     url: '/advisor',
     icon: AccountCircle,
     id: 1
+  },
+  {
+    nom: 'Groupes',
+    url: '/groupes',
+    icon: Share,
+    id: 2,
   }
 ];
 
