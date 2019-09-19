@@ -250,7 +250,7 @@ class GroupContainer extends Component<Props, State> {
 
   handleSearch = (value: string) => {
     this.search = value;
-    this.getListGroup(this.search);
+    this.getListGroup({search: value});
   };
 
   resetInterests = () => {
