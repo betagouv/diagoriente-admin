@@ -109,6 +109,7 @@ interface Props<T> {
   groups?: ListResponse<IGroup>;
   groupSearch?: boolean;
   serachList?: (codeId: string) => void;
+  groupReset?: boolean;
 }
 
 interface State {
@@ -176,6 +177,11 @@ class Tables<T> extends React.PureComponent<Props<T>, State> {
   reset = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     this.setState({ value: "", index: 0 });
+    this.props.reset();
+  };
+  resetGroup = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    this.setState({ group: "", index: 0 });
     this.props.reset();
   };
 
@@ -308,6 +314,13 @@ class Tables<T> extends React.PureComponent<Props<T>, State> {
                   })}
               </Select>
             ) : null}
+            {this.props.groupReset && <Button
+                onClick={this.resetGroup}
+                className={classes.button}
+                style={{ color: "red" }}
+              >
+                Annuler
+              </Button>}
           </div>
           {hasAdd ? (
             <div className="table-component-add-icon ">

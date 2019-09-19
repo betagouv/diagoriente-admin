@@ -268,6 +268,7 @@ interface State {
   value: string;
   tabIndex: number;
   hideLayout: boolean;
+  groupReset: boolean;
 }
 interface questionJobs {
   _id: string;
@@ -290,6 +291,7 @@ class ParcoursContainer extends Component<Props, State> {
     hideLayout: false,
     tabIndex: 0,
     value: '',
+    groupReset: false,
   };
 
   headers = [
@@ -374,6 +376,7 @@ class ParcoursContainer extends Component<Props, State> {
   };
   searchGroup = (value: string) => {
     this.getListParcours({codeId: value})
+    this.setState({groupReset: true})
   }
 
 
@@ -389,6 +392,7 @@ class ParcoursContainer extends Component<Props, State> {
   resetParcours = () => {
     this.search = '';
     this.getListParcours();
+    this.setState({groupReset: false})
   };
   closeTestModal = () => {
     this.props.history.push({
@@ -684,6 +688,7 @@ class ParcoursContainer extends Component<Props, State> {
           groups={this.props.Groups}
           groupSearch={this.props.role === 'admin' ? false : true}
           serachList={this.searchGroup}
+          groupReset={this.state.groupReset}
         />
 
         <FullModal
