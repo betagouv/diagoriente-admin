@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
-import { IParcour, listParcoursParams, getParcoursParams, getJobsParams, ListCompetencesParams, DeleteParcourParams, ICompetence } from 'requests';
+import { IParcour, listParcoursParams, getParcoursParams, ListResponse, ListCompetencesParams, DeleteParcourParams, ICompetence, IGroup } from 'requests';
 import moment from 'moment';
 import { isArray } from 'lodash';
-import { getUser } from '../../requests';
+import { getUser, listParcoursSearch } from '../../requests';
 import { Job } from 'requests';
 
 import { ReduxState } from 'reducers';
@@ -17,6 +17,8 @@ import getParcoursActions from '../../reducers/parcours/GetParcour';
 import getJobsActions from '../../reducers/job/GetJob';
 import listCompetencesActions from '../../reducers/competences/listCompetences';
 import deleteParcourActions from '../../reducers/parcours/deleteParcour';
+import listGroupActions from "../../reducers/group/listGroup";
+
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -57,7 +59,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import { string } from 'prop-types';
+import {ListGroupParams} from '../../requests/group';
 
 const colors = [
   'rgba(255, 0, 0, 0.5)',
@@ -243,6 +245,7 @@ interface MapToProps {
   jobs: Job[];
   role: any;
   id: string;
+  Groups: ListResponse<IGroup>;
 }
 
 interface DispatchToProps {
@@ -251,6 +254,7 @@ interface DispatchToProps {
   listCompetences: (payload: ListCompetencesParams) => void;
   deleteParcour: (payload: DeleteParcourParams) => void;
   getJobs: (payload: { parcourId: string; algoType: string }) => void;
+  getListGroup: (payload: ListGroupParams) => void;
 }
 
 interface State {
@@ -335,6 +339,7 @@ class ParcoursContainer extends Component<Props, State> {
     const { page } = decodeUri(this.props.location.search);
     this.getListCompetences();
     this.getListParcours({ page });
+    this.props.getListGroup({advisorId: this.props.id })
     // this.props.getParcours({ id: this.props.parcour._id });
   }
 
@@ -355,7 +360,7 @@ class ParcoursContainer extends Component<Props, State> {
       this.setState({ openModal: true });
     }
   }
-  getListParcours = (params: listParcoursParams = {}) => {
+  getListParcours = (params: any = {}) => {
     this.props.getListParcours({
       search: this.search,
       page: this.props.currentPage,
@@ -367,6 +372,11 @@ class ParcoursContainer extends Component<Props, State> {
     this.search = value;
     this.getListParcours();
   };
+  searchGroup = (value: string) => {
+    this.getListParcours({codeId: value})
+  }
+
+
   handlePageChange = (page: number) => {
     this.props.history.push({
       pathname: this.props.location.pathname,
@@ -434,6 +444,7 @@ class ParcoursContainer extends Component<Props, State> {
     }
     return { ...this.deepObject(value) };
   }
+  
 
   deepObject(obj: any) {
     let result: any = {};
@@ -670,6 +681,9 @@ class ParcoursContainer extends Component<Props, State> {
           hasVisualization
           showVisualisation={this.showVisualisation}
           delete={this.openModalDelete}
+          groups={this.props.Groups}
+          groupSearch={this.props.role === 'admin' ? false : true}
+          serachList={this.searchGroup}
         />
 
         <FullModal
@@ -864,6 +878,7 @@ function mapStateToProps(state: ReduxState): MapToProps {
   const listCompetences = state.competences.get('listCompetences');
   const deleteParcour = state.parcours.get('deleteParcour');
   const listJobs = state.job.get('jobs');
+  const listGroup = state.groupe.get('listGroup');
 
   return {
     fetching: listParcours.get('fetching'),
@@ -881,6 +896,7 @@ function mapStateToProps(state: ReduxState): MapToProps {
     jobs: listJobs,
     role: state.login.get('role'),
     id: state.login.get('_id'),
+    Groups: listGroup.get('groups'),
   };
 }
 
@@ -891,6 +907,8 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
     getJobs: (payload) => dispatch(getJobsActions.getJobsRequest(payload)),
     listCompetences: (payload) => dispatch(listCompetencesActions.listCompetencesRequest(payload)),
     deleteParcour: (payload) => dispatch(deleteParcourActions.deleteParcourRequest(payload)),
+    getListGroup: payload =>
+    dispatch(listGroupActions.listGroupRequest(payload)),
   };
 }
 

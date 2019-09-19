@@ -8,11 +8,15 @@ import {
   ListGroupResponse
 } from "requests";
 
-export const listgroup = (
-  advisorId: any, page?: number, perPage?: number,
-  search?: string
-): Promise<Response<ListGroupResponse>> => {
-  return axiosGet(`v1/groupe/advisor/${advisorId.advisorId}`);
+export interface ListGroupParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+  advisorId?: any;
+}
+
+export const listgroup = (params: ListGroupParams): Promise<Response<ListGroupResponse>> => {
+  return axiosGet(`v1/groupe/advisor/${params.advisorId}`, {params});
 };
 export const createGroupCall = (data: createGroup): Promise<Response<IGroup>> =>
   axiosPost("v1/groupe", { data });
