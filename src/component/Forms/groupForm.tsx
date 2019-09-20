@@ -56,9 +56,9 @@ class GroupForm extends React.Component<Props> {
         </div>
         <div className={classes.codeContainer}>
           <Input className={classes.input} value={code} />
-          <Button onClick={this.generetaCode}>Generate</Button>
+          <Button onClick={this.generetaCode}>Générer</Button>
         </div>
-        <Button onClick={this.onSubmitHandler}>valider</Button>
+        <Button onClick={this.onSubmitHandler}>Valider</Button>
       </div>
     );
   }

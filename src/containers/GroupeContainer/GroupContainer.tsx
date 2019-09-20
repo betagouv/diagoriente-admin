@@ -144,7 +144,7 @@ class GroupContainer extends Component<Props, State> {
   componentDidUpdate(props: Props) {
     const edit = this.isEdit(this.props.location);
     if (edit && !this.isEdit(props.location)) {
-      console.log("object", (edit.params as any).id);
+     // console.log("object", (edit.params as any).id);
       this.props.getGroup({ id: (edit.params as any).id });
     }
 
@@ -179,14 +179,15 @@ class GroupContainer extends Component<Props, State> {
   handleClose = () => {
     this.setState({ open: false });
   };
-  isEdit = (location: Location<any>) =>
-    matchPath(location.pathname, {
+  isEdit = (location: Location<any>) => 
+      matchPath(location.pathname, {
       path: "/groupes/:id",
       exact: true
     });
+    
   openCreateModal = () => {
     this.setState({ open: true });
-    console.log(!this.isEdit);
+    console.log('this.isEdit ',!this.isEdit);
   };
 
   closeCreateModal = () => {
@@ -275,7 +276,7 @@ class GroupContainer extends Component<Props, State> {
         firstName={this.props.firstName}
         lastName={this.props.lastName}
         id={this.props.id}
-        onSubmitHandler={!this.isEdit? this.create: this.edit}
+        onSubmitHandler={!this.isEdit(this.props.location)? this.create: this.edit}
         group={this.props.group}
       />
     );
