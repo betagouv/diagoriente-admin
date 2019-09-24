@@ -25,6 +25,8 @@ interface State {
   response: string;
 }
 
+
+
 class FaqForm extends React.Component<Props> {
   state = {
     submit: false,
@@ -64,8 +66,16 @@ class FaqForm extends React.Component<Props> {
     return !!(this.state.questionError || !this.state.questionValue);
   }; */
 
+ 
+
   public render(): JSX.Element {
     const { classes } = this.props;
+    const styles = {
+      input: {
+        width: '100%',
+        height: '100%'
+      },
+    };
     return (
       <Card className={classes.card}>
         {this.props.fetching && (
@@ -76,9 +86,6 @@ class FaqForm extends React.Component<Props> {
             <CircularProgress />
           </div>
         )}
-        <Typography variant="h4" gutterBottom className={classes.formTitle}>
-          {this.props.header}
-        </Typography>
         <Grid
           direction="column"
           container
@@ -102,6 +109,8 @@ class FaqForm extends React.Component<Props> {
               value={this.state.response}
               onChangeInput={this.handleChangeResponse}
               name={this.state.response}
+              textArea
+
             />
           </Grid>
           <Grid className={classes.buttonContainer} item xs={12}>
@@ -137,7 +146,7 @@ const styles = () =>
       margin: 25,
     },
     button: {
-      marginBottom: 30,
+      marginBottom: 20,
       marginRight: 'auto',
       marginLeft: 'auto',
       display: 'block',
