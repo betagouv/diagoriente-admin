@@ -17,4 +17,5 @@ export * from './questions';
 export * from './context';
 export * from './environment';
 export * from './questionJob';
-export * from './group'
+export * from './group';
+export * from './faq';

@@ -15,7 +15,7 @@ import context from '@material-ui/icons/VerifiedUserOutlined';
 import environment from '@material-ui/icons/EventNoteOutlined';
 import questionJob from '@material-ui/icons/HelpOutline';
 import Share from '@material-ui/icons/ShareOutlined';
-
+import Conv from '@material-ui/icons/QuestionAnswerOutlined';
 const menu = [
   {
     nom: 'Thèmes',
@@ -106,6 +106,12 @@ const menu = [
     url: '/questionJob',
     icon: questionJob,
     id: 14
+  },
+  {
+    nom: 'FAQ',
+    url: '/faq',
+    icon: Conv,
+    id: 15
   }
 ];
 
