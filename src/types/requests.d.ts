@@ -124,8 +124,8 @@ declare module 'requests' {
     activities: Activity[];
     resources: { color: string; backgroundColor: string; icon: string };
     parentId: string;
-    required?: {_id: string, title: string}[] ;
-    tooltips: {_id: string; competenceId: string; tooltip: string}[];
+    required?: { _id: string; title: string }[];
+    tooltips: { _id: string; competenceId: string; tooltip: string }[];
   }
   export interface ListThemesParams {
     page?: number;
@@ -148,7 +148,7 @@ declare module 'requests' {
     };
     icon?: File;
     parentId?: string;
-    required?: string[] | {_id: string, title: string}[];
+    required?: string[] | { _id: string; title: string }[];
     tooltips?: any[];
   }
   export type GetThemeParams = DeleteOrGetParams;
@@ -515,7 +515,7 @@ declare module 'requests' {
   }
   export type ListGroupResponse = ListResponse<IGroup>;
   export type GetGroupParams = DeleteOrGetParams;
-  export type PatchGroupParams = createGroupParams & { id: string }
+  export type PatchGroupParams = createGroupParams & { id: string };
   export interface createGroupParams {
     title: string;
     advisorId: string;
@@ -523,5 +523,23 @@ declare module 'requests' {
     users: any[];
   }
 
+  // faq **
+  export interface IFaq {
+    _id: string;
+    question: string;
+    response: string;
+  }
 
+  export interface createFaq {
+    question: string;
+    response: string;
+  }
+  export type ListFaqResponse = ListResponse<IFaq>;
+  export type GetFaqParams = DeleteOrGetParams;
+  export type PatchFaqParams = createFaqParams & { id: string };
+  export interface createFaqParams {
+    question: string;
+    response: string;
+  }
+  
 }
