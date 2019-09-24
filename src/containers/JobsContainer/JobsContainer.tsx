@@ -243,6 +243,7 @@ class JobsContainer extends React.Component<Props, State> {
                 this.props.details.data.secteur && this.props.details.data.secteur.length ? this.props.details.data.secteur[0]._id : ''
               }
               link={this.props.details.data.link}
+              salaire={this.props.details.data.salaire}
             />
           )}
         </FullModal>
