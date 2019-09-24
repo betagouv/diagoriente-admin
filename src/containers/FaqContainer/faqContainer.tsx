@@ -284,16 +284,16 @@ class FaqContainer extends React.Component<Props, State> {
         <FullModal
           open={!!this.checkEdit()}
           handleClose={this.closeModal}
-          title="Modifier Faq">
+          title="Modifier Faq"
+          maxWidth="md">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
         <FullModal
           open={this.state.open}
           handleClose={this.handleClose}
-          title="Créer Faq">
-          <Grid container spacing={16} justify="space-between">
-            {this.renderModalContent()}
-          </Grid>
+          title="Créer Faq"
+          maxWidth="md">
+          <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
         <ConfirmModal
           open={this.state.openConfirm}
