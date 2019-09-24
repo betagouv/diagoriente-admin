@@ -12,7 +12,7 @@ import { CreateJobData } from 'requests';
 import {
   listInterests,
   listCompetences,
-  listEnvironment
+  listEnvironment,
 } from '../../requests';
 import JobAutoComplete from '../inputs/JobAutoComplete';
 import JobCompetencesAutoComplete from '../inputs/JobCompetencesAutoComplete';
@@ -35,6 +35,7 @@ interface Props {
   environments: { _id: string; title: string }[];
   Acceccible?: string;
   link?: string;
+  salaire?: string;
 }
 
 interface State {
@@ -61,43 +62,45 @@ interface State {
   environments: { label: string; value: string }[];
   link: string;
   linkProps?: string;
+  salaire: string;
+  salaireProps?: string;
   questionJobs: [];
 }
 
 const formatInterests = (
-  interests: { _id: string; weight: number; rank: string; nom: string }[]
+  interests: { _id: string; weight: number; rank: string; nom: string }[],
 ) => {
-  return interests.map(interest => ({
+  return interests.map((interest) => ({
     value: interest._id,
     weight: `${interest.weight}`,
-    label: interest.nom
+    label: interest.nom,
   }));
 };
 
 const formatCompétence = (
-  competences: { _id: string; weight: number; rank: string; title: string }[]
+  competences: { _id: string; weight: number; rank: string; title: string }[],
 ) => {
-  return competences.map(competence => ({
+  return competences.map((competence) => ({
     value: competence._id,
     weight: `${competence.weight}`,
-    label: competence.title
+    label: competence.title,
   }));
 };
 
 const formatEnvironment = (environments: { _id: string; title: string }[]) => {
-  return environments.map(environment => ({
+  return environments.map((environment) => ({
     value: environment._id,
-    label: environment.title
+    label: environment.title,
   }));
 };
 
 class JobForm extends React.Component<Props, State> {
   static defaultProps = {
     submitText: 'Créer Emplois',
-    onSubmit: () => { },
+    onSubmit: () => {},
     interests: [],
     competences: [],
-    environments: []
+    environments: [],
   };
 
   static getDerivedStateFromProps(props: Props, state: State) {
@@ -105,7 +108,7 @@ class JobForm extends React.Component<Props, State> {
     if (state.descriptionProps !== props.description) {
       returnValue = {
         description: props.description,
-        descriptionProps: props.description
+        descriptionProps: props.description,
       };
     }
     if (state.titleProps !== props.title) {
@@ -116,7 +119,7 @@ class JobForm extends React.Component<Props, State> {
     if (!isEqual(state.interestsProps, props.interests)) {
       const interestsPart = {
         interests: formatInterests(props.interests),
-        interestsProps: props.interests
+        interestsProps: props.interests,
       };
       returnValue = returnValue
         ? { ...returnValue, ...interestsPart }
@@ -126,7 +129,7 @@ class JobForm extends React.Component<Props, State> {
     if (!isEqual(state.competencesProps, props.competences)) {
       const competencePart = {
         competences: formatCompétence(props.competences),
-        competencesProps: props.competences
+        competencesProps: props.competences,
       };
       returnValue = returnValue
         ? { ...returnValue, ...competencePart }
@@ -136,7 +139,7 @@ class JobForm extends React.Component<Props, State> {
     if (state.secteurProps !== props.selectedSecteur) {
       const secteurPart = {
         secteurProps: props.selectedSecteur,
-        secteur: props.selectedSecteur
+        secteur: props.selectedSecteur,
       };
       returnValue = returnValue
         ? { ...returnValue, ...secteurPart }
@@ -145,7 +148,7 @@ class JobForm extends React.Component<Props, State> {
     if (state.AcceccibleProps !== props.Acceccible) {
       const AccecciblePart = {
         Acceccible: props.Acceccible,
-        AcceccibleProps: props.Acceccible
+        AcceccibleProps: props.Acceccible,
       };
       returnValue = returnValue
         ? { ...returnValue, ...AccecciblePart }
@@ -155,17 +158,24 @@ class JobForm extends React.Component<Props, State> {
     if (state.linkProps !== props.link) {
       const linkPart = {
         link: props.link,
-        linkProps: props.link
+        linkProps: props.link,
+      };
+      returnValue = returnValue ? { ...returnValue, ...linkPart } : linkPart;
+    }
+    if (state.salaireProps !== props.salaire) {
+      const salairePart = {
+        salaire: props.salaire,
+        salaireProps: props.salaire,
       };
       returnValue = returnValue
-        ? { ...returnValue, ...linkPart }
-        : linkPart;
+        ? { ...returnValue, ...salairePart }
+        : salairePart;
     }
 
     if (!isEqual(state.environmentsProps, props.environments)) {
       const environmentPart = {
         environments: formatEnvironment(props.environments),
-        environmentsProps: props.environments
+        environmentsProps: props.environments,
       };
       returnValue = returnValue
         ? { ...returnValue, ...environmentPart }
@@ -194,7 +204,9 @@ class JobForm extends React.Component<Props, State> {
     AcceccibleProps: this.props.Acceccible,
     link: this.props.link || '',
     linkProps: this.props.link,
-    questionJobs: []
+    salaire: this.props.salaire || '',
+    salaireProps: this.props.salaire,
+    questionJobs: [],
   };
 
   isValid = () => {
@@ -205,7 +217,7 @@ class JobForm extends React.Component<Props, State> {
       descriptionError,
       competences,
       interests,
-      environments
+      environments,
     } = this.state;
 
     const titleValid = !!title && !titleError;
@@ -214,7 +226,7 @@ class JobForm extends React.Component<Props, State> {
     const competencesValid = this.isWeightValid(competences);
     const environmentsValid =
       (environments instanceof Array && !environment.length) ||
-      environments.filter(env => env.label && env.value).length;
+      environments.filter((env) => env.label && env.value).length;
     return (
       titleValid &&
       descriptionValid &&
@@ -225,7 +237,7 @@ class JobForm extends React.Component<Props, State> {
   };
 
   isWeightValid = (
-    array: { label: string; value: string; weight: string }[]
+    array: { label: string; value: string; weight: string }[],
   ) => {
     if (array.length === 0) return true;
     if (array.find(({ weight }) => (weight as any) <= 0)) return false;
@@ -235,7 +247,7 @@ class JobForm extends React.Component<Props, State> {
   handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({
       title: e.target.value,
-      titleError: e.target.value.length < 3
+      titleError: e.target.value.length < 3,
     });
   };
   handleAccecibleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -245,29 +257,32 @@ class JobForm extends React.Component<Props, State> {
   handleLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({ link: e.target.value });
   };
+  handleSalaireChange = (e: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ salaire: e.target.value });
+  };
 
   handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({
       description: e.target.value,
-      descriptionError: e.target.value.length < 3
+      descriptionError: e.target.value.length < 3,
     });
   };
 
   handleInterestChange = (
-    interests: { value: string; weight: string; label: string }[]
+    interests: { value: string; weight: string; label: string }[],
   ) => {
     this.setState({ interests });
   };
 
   handleCompetenceChange = (
-    competences: { value: string; weight: string; label: string }[]
+    competences: { value: string; weight: string; label: string }[],
   ) => {
     this.setState({ competences });
   };
 
   EnvironmentsChange = (environments: { label: string; value: string }[]) => {
     this.setState({
-      environments
+      environments,
     });
   };
 
@@ -275,13 +290,13 @@ class JobForm extends React.Component<Props, State> {
     try {
       const response: any = await listEnvironment({
         search: value,
-        perPage: 10
+        perPage: 10,
       });
 
       if (response.code === 200 && response.data) {
         return response.data.data.map((suggestion: any) => ({
           value: suggestion._id,
-          label: suggestion.title
+          label: suggestion.title,
         }));
       }
       return [];
@@ -296,7 +311,7 @@ class JobForm extends React.Component<Props, State> {
       if (response.code === 200 && response.data) {
         return response.data.map((d: any) => ({
           label: d.title,
-          value: d._id
+          value: d._id,
         }));
       }
       return [];
@@ -311,7 +326,7 @@ class JobForm extends React.Component<Props, State> {
       if (response.code === 200 && response.data) {
         return response.data.map((d: any) => ({
           label: d.title,
-          value: d._id
+          value: d._id,
         }));
       }
       return [];
@@ -324,7 +339,7 @@ class JobForm extends React.Component<Props, State> {
     try {
       const response = await listInterests({ search: value, perPage: 10 });
       if (response.code === 200 && response.data) {
-        return response.data.data.map(d => ({ label: d.nom, value: d._id }));
+        return response.data.data.map((d) => ({ label: d.nom, value: d._id }));
       }
       return [];
     } catch (e) {
@@ -338,18 +353,19 @@ class JobForm extends React.Component<Props, State> {
       description: this.state.description,
       interests: this.state.interests.map(({ weight, value }) => ({
         weight,
-        _id: value
+        _id: value,
       })),
       competences: this.state.competences.map(({ weight, value }) => ({
         weight,
-        _id: value
+        _id: value,
       })),
       formations: [],
       secteur: [this.state.secteur],
       accessibility: this.state.Acceccible,
       environments: this.state.environments.map(({ value }) => value),
       link: this.state.link,
-      questionJobs: []
+      salaire: this.state.salaire,
+      questionJobs: [],
     });
   };
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -367,112 +383,122 @@ class JobForm extends React.Component<Props, State> {
             <CircularProgress />
           </div>
         ) : (
-            <div className={classes.card}>
-              <Grid container spacing={24} direction={'row'}>
-                <Grid item sm={6}>
-                  <Input
-                    placeholder="Titre"
-                    id="1"
-                    label="Titre"
-                    value={this.state.title}
-                    onChangeInput={this.handleTitleChange}
-                    InputIndication={
-                      this.state.titleError
-                        ? 'Titre doit contenir au moins 3 caractère'
-                        : ''
-                    }
-                  />
-                </Grid>
-                <Grid item sm={6}>
-                  <Input
-                    multiline
-                    placeholder="Description"
-                    id="2"
-                    label="Description"
-                    value={this.state.description}
-                    onChangeInput={this.handleDescriptionChange}
-                    InputIndication={
-                      this.state.descriptionError
-                        ? 'Description doit contenir au moins 3 caractère'
-                        : ''
-                    }
-                  />
-                </Grid>
+          <div className={classes.card}>
+            <Grid container spacing={24} direction={'row'}>
+              <Grid item sm={6}>
+                <Input
+                  placeholder="Titre"
+                  id="1"
+                  label="Titre"
+                  value={this.state.title}
+                  onChangeInput={this.handleTitleChange}
+                  InputIndication={
+                    this.state.titleError
+                      ? 'Titre doit contenir au moins 3 caractère'
+                      : ''
+                  }
+                />
               </Grid>
-              <Grid container spacing={24} direction={'row'}>
-                <Grid item sm={6}>
-                  <SelectInput
-                    label="Secteur"
-                    Selectvalue={this.state.secteur}
-                    handleChange={this.handleSecteurChange}
-                    id="3"
-                    choice={this.props.secteur}
-                    defaultValue={this.props.selectedSecteur}
-                    defaultValueID={this.props.selectedSecteurId}
-                  />
-                </Grid>
-                <Grid item sm={6}>
-                  <Input
-                    placeholder="Accessible"
-                    id="4"
-                    label="Accessible"
-                    value={this.state.Acceccible}
-                    onChangeInput={this.handleAccecibleChange}
-                  />
-                </Grid>
+              <Grid item sm={6}>
+                <Input
+                  multiline
+                  placeholder="Description"
+                  id="2"
+                  label="Description"
+                  value={this.state.description}
+                  onChangeInput={this.handleDescriptionChange}
+                  InputIndication={
+                    this.state.descriptionError
+                      ? 'Description doit contenir au moins 3 caractère'
+                      : ''
+                  }
+                />
               </Grid>
+            </Grid>
+            <Grid container spacing={24} direction={'row'}>
+              <Grid item sm={6}>
+                <SelectInput
+                  label="Secteur"
+                  Selectvalue={this.state.secteur}
+                  handleChange={this.handleSecteurChange}
+                  id="3"
+                  choice={this.props.secteur}
+                  defaultValue={this.props.selectedSecteur}
+                  defaultValueID={this.props.selectedSecteurId}
+                />
+              </Grid>
+              <Grid item sm={6}>
+                <Input
+                  placeholder="Accessible"
+                  id="4"
+                  label="Accessible"
+                  value={this.state.Acceccible}
+                  onChangeInput={this.handleAccecibleChange}
+                />
+              </Grid>
+            </Grid>
 
-              <Grid alignItems="stretch" container spacing={24} direction={'row'}>
-                <Grid item sm={6}>
-                  <JobAutoComplete
-                    handleInputChange={this.getInterest}
-                    label={'Intérêts'}
-                    onValuesChange={this.handleInterestChange}
-                    values={this.state.interests}
-                  />
-                </Grid>
-                <Grid item sm={6}>
-                  <JobCompetencesAutoComplete
-                    handleInputChange={this.getCompetence}
-                    label={'Compétences'}
-                    onValuesChange={this.handleCompetenceChange}
-                    values={this.state.competences}
-                  />
-                </Grid>
+            <Grid alignItems="stretch" container spacing={24} direction={'row'}>
+              <Grid item sm={6}>
+                <JobAutoComplete
+                  handleInputChange={this.getInterest}
+                  label={'Intérêts'}
+                  onValuesChange={this.handleInterestChange}
+                  values={this.state.interests}
+                />
               </Grid>
-              <Grid alignItems="stretch" container spacing={24} direction={'row'}>
-                <Grid item sm={6}>
-                  <AutoComplete
-                    placeholder="Environnements"
-                    handleChange={this.EnvironmentsChange}
-                    value={this.state.environments}
-                    title={'Environements'}
-                    handleInputChange={this.handleSuggestionEnvironments}
-                  />
-                </Grid>
-                <Grid item sm={6}>
-                  <Input
-                    placeholder="Lien vidéo"
-                    id="5"
-                    label="Lien vidéo"
-                    value={this.state.link}
-                    onChangeInput={this.handleLinkChange}
-                  />
-                </Grid>
+              <Grid item sm={6}>
+                <JobCompetencesAutoComplete
+                  handleInputChange={this.getCompetence}
+                  label={'Compétences'}
+                  onValuesChange={this.handleCompetenceChange}
+                  values={this.state.competences}
+                />
               </Grid>
+            </Grid>
+            <Grid alignItems="stretch" container spacing={24} direction={'row'}>
+              <Grid item sm={6}>
+                <AutoComplete
+                  placeholder="Environnements"
+                  handleChange={this.EnvironmentsChange}
+                  value={this.state.environments}
+                  title={'Environements'}
+                  handleInputChange={this.handleSuggestionEnvironments}
+                />
+              </Grid>
+              <Grid item sm={6}>
+                <Input
+                  placeholder="Lien vidéo"
+                  id="5"
+                  label="Lien vidéo"
+                  value={this.state.link}
+                  onChangeInput={this.handleLinkChange}
+                />
+              </Grid>
+            </Grid>
+            <Grid alignItems="stretch" container spacing={24} direction={'row'}>
+              <Grid item sm={6}>
+                <Input
+                  placeholder="Salaire"
+                  id="6"
+                  label="Salaire"
+                  value={this.state.salaire}
+                  onChangeInput={this.handleSalaireChange}
+                />
+              </Grid>
+            </Grid>
 
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                className={classes.button}
-                onClick={this.submit}
-                disabled={!this.isValid()}
-              >
-                {submitText}
-              </Button>
-            </div>
-          )}
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className={classes.button}
+              onClick={this.submit}
+              disabled={!this.isValid()}>
+              {submitText}
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
@@ -487,14 +513,14 @@ const styles = createStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    minHeight: 'calc(50vh - 64px)'
+    minHeight: 'calc(50vh - 64px)',
   },
   title: {
     color: 'rgba(0, 0, 0, 0.87)',
     margin: '10px 0',
     flex: '0 0 auto',
     textAlign: 'center',
-    width: '70%'
+    width: '70%',
   },
   card: {
     width: '100%',
@@ -503,40 +529,40 @@ const styles = createStyles({
     display: 'flex',
     flexDirection: 'column',
     padding: '15px 30px',
-    margin: 'auto'
+    margin: 'auto',
   },
   formTitle: {
-    margin: 25
+    margin: 25,
   },
   button: {
     margin: '30px auto',
-    display: 'block'
+    display: 'block',
   },
   close: {
     position: 'absolute',
     right: 15,
-    top: 20
+    top: 20,
   },
   absolute: {
     position: 'absolute',
     bottom: 0,
     top: 0,
     left: 0,
-    right: 0
+    right: 0,
   },
   center: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   error: {
     color: 'rgb(225, 0, 80)',
     fontSize: 18,
     textAlign: 'center',
-    fontFamily: 'inherit'
-  }
+    fontFamily: 'inherit',
+  },
 });
 
-export interface JobFormComponent extends JobForm { }
+export interface JobFormComponent extends JobForm {}
 
 export default withStyles(styles)(JobForm);

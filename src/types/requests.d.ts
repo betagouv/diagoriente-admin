@@ -404,6 +404,7 @@ declare module 'requests' {
     interested: boolean;
     environments: IEnvironment[];
     link: string;
+    salaire: string;
     questionJobs: {
       _id: string;
 
@@ -422,6 +423,7 @@ declare module 'requests' {
     accessibility?: string;
     environments: string[];
     link: string;
+    salaire: string;
     questionJobs: { _id?: string; label: string }[];
   }
 
