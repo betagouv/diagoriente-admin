@@ -9,7 +9,7 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import Input from '../inputs/input';
-
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 interface Props {
   onSubmitHandler(params: {
     rebrique: string;
