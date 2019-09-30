@@ -49,7 +49,7 @@ class Input extends Component<Props> {
           onChange={this.props.onChangeInput}
           variant="standard"
           multiline={this.props.textArea}
-          rows={this.props.textArea ? 5 : 0}
+          rows={this.props.textArea ? 20 : 0}
           {...other}
         />
         <FormHelperText style={{ color: 'red' }}>
