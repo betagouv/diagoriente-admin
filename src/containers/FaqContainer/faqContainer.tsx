@@ -63,10 +63,9 @@ class FaqContainer extends React.Component<Props, State> {
 
   headers = [
     {
-      id: 'question',
-      title: 'Question',
-    },
-    { id: 'response', title: 'Response' },
+      id: 'rebrique',
+      title: 'Rebrique',
+    }
   ];
 
   search: string = '';
@@ -229,8 +228,7 @@ class FaqContainer extends React.Component<Props, State> {
         return (
           <FaqForm
             onSubmitHandler={this.edit}
-            response={this.props.details.data.response}
-            question={this.props.details.data.question}
+            data={this.props.details.data}
             buttonName="Modifier"
           />
         );
@@ -285,14 +283,14 @@ class FaqContainer extends React.Component<Props, State> {
           open={!!this.checkEdit()}
           handleClose={this.closeModal}
           title="Modifier Faq"
-          maxWidth="md">
+          maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
         <FullModal
           open={this.state.open}
           handleClose={this.handleClose}
           title="Créer Faq"
-          maxWidth="md">
+          maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
         <ConfirmModal
