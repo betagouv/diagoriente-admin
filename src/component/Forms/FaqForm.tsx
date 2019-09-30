@@ -1,81 +1,90 @@
 import React, { MouseEvent } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import createStyles from '@material-ui/core/styles/createStyles';
 import Input from '../inputs/input';
-import Typography from '@material-ui/core/Typography';
 
 interface Props {
-  onSubmitHandler(params: { question: string; response: string }): void;
+  onSubmitHandler(params: {
+    rebrique: string;
+    questions: [{ question: string; response: string }];
+  }): void;
   header?: string;
   submitText?: string;
   classes: any;
-  question?: string;
-  response?: string;
+  data?: any;
   buttonName?: string;
   fetching?: boolean;
 }
 interface State {
   submit: boolean;
-  question: string;
-  response: string;
+  rebrique: string;
+  fields: [{ question: string; response: string }];
 }
 
-
-
 class FaqForm extends React.Component<Props> {
-  state = {
+  state: State = {
     submit: false,
-    question: '',
-    response: '',
+    rebrique: '',
+    fields: [{ question: '', response: '' }],
   };
 
   componentDidUpdate(props: Props) {
-    if (props.question !== this.props.question) {
+    if (this.props.data && props.data !== this.props.data) {
       this.setState({
-        question: this.props.question,
-        response: this.props.response,
+        rebrique: this.props.data.rebrique,
+        fields: this.props.data.questions,
       });
     }
   }
-  // handle question changes
-  handleChangeQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ question: e.target.value });
+  addInputField = () => {
+    this.setState({
+      fields: [...this.state.fields, { question: '', response: '' }],
+    });
+  };
+
+  // handle rebrique changes
+  handleChangeRebrique = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ rebrique: e.target.value });
   };
   // handle question changes
-  handleChangeResponse = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ response: e.target.value });
+  handleChangeQuestion = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    this.state.fields[index].question = e.target.value;
+    this.setState({ fields: this.state.fields });
+  };
+  // handle question changes
+  handleChangeResponse = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    this.state.fields[index].response = e.target.value;
+    this.setState({ fields: this.state.fields });
+  };
+  handelRemove = (index: number) => {
+    this.state.fields.splice(index, 1);
+    this.setState({ fields: this.state.fields });
   };
 
   // oncreate theme handler
   onSubmit = (e: MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (this.state.question && this.state.response) {
+    if (this.state.fields) {
       this.props.onSubmitHandler({
-        question: this.state.question,
-        response: this.state.response,
+        rebrique: this.state.rebrique,
+        questions: this.state.fields,
       });
     }
   };
 
-  /* checkError = () => {
-    return !!(this.state.questionError || !this.state.questionValue);
-  }; */
-
- 
-
   public render(): JSX.Element {
     const { classes } = this.props;
-    const styles = {
-      input: {
-        width: '100%',
-        height: '100%'
-      },
-    };
+
     return (
       <Card className={classes.card}>
         {this.props.fetching && (
@@ -95,31 +104,63 @@ class FaqForm extends React.Component<Props> {
           className={this.props.classes.formContainer}>
           <Grid className={this.props.classes.inputsContainer} item sm={8}>
             <Input
-              placeholder="question"
-              id="1"
-              label="Question"
-              value={this.state.question}
-              onChangeInput={this.handleChangeQuestion}
-              name={this.state.question}
+              placeholder="Rebrique"
+              id="0"
+              label="rebrique"
+              value={this.state.rebrique}
+              onChangeInput={this.handleChangeRebrique}
+              name={this.state.rebrique}
             />
-            <Input
-              placeholder="response"
-              id="1"
-              label="Reponse"
-              value={this.state.response}
-              onChangeInput={this.handleChangeResponse}
-              name={this.state.response}
-              textArea
-
-            />
+            {this.state.fields.map((field, index) => {
+              return (
+                <div key={index}>
+                  <Input
+                    placeholder="question"
+                    id={index.toString()}
+                    label="Question"
+                    value={field.question}
+                    onChangeInput={(e) => this.handleChangeQuestion(e, index)}
+                    name={field.question}
+                  />
+                  <Input
+                    placeholder="response"
+                    id={index.toString()}
+                    label="Reponse"
+                    value={field.response}
+                    onChangeInput={(e) => this.handleChangeResponse(e, index)}
+                    name={field.response}
+                    textArea
+                  />
+                  {this.props.data && (
+                    <div>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        type="submit"
+                        onClick={() => this.handelRemove(index)}
+                        className={classes.button}>
+                        supprimer
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </Grid>
           <Grid className={classes.buttonContainer} item xs={12}>
             <Button
               variant="contained"
               color="primary"
               type="submit"
+              onClick={this.addInputField}
+              className={classes.button}>
+              Ajouter un champs
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
               onClick={this.onSubmit}
-              // disabled={this.checkError()}
               className={classes.button}>
               {this.props.buttonName}
             </Button>
@@ -159,7 +200,9 @@ const styles = () =>
     buttonContainer: {
       flex: '1 1 auto',
       display: 'flex',
-      alignItems: 'flex-end',
+      alignItems: 'baseline',
+      justifyContent: 'space-between',
+      width: '100%',
     },
     absolute: {
       position: 'absolute',
