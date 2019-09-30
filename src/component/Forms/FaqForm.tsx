@@ -5,15 +5,12 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import createStyles from '@material-ui/core/styles/createStyles';
-import { EditorState, convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
 import Input from '../inputs/input';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+
 interface Props {
   onSubmitHandler(params: {
     rebrique: string;
-    questions: [{ question: string; response: any }];
+    questions: [{ question: string; response: string }];
   }): void;
   header?: string;
   submitText?: string;
@@ -25,14 +22,14 @@ interface Props {
 interface State {
   submit: boolean;
   rebrique: string;
-  fields: [{ question: string; response: any }];
+  fields: [{ question: string; response: string }];
 }
 
 class FaqForm extends React.Component<Props> {
   state: State = {
     submit: false,
     rebrique: '',
-    fields: [{ question: '', response: EditorState.createEmpty() }],
+    fields: [{ question: '', response: '' }],
   };
 
   componentDidUpdate(props: Props) {
@@ -62,11 +59,14 @@ class FaqForm extends React.Component<Props> {
     this.setState({ fields: this.state.fields });
   };
   // handle question changes
-  onEditorStateChange = (value: any, index: number) => {
-    const nextFiled = [...this.state.fields];
-    nextFiled[index] = { ...nextFiled[index], response: value };
-    this.setState({ fields: nextFiled });
+  handleChangeResponse = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    this.state.fields[index].response = e.target.value;
+    this.setState({ fields: this.state.fields });
   };
+
 
   handelRemove = (index: number) => {
     this.state.fields.splice(index, 1);
@@ -124,22 +124,15 @@ class FaqForm extends React.Component<Props> {
                     onChangeInput={(e) => this.handleChangeQuestion(e, index)}
                     name={field.question}
                   />
-                  <Editor
-                    editorState={field.response}
-                    editorStyle={{ height: 250, border: '1px solid gray' }}
-                    toolbarClassName="toolbar-class"
-                    toolbar={{
-                      inline: { inDropdown: true },
-                      list: { inDropdown: true },
-                      textAlign: { inDropdown: true },
-                      link: { inDropdown: true },
-                      history: { inDropdown: true },
-                    }}
-                    onEditorStateChange={(value) =>
-                      this.onEditorStateChange(value, index)
-                    }
+                  <Input
+                    placeholder="response"
+                    id={index.toString()}
+                    label="Reponse"
+                    value={field.response}
+                    onChangeInput={(e) => this.handleChangeResponse(e, index)}
+                    name={field.response}
+                    textArea
                   />
-
                   {this.props.data && (
                     <div>
                       <Button
