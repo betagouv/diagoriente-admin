@@ -17,18 +17,17 @@ const ProtectedRoute = ({
   advisorConnected,
   ...rest
 }: Props) => {
+  console.log(connected);
+
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         connected ? (
           <Component {...props} />
-        ) :
-        advisorConnected ? (
+        ) : advisorConnected ? (
           <Component {...props} />
-        )
-         :
-        (
+        ) : (
           <Redirect
             to={{
               pathname: '/login',
