@@ -3,7 +3,7 @@ import { PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 // is this object already Immutable?
-const isImmutable = (raw: any) => Immutable.isImmutable(raw);
+const isImmutable = (raw: any) => Immutable.Iterable.isIterable(raw);
 
 // change this Immutable object into a JS object
 const convertToJs = (state: any) => state.toJS();
