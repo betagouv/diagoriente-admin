@@ -30,8 +30,8 @@ declare module "reducers" {
   } from "requests";
 
   export interface ImmutableMap<T> extends Map<string, any> {
-    get<K extends keyof T>(name: K): T[K];
-    merge<O extends Partial<T>>(object: O): this;
+   // get<K extends keyof T>(name: K): T[K];
+   // merge<O extends Partial<T>>(object: O): this;
   }
 
   export type Language = "en" | "fr" | "ar";
