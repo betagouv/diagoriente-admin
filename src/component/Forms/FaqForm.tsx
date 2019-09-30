@@ -7,7 +7,6 @@ import Card from '@material-ui/core/Card';
 import createStyles from '@material-ui/core/styles/createStyles';
 import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import './editor.css';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import draftToHtml from 'draftjs-to-html';
