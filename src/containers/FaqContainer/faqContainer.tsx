@@ -63,8 +63,8 @@ class FaqContainer extends React.Component<Props, State> {
 
   headers = [
     {
-      id: 'rebrique',
-      title: 'Rebrique',
+      id: 'rubrique',
+      title: 'Rubrique',
     }
   ];
 
@@ -234,7 +234,7 @@ class FaqContainer extends React.Component<Props, State> {
         );
       }
     } else {
-      return <FaqForm onSubmitHandler={this.create} buttonName="Ajouter" />;
+      return <FaqForm onSubmitHandler={this.create} buttonName="Enregistrer" />;
     }
   };
 
