@@ -104,9 +104,9 @@ class FaqForm extends React.Component<Props> {
           className={this.props.classes.formContainer}>
           <Grid className={this.props.classes.inputsContainer} item sm={8}>
             <Input
-              placeholder="Rebrique"
+              placeholder="Rubrique"
               id="0"
-              label="rebrique"
+              label="Rubrique"
               value={this.state.rebrique}
               onChangeInput={this.handleChangeRebrique}
               name={this.state.rebrique}
@@ -154,7 +154,7 @@ class FaqForm extends React.Component<Props> {
               type="submit"
               onClick={this.addInputField}
               className={classes.button}>
-              Ajouter un champs
+              Ajouter une question
             </Button>
             <Button
               variant="contained"
