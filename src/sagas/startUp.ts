@@ -14,37 +14,46 @@ function* getRequest() {
   const firstName = login.toJS().firstName;
   const lastName = login.toJS().lastName;
   // console.log('role startup', login.toJS().firstName);
+
   try {
-    const domain =
-      process.env.REACT_APP_API_URL || 'https://api3.projetttv.org';
+    const domain = process.env.REACT_APP_API_URL || 'http://localhost:3005';
     const baseUrl = domain + '/v1/auth/refresh-token';
 
     let token = null;
     const value = yield (call as any)(localforage.getItem, 'token');
     // console.log(value);
+
     if (value) {
       token = JSON.parse(value);
       const payload = {
         userId: token.admin ? token.admin._id : token.advisor._id,
-        refreshToken: token.token.refreshToken
+        refreshToken: token.token.refreshToken,
       };
       // console.log(payload.refreshToken);
 
       let responseStatus = 0;
       const response = yield axios
         .post(baseUrl, payload)
-        .then(response => {
+        .then((response) => {
           responseStatus = response.status;
           return response.data;
         })
-        .catch(err => ({ status: 'error', error: Promise.reject(err) }));
+        .catch((err) => ({ status: 'error', error: Promise.reject(err) }));
       // console.log(responseStatus);
       if (responseStatus === 200) {
         const err = yield call(callLocalForage, { ...token, token: response });
 
         if (!err) {
           setAuthorizationBearer(response.accessToken);
-          yield put(loginActions.loginSuccess(response, role, payload.userId, firstName, lastName));
+          yield put(
+            loginActions.loginSuccess(
+              response,
+              role,
+              payload.userId,
+              firstName,
+              lastName,
+            ),
+          );
           // console.log(localforage);
           yield put(startUpActions.startupDone());
           // console.log(authorizationBearer);
@@ -52,11 +61,11 @@ function* getRequest() {
         }
         throw err;
       }
-      yield put(startUpActions.startupDone());
     }
-    yield put(startUpActions.startupDone());
+    throw '';
   } catch (e) {
     // console.log(e);
+    yield put(loginActions.logout());
     yield put(startUpActions.startupDone());
   }
 }

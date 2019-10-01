@@ -275,20 +275,20 @@ class FaqContainer extends React.Component<Props, State> {
         )}
         {!this.props.list.fetching && (!data || data.length === 0) && (
           <p className={classes.empty}>
-            {this.props.list.error || 'Aucune faq ...'}
+            {this.props.list.error || 'Aucune FAQ ...'}
           </p>
         )}
         <FullModal
           open={!!this.checkEdit()}
           handleClose={this.closeModal}
-          title="Modifier Faq"
+          title="Modifier FAQ"
           maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
         <FullModal
           open={this.state.open}
           handleClose={this.handleClose}
-          title="Créer Faq"
+          title="Créer FAQ"
           maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>

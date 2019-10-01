@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Response } from 'requests';
 
-const BaseURL = process.env.REACT_APP_API_URL || 'https://api3.projetttv.org';
+const BaseURL = process.env.REACT_APP_API_URL || 'http://localhost:3005';
 
 export let authorizationBearer: string | null = null;
 

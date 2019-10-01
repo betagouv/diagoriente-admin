@@ -45,7 +45,6 @@ class GroupForm extends React.Component<Props> {
   };
 
   render() {
-   // console.log('firstName',this.props.firstName)
     const { classes } = this.props;
     const { title, code } = this.state;
 
