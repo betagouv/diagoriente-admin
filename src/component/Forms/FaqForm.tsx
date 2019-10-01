@@ -166,6 +166,7 @@ class FaqForm extends React.Component<Props> {
                       borderWidth: 1,
                       borderStyle: 'solid',
                       borderColor: 'gray',
+                      marginBottom:15
                     }}
                     toolbarClassName="toolbar-class"
                     toolbar={{
