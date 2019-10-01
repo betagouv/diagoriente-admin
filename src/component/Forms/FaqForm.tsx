@@ -9,6 +9,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import { map } from 'lodash';
 import Input from '../inputs/input';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 interface Props {
@@ -83,7 +84,7 @@ class FaqForm extends React.Component<Props> {
     index: number,
   ) => {
     this.state.fields[index].question = e.target.value;
-    this.setState({ fields: this.state.fields, error: ''  });
+    this.setState({ fields: this.state.fields, error: '' });
   };
 
   // handle question changes
@@ -94,7 +95,7 @@ class FaqForm extends React.Component<Props> {
       response: value,
     };
 
-    this.setState({ fields: nextFiled, error: ''  });
+    this.setState({ fields: nextFiled });
   };
 
   handelRemove = (index: number) => {
@@ -104,31 +105,31 @@ class FaqForm extends React.Component<Props> {
 
   onSubmit = (e: MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
-
-    if (this.state.rebrique === '') {
+    if (this.state.rebrique !== '') {
+      const error = this.state.fields.find((el: any) => {
+        return el.question === '' || el.response === '';
+      });
+      if (error) {
+        this.setState({
+          error: !error.question
+            ? 'Veuillez remplire tous question'
+            : 'Veuillez remplire tous response',
+        });
+      } else {
+        const formattedArray = map(this.state.fields, (el: any) => {
+          return {
+            question: el.question,
+            response: this.valueToHtml(el.response),
+          };
+        });
+        this.props.onSubmitHandler({
+          rebrique: this.state.rebrique,
+          questions: formattedArray,
+        });
+      }
+    } else {
       this.setState({
         error: 'Rubrique est obligatoire',
-      });
-    } else {
-      this.state.fields.map((el: any) => {
-        if (el.question === '' || el.response === '') {
-          this.setState({
-            error: 'Veuillez remplir tous les champs obligatoires',
-          });
-        } else {
-          const formattedArray = this.state.fields
-            .filter((el: any) => el.question !== '')
-            .map((el: any) => {
-              return {
-                question: el.question,
-                response: this.valueToHtml(el.response),
-              };
-            });
-          this.props.onSubmitHandler({
-            rebrique: this.state.rebrique,
-            questions: formattedArray,
-          });
-        }
       });
     }
   };
@@ -199,7 +200,7 @@ class FaqForm extends React.Component<Props> {
                     }
                   />
 
-                  {this.props.data && (
+                  {this.state.fields.length > 1 ? (
                     <div>
                       <Button
                         variant="contained"
@@ -210,7 +211,7 @@ class FaqForm extends React.Component<Props> {
                         Supprimer
                       </Button>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               );
             })}
