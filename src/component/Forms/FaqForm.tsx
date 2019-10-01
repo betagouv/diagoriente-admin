@@ -26,6 +26,7 @@ interface Props {
 interface State {
   submit: boolean;
   rebrique: string;
+  error: string;
   fields: [{ question: string; response: any }];
 }
 
@@ -33,6 +34,7 @@ class FaqForm extends React.Component<Props> {
   state: State = {
     submit: false,
     rebrique: '',
+    error: '',
     fields: [{ question: '', response: EditorState.createEmpty() }],
   };
 
@@ -74,7 +76,7 @@ class FaqForm extends React.Component<Props> {
   }; // handle rebrique changes
 
   handleChangeRebrique = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ rebrique: e.target.value });
+    this.setState({ rebrique: e.target.value, error: '' });
   }; // handle question changes
   handleChangeQuestion = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -103,12 +105,19 @@ class FaqForm extends React.Component<Props> {
   onSubmit = (e: MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (this.state.fields) {
-      const formattedArray = this.state.fields.map((el: any) => {
-        return {
-          question: el.question,
-          response: this.valueToHtml(el.response),
-        };
-      });
+      if (this.state.rebrique === '') {
+        this.setState({
+          error: 'Rubrique est obligatoire',
+        });
+      }
+      const formattedArray = this.state.fields
+        .filter((el: any) => el.question !== '')
+        .map((el: any) => {
+          return {
+            question: el.question,
+            response: this.valueToHtml(el.response),
+          };
+        });
       this.props.onSubmitHandler({
         rebrique: this.state.rebrique,
         questions: formattedArray,
@@ -140,6 +149,7 @@ class FaqForm extends React.Component<Props> {
           justify="center"
           className={this.props.classes.formContainer}>
           <Grid className={this.props.classes.inputsContainer} item sm={8}>
+            <div className={classes.error}>{this.state.error}</div>
             <Input
               placeholder="Rubrique"
               id="0"
@@ -287,6 +297,10 @@ const styles = () =>
     },
     editorImagePopup: {
       left: '-100%',
+    },
+    error: {
+      color: 'red',
+      fontSize: 13,
     },
   });
 
