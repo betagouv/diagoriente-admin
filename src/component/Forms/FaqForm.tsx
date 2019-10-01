@@ -166,7 +166,7 @@ class FaqForm extends React.Component<Props> {
                       borderWidth: 1,
                       borderStyle: 'solid',
                       borderColor: 'gray',
-                      marginBottom:15
+                      marginBottom: 15,
                     }}
                     toolbarClassName="toolbar-class"
                     toolbar={{
@@ -189,7 +189,7 @@ class FaqForm extends React.Component<Props> {
                         type="submit"
                         onClick={() => this.handelRemove(index)}
                         className={classes.button}>
-                                                supprimer                       
+                        Supprimer
                       </Button>
                     </div>
                   )}
@@ -204,7 +204,7 @@ class FaqForm extends React.Component<Props> {
               type="submit"
               onClick={this.addInputField}
               className={classes.button}>
-                            Ajouter une question             
+              Ajouter une question
             </Button>
             <Button
               variant="contained"
@@ -212,7 +212,7 @@ class FaqForm extends React.Component<Props> {
               type="submit"
               onClick={this.onSubmit}
               className={classes.button}>
-                            {this.props.buttonName}
+              {this.props.buttonName}
             </Button>
           </Grid>
         </Grid>
