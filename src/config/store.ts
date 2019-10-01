@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'development') {
     // even after test with isImmutable
     const newState: { [key: string]: any } = {};
     _.keys(state).forEach((key: string) => {
-      newState[key] = Immutable.Iterable.isIterable(state[key])
+      newState[key] = Immutable.isImmutable(state[key])
         ? state[key].toJS()
         : state[key];
     });

@@ -17,8 +17,6 @@ const ProtectedRoute = ({
   advisorConnected,
   ...rest
 }: Props) => {
-  console.log(connected);
-
   return (
     <Route
       {...rest}

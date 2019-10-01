@@ -529,18 +529,18 @@ declare module 'requests' {
   export interface IFaq {
     _id: string;
     rebrique: string;
-    questions: [{ question: string; response: string }];
+    questions: [{ question: string; response: any }];
   }
 
   export interface createFaq {
     rebrique: string;
-    questions: [{ question: string; response: string }];
+    questions: [{ question: string; response: any }];
   }
   export type ListFaqResponse = ListResponse<IFaq>;
   export type GetFaqParams = DeleteOrGetParams;
   export type PatchFaqParams = createFaqParams & { id: string };
   export interface createFaqParams {
     rebrique: string;
-    questions: [{ question: string; response: string }];
+    questions: [{ question: string; response: any }];
   }
 }

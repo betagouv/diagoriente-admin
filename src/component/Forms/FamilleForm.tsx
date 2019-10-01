@@ -182,7 +182,6 @@ class FamilleForm extends React.Component<Props> {
   remove = (index: number) => {
     let removed = this.state.localPreviews;
     let picturesUpdated = this.state.pictures;
-    console.log(removed.length);
 
     removed = this.state.localPreviews.filter(el => el !== removed[index]);
     picturesUpdated = this.state.pictures.filter(
@@ -194,8 +193,6 @@ class FamilleForm extends React.Component<Props> {
 
   render(): JSX.Element {
     const { classes } = this.props;
-    console.log(this.state);
-    console.log(this.props)
 
     return (
       <div className={classes.container}>

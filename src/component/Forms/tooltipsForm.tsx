@@ -180,13 +180,8 @@ class TooltipForm extends React.Component<Props, State> {
     const title = this.props.competences.filter(
       (el: any) => el._id === this.props.theme.tooltips[index].competenceId,
     );
-   // console.log(title.map(el => el.title));
     return (title[0].title);
   }
-
-  /* componentDidMount() {
-    this.findCompetence(0);
-  } */
 
   render() {
     const { competences } = this.props;
