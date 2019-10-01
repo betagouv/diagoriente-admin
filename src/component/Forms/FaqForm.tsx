@@ -35,7 +35,7 @@ class FaqForm extends React.Component<Props> {
     submit: false,
     rebrique: '',
     error: '',
-    fields: [{ question: '', response: EditorState.createEmpty() }],
+    fields: [{ question: '', response: '' }],
   };
 
   convertHTMLtoEditorState(html: string): any {
@@ -83,7 +83,7 @@ class FaqForm extends React.Component<Props> {
     index: number,
   ) => {
     this.state.fields[index].question = e.target.value;
-    this.setState({ fields: this.state.fields });
+    this.setState({ fields: this.state.fields, error: ''  });
   };
 
   // handle question changes
@@ -94,7 +94,7 @@ class FaqForm extends React.Component<Props> {
       response: value,
     };
 
-    this.setState({ fields: nextFiled });
+    this.setState({ fields: nextFiled, error: ''  });
   };
 
   handelRemove = (index: number) => {
@@ -104,23 +104,31 @@ class FaqForm extends React.Component<Props> {
 
   onSubmit = (e: MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (this.state.fields) {
-      if (this.state.rebrique === '') {
-        this.setState({
-          error: 'Rubrique est obligatoire',
-        });
-      }
-      const formattedArray = this.state.fields
-        .filter((el: any) => el.question !== '')
-        .map((el: any) => {
-          return {
-            question: el.question,
-            response: this.valueToHtml(el.response),
-          };
-        });
-      this.props.onSubmitHandler({
-        rebrique: this.state.rebrique,
-        questions: formattedArray,
+
+    if (this.state.rebrique === '') {
+      this.setState({
+        error: 'Rubrique est obligatoire',
+      });
+    } else {
+      this.state.fields.map((el: any) => {
+        if (el.question === '' || el.response === '') {
+          this.setState({
+            error: 'Veuillez remplir tous les champs obligatoires',
+          });
+        } else {
+          const formattedArray = this.state.fields
+            .filter((el: any) => el.question !== '')
+            .map((el: any) => {
+              return {
+                question: el.question,
+                response: this.valueToHtml(el.response),
+              };
+            });
+          this.props.onSubmitHandler({
+            rebrique: this.state.rebrique,
+            questions: formattedArray,
+          });
+        }
       });
     }
   };
