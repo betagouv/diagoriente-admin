@@ -28,7 +28,7 @@ interface State {
   submit: boolean;
   rebrique: string;
   error: string;
-  fields: [{ question: string; response: any }];
+  fields: { question: string; response: any }[];
 }
 
 class FaqForm extends React.Component<Props> {
@@ -41,6 +41,7 @@ class FaqForm extends React.Component<Props> {
 
   convertHTMLtoEditorState(html: string): any {
     const contentBlock = htmlToDraft(html);
+
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(
         contentBlock.contentBlocks,
