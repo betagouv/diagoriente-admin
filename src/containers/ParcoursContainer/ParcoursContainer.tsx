@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
-import { IParcour, listParcoursParams, getParcoursParams, ListResponse, ListCompetencesParams, DeleteParcourParams, ICompetence, IGroup } from 'requests';
+import {
+  IParcour,
+  listParcoursParams,
+  getParcoursParams,
+  ListResponse,
+  ListCompetencesParams,
+  DeleteParcourParams,
+  ICompetence,
+  IGroup,
+} from 'requests';
 import moment from 'moment';
 import { isArray } from 'lodash';
 import { getUser, listParcoursSearch } from '../../requests';
@@ -17,8 +26,7 @@ import getParcoursActions from '../../reducers/parcours/GetParcour';
 import getJobsActions from '../../reducers/job/GetJob';
 import listCompetencesActions from '../../reducers/competences/listCompetences';
 import deleteParcourActions from '../../reducers/parcours/deleteParcour';
-import listGroupActions from "../../reducers/group/listGroup";
-
+import listGroupActions from '../../reducers/group/listGroup';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -35,6 +43,8 @@ import Chartlabels from '../../component/Chart/chartLabels';
 
 // utils
 import { encodeUri, decodeUri } from '../../utils/url';
+import { pdf2 } from '../../utils/pdf';
+
 import format from '../../utils/formatChartData';
 import formatOcc from '../../utils/competencesOcc';
 import Collapse from '../../component/CollaplseList/collpase';
@@ -59,7 +69,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import {ListGroupParams} from '../../requests/group';
+import { ListGroupParams } from '../../requests/group';
 
 const colors = [
   'rgba(255, 0, 0, 0.5)',
@@ -341,7 +351,7 @@ class ParcoursContainer extends Component<Props, State> {
     const { page } = decodeUri(this.props.location.search);
     this.getListCompetences();
     this.getListParcours({ page });
-    this.props.getListGroup({advisorId: this.props.id })
+    this.props.getListGroup({ advisorId: this.props.id });
     // this.props.getParcours({ id: this.props.parcour._id });
   }
 
@@ -375,10 +385,9 @@ class ParcoursContainer extends Component<Props, State> {
     this.getListParcours();
   };
   searchGroup = (value: string) => {
-    this.getListParcours({codeId: value})
-    this.setState({groupReset: true})
-  }
-
+    this.getListParcours({ codeId: value });
+    this.setState({ groupReset: true });
+  };
 
   handlePageChange = (page: number) => {
     this.props.history.push({
@@ -392,7 +401,7 @@ class ParcoursContainer extends Component<Props, State> {
   resetParcours = () => {
     this.search = '';
     this.getListParcours();
-    this.setState({groupReset: false})
+    this.setState({ groupReset: false });
   };
   closeTestModal = () => {
     this.props.history.push({
@@ -448,7 +457,6 @@ class ParcoursContainer extends Component<Props, State> {
     }
     return { ...this.deepObject(value) };
   }
-  
 
   deepObject(obj: any) {
     let result: any = {};
@@ -475,110 +483,11 @@ class ParcoursContainer extends Component<Props, State> {
       const id: any = this.props.parcour.userId;
 
       const response = await getUser({ id });
-
-      let firstName = 'Inconnu';
-      let lastName = '';
-
       if (response.code === 200 && response.data) {
-        firstName = response.data.profile.firstName;
-        lastName = response.data.profile.lastName;
+        console.log('in in ');
+
+        pdf2(this.props.parcour, this.props.parcour, response.data);
       }
-      const lastNode = document.getElementsByTagName('canvas').length - 1;
-      const node = document.getElementsByTagName('canvas');
-      const test = node[lastNode].toDataURL();
-
-      firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-      lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
-      const competences = this.props.competences.map((el: ICompetence) => el.title);
-      const doc = new jsPDF('p', 'pt', '', true as any);
-      const width = doc.internal.pageSize.getWidth();
-      const height = doc.internal.pageSize.getHeight();
-      const Fullname = firstName.concat(' ', lastName);
-      doc.addImage(diagorientebeta, 'PNG', 20, 20, 150, 50, '', 'FAST');
-      const betaimg = document.createElement('img');
-      betaimg.setAttribute('src', betagouvfr);
-      doc.addImage(betaimg, 'PNG', 220, 8, 180, 100, '', 'FAST');
-      doc.addImage(republiquecom, 'PNG', 450, 10, 75, 120, '', 'FAST');
-      doc.setFontStyle('bold');
-      doc.text(`Carte de competénces de ${Fullname}`, 140, 165, '', 'FAST');
-      doc.setFillColor(240, 240, 240);
-      // doc.roundedRect(10, 200, 455, 380, 2, 2, 'F');
-      doc.addImage(test, 'PNG', 110, 210, 265, 345, '', 'FAST');
-      doc.setFontStyle('normal');
-      doc.setFontSize(10);
-      doc.setFillColor(255, 255, 255);
-      doc.rect(120, 180, 250, 50, 'F');
-      doc.setFillColor(255, 255, 255);
-      doc.rect(100, 520, 300, 150, 'F');
-
-      const radius = 180;
-      const numNodes = 10;
-      const w = radius * 2 + 50;
-
-      for (let i = 2; i < numNodes + 2; i++) {
-        const angle = (i / (numNodes / 2)) * Math.PI;
-        let x = (radius + 5) * Math.cos(angle) + w / 2;
-        let y = (radius - 2) * Math.sin(angle) + w / 2;
-        x = (x.toFixed(1) as any) - 0;
-        y = (y.toFixed(1) as any) - 0;
-
-        const rgba = colors[(i + 2) % numNodes]
-          .split('(')[1]
-          .split(')')[0]
-          .split(',')
-          .map((el) => (el.trim() as any) - 0);
-        const alpha = 1 - rgba[3];
-        const rgb = [];
-        rgb.push(Math.round((rgba[3] * (rgba[0] / 255) + alpha * 0.5) * 255));
-        rgb.push(Math.round((rgba[3] * (rgba[1] / 255) + alpha * 0.5) * 255));
-        rgb.push(Math.round((rgba[3] * (rgba[2] / 255) + alpha * 0.5) * 255));
-
-        doc.setTextColor(...rgb);
-        doc.text(competences[(i + 2) % numNodes], x + 5, y + 180, {
-          maxWidth: '75',
-        });
-      }
-
-      doc.setTextColor('#fefefe' as any);
-      doc.setFontSize(11.5);
-
-      const etapes = ['je débute', 'je le fais de temps en temps', 'je le fais souvent', 'je le fais tout le temps'];
-      for (let i = 0; i < 4; i++) {
-        doc.setFillColor('#4472c4');
-        const recty = 220 + i * 90;
-        doc.roundedRect(width - 110, recty, 80, 58, 2, 2, 'F');
-        doc.text(i + 1 + '', width - 75, recty + 12);
-        doc.text(etapes.shift(), width - 70, recty + 12 + 15, {
-          align: 'center',
-          maxWidth: '70',
-        });
-      }
-      const parcoursPerso = this.props.parcour.skills.filter((el: any) => el.theme.type === 'personal').map((al: any) => al.theme.title);
-
-      const parcoursPro = this.props.parcour.skills.filter((el: any) => el.theme.type === 'professional').map((al: any) => al.theme.title);
-
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(12);
-      doc.setFillColor(240, 240, 240);
-
-      doc.roundedRect(12, 610, 260, parcoursPerso.length * 28 + 88, 2, 2, 'F');
-      doc.roundedRect(302, 610, 260, parcoursPerso.length * 28 + 88, 2, 2, 'F');
-
-      // doc.setTextColor(68, 58, 219);
-      doc.setTextColor(170, 51, 255);
-      doc.text('Mes expériences personnelles', 35, 650);
-      doc.text('Mes expériences profesionnelles', 335, 650);
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(10);
-      for (let i = 0; i < parcoursPerso.length; i++) {
-        doc.text(parcoursPerso[i], 35, 30 * i + 690);
-      }
-      for (let i = 0; i < parcoursPro.length; i++) {
-        doc.text(parcoursPro[i], 335, 30 * i + 690);
-      }
-
-      doc.save('Carte de compétences.pdf');
-      this.setState({ hideLayout: false });
     } catch {
       (error: any) => {
         console.error('oops, something went wrong!', error);
@@ -912,8 +821,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
     getJobs: (payload) => dispatch(getJobsActions.getJobsRequest(payload)),
     listCompetences: (payload) => dispatch(listCompetencesActions.listCompetencesRequest(payload)),
     deleteParcour: (payload) => dispatch(deleteParcourActions.deleteParcourRequest(payload)),
-    getListGroup: payload =>
-    dispatch(listGroupActions.listGroupRequest(payload)),
+    getListGroup: (payload) => dispatch(listGroupActions.listGroupRequest(payload)),
   };
 }
 

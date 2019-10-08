@@ -16,7 +16,7 @@ function* getRequest() {
   // console.log('role startup', login.toJS().firstName);
 
   try {
-    const domain = process.env.REACT_APP_API_URL || 'http://localhost:3005';
+    const domain = process.env.REACT_APP_API_URL ||'https://api3.projetttv.org';
     const baseUrl = domain + '/v1/auth/refresh-token';
 
     let token = null;

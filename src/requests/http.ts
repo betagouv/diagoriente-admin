@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Response } from 'requests';
 
-const BaseURL = process.env.REACT_APP_API_URL || 'http://localhost:3005';
+const BaseURL = process.env.REACT_APP_API_URL || 'https://api3.projetttv.org';
 
 export let authorizationBearer: string | null = null;
 
@@ -11,13 +11,7 @@ export const setAuthorizationBearer = (token: string | null) => {
 
 type Method = 'POST' | 'GET' | 'DELETE' | 'PUT' | 'PATCH';
 
-function axiosRequest<T, P>(
-  method: Method,
-  baseURL: string,
-  url: string,
-  params: P,
-  headers: any
-): Promise<Response<T>> {
+function axiosRequest<T, P>(method: Method, baseURL: string, url: string, params: P, headers: any): Promise<Response<T>> {
   return new Promise((resolve, reject) => {
     axios({
       baseURL,
@@ -26,8 +20,8 @@ function axiosRequest<T, P>(
       timeout: 300000,
       ...params,
       headers: {
-        ...headers
-      }
+        ...headers,
+      },
     })
       .then(
         (payload: AxiosResponse<T>) => {
@@ -44,24 +38,20 @@ function axiosRequest<T, P>(
           } else {
             reject(payload);
           }
-        }
+        },
       )
-      .catch(e => {
+      .catch((e) => {
         throw e;
       });
   });
 }
 
 /* ------ Request POST ------ */
-export const axiosPost = <T, P extends object>(
-  url: string,
-  params?: P,
-  timeout = null
-): Promise<Response<T>> => {
+export const axiosPost = <T, P extends object>(url: string, params?: P, timeout = null): Promise<Response<T>> => {
   let p: any = {
     sendToken: true,
     data: {},
-    headers: {}
+    headers: {},
   };
 
   if (params) {
@@ -80,11 +70,7 @@ export const axiosPost = <T, P extends object>(
 };
 
 /* ------ Request PUT ------ */
-export const axiosPut = <T, P extends object>(
-  url: string,
-  params?: P,
-  timeout = null
-): Promise<Response<T>> => {
+export const axiosPut = <T, P extends object>(url: string, params?: P, timeout = null): Promise<Response<T>> => {
   let p: any = { sendToken: true, data: {}, headers: {} };
   if (params) {
     p = { ...p, ...params };
@@ -101,11 +87,7 @@ export const axiosPut = <T, P extends object>(
 };
 
 /* ------ Request PATCH ------ */
-export const axiosPatch = <T, P extends object>(
-  url: string,
-  params?: P,
-  timeout = null
-): Promise<Response<T>> => {
+export const axiosPatch = <T, P extends object>(url: string, params?: P, timeout = null): Promise<Response<T>> => {
   let p: any = { sendToken: true, data: {}, headers: {} };
   if (params) {
     p = { ...p, ...params };
@@ -122,11 +104,7 @@ export const axiosPatch = <T, P extends object>(
 };
 
 /* ------ Request GET ------ */
-export const axiosGet = <T, P extends object>(
-  url: string,
-  params?: P,
-  timeout = null
-): Promise<Response<T>> => {
+export const axiosGet = <T, P extends object>(url: string, params?: P, timeout = null): Promise<Response<T>> => {
   let p: any = { sendToken: true, params: {}, headers: {} };
   if (params) {
     p = { ...p, ...params };
@@ -136,7 +114,7 @@ export const axiosGet = <T, P extends object>(
     headers.Authorization = `Bearer ${authorizationBearer}`;
   }
   const reqParams: { params: P; timeout?: number | null } = {
-    params: p.params
+    params: p.params,
   };
   if (timeout) {
     reqParams.timeout = timeout;
@@ -145,11 +123,7 @@ export const axiosGet = <T, P extends object>(
 };
 
 /* ------ Request DELETE ------ */
-export const axiosDelete = <T, P extends object>(
-  url: string,
-  params?: P,
-  timeout = null
-): Promise<Response<T>> => {
+export const axiosDelete = <T, P extends object>(url: string, params?: P, timeout = null): Promise<Response<T>> => {
   let p: any = { sendToken: true, headers: {}, ...params };
   if (params) {
     p = { ...p, ...params };
@@ -159,7 +133,7 @@ export const axiosDelete = <T, P extends object>(
     headers.Authorization = `Bearer ${authorizationBearer}`;
   }
   const reqParams: { params: P; timeout?: number | null } = {
-    params: p.params
+    params: p.params,
   };
   if (timeout) {
     reqParams.timeout = timeout;
@@ -168,16 +142,12 @@ export const axiosDelete = <T, P extends object>(
 };
 
 /* ------ Request POST files ------ */
-export const axiosPostFilesData = <T, P extends object>(
-  url: string,
-  params?: P,
-  timeout = 60000
-): Promise<Response<T>> => {
+export const axiosPostFilesData = <T, P extends object>(url: string, params?: P, timeout = 60000): Promise<Response<T>> => {
   const p: any = {
     sendToken: true,
     form: {},
     headers: {},
-    ...params
+    ...params,
   };
   const { headers } = p;
 
