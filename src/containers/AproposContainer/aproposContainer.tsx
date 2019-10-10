@@ -8,20 +8,20 @@ import Table from '../../component/Table/Tables';
 import FullModal from '../../component/fullScreenModal/fullModal';
 import { Location } from 'history';
 
-import classes from './faq.module.css';
+import classes from './apropos.module.css';
 
 import {
-  listFaq,
-  CreateFaq,
-  getFaq,
-  patchFaq,
-  deleteFaq,
-  ListFaqParams,
+  listApropos,
+  CreateApropos,
+  getApropos,
+  patchApropos,
+  deleteApropos,
+  ListAproposParams,
 } from '../../requests';
-import { createFaqParams } from 'requests';
+import { createAproposParams } from 'requests';
 
 import withApi, { ApiComponentProps } from '../../hoc/withApis';
-import FaqForm from '../../component/Forms/FaqForm';
+import AproposForm from '../../component/Forms/AproposForm';
 
 import { decodeUri, encodeUri } from '../../utils/url';
 import ConfirmModal from '../../component/ConfirmModal/ConfirmModal';
@@ -35,16 +35,16 @@ interface State {
 
 type Props = RouteComponentProps &
   ApiComponentProps<{
-    create: typeof CreateFaq;
-    list: typeof listFaq;
-    details: typeof getFaq;
-    edit: typeof patchFaq;
-    delete: typeof deleteFaq;
+    create: typeof CreateApropos;
+    list: typeof listApropos;
+    details: typeof getApropos;
+    edit: typeof patchApropos;
+    delete: typeof deleteApropos;
   }>;
 
 const PER_PAGE = 5;
 
-class FaqContainer extends React.Component<Props, State> {
+class AproposContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -63,9 +63,9 @@ class FaqContainer extends React.Component<Props, State> {
 
   headers = [
     {
-      id: 'rebrique',
-      title: 'Rubrique',
-    }
+      id: 'title',
+      title: 'Title',
+    },
   ];
 
   search: string = '';
@@ -81,6 +81,7 @@ class FaqContainer extends React.Component<Props, State> {
     const { page } = decodeUri(this.props.location.search);
     const edit = this.isEdit(this.props.location);
     if (edit && !this.isEdit(props.location)) {
+      console.log('details call')
       this.props.details.call({ id: (edit.params as any).id });
     }
     if (
@@ -89,7 +90,7 @@ class FaqContainer extends React.Component<Props, State> {
         !this.props.list.fetching &&
         this.props.list.data.totalPages < page)
     ) {
-      this.props.history.push('/faq');
+      this.props.history.push('/apropos');
       this.getList({ search: this.search });
     }
     if (
@@ -107,7 +108,7 @@ class FaqContainer extends React.Component<Props, State> {
     ) {
       this.getList({ page });
       this.props.history.push({
-        pathname: '/faq',
+        pathname: '/apropos',
         search: this.props.location.search,
       });
     }
@@ -130,7 +131,7 @@ class FaqContainer extends React.Component<Props, State> {
   checkEdit = () => {
     const { location } = this.props;
     return matchPath(location.pathname, {
-      path: '/faq/edit/:id',
+      path: '/apropos/edit/:id',
       exact: true,
     });
   };
@@ -141,19 +142,19 @@ class FaqContainer extends React.Component<Props, State> {
     });
   openEdit = (id: string) => {
     this.handleEdit(id);
-    this.props.history.push(`/faq/edit/${id}`);
+    this.props.history.push(`/apropos/edit/${id}`);
   };
 
   handleEdit = (id: string) => {
-    this.title = 'Modifier FAQ Question';
+    this.title = 'Modifier Apropos Question';
     this.props.details.call(id);
   };
 
   closeModal = () => {
-    this.props.history.push('/faq');
+    this.props.history.push('/apropos');
   };
 
-  edit = (data: createFaqParams) => {
+  edit = (data: createAproposParams) => {
     const editMatch = this.checkEdit();
     const id = this.props.details.data._id;
 
@@ -164,7 +165,7 @@ class FaqContainer extends React.Component<Props, State> {
       });
     }
   };
-  create = (data: createFaqParams) => {
+  create = (data: createAproposParams) => {
     this.props.create.call(data);
   };
 
@@ -173,12 +174,12 @@ class FaqContainer extends React.Component<Props, State> {
     this.getList({ search });
   };
 
-  getList = (params: ListFaqParams = {}) => {
+  getList = (params: ListAproposParams = {}) => {
     this.props.list.call({ perPage: PER_PAGE, ...params });
   };
 
   handlePageChange = (page: number) => {
-    const params: ListFaqParams = { page };
+    const params: ListAproposParams = { page };
     if (this.search) params.search = this.search;
     this.props.history.push({
       pathname: this.props.location.pathname,
@@ -206,7 +207,7 @@ class FaqContainer extends React.Component<Props, State> {
 
   openEditModal = (id: string) => {
     this.props.history.push({
-      pathname: `/faq/edit/${id}`,
+      pathname: `/apropos/edit/${id}`,
       search: this.props.location.search,
     });
   };
@@ -224,9 +225,10 @@ class FaqContainer extends React.Component<Props, State> {
 
   renderModalContent = () => {
     if (!!this.checkEdit()) {
+      console.log(this.props.details);
       if (this.props.details && this.props.details.data) {
         return (
-          <FaqForm
+          <AproposForm
             onSubmitHandler={this.edit}
             data={this.props.details.data}
             buttonName="Modifier"
@@ -234,7 +236,9 @@ class FaqContainer extends React.Component<Props, State> {
         );
       }
     } else {
-      return <FaqForm onSubmitHandler={this.create} buttonName="Enregistrer" />;
+      return (
+        <AproposForm onSubmitHandler={this.create} buttonName="Enregistrer" />
+      );
     }
   };
   render() {
@@ -245,7 +249,6 @@ class FaqContainer extends React.Component<Props, State> {
       count,
       perPage,
     } = this.props.list.data;
-    console.log(data)
     return (
       <>
         {this.props.list.fetching && (
@@ -276,20 +279,20 @@ class FaqContainer extends React.Component<Props, State> {
         )}
         {!this.props.list.fetching && (!data || data.length === 0) && (
           <p className={classes.empty}>
-            {this.props.list.error || 'Aucune FAQ ...'}
+            {this.props.list.error || 'Aucune apropos ...'}
           </p>
         )}
         <FullModal
           open={!!this.checkEdit()}
           handleClose={this.closeModal}
-          title="Modifier FAQ"
+          title="Modifier apropos"
           maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
         <FullModal
           open={this.state.open}
           handleClose={this.handleClose}
-          title="Créer FAQ"
+          title="Créer apropos"
           maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
@@ -305,9 +308,9 @@ class FaqContainer extends React.Component<Props, State> {
 }
 
 export default withApi({
-  create: CreateFaq,
-  list: listFaq,
-  details: getFaq,
-  edit: patchFaq,
-  delete: deleteFaq,
-})(FaqContainer);
+  create: CreateApropos,
+  list: listApropos,
+  details: getApropos,
+  edit: patchApropos,
+  delete: deleteApropos,
+})(AproposContainer);

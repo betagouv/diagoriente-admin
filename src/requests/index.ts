@@ -19,3 +19,4 @@ export * from './environment';
 export * from './questionJob';
 export * from './group';
 export * from './faq';
+export * from './apropos';

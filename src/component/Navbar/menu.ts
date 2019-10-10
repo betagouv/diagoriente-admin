@@ -112,6 +112,12 @@ const menu = [
     url: '/faq',
     icon: Conv,
     id: 15
+  },
+  {
+    nom: 'Apropos',
+    url: '/apropos',
+    icon: Conv,
+    id: 16
   }
 ];
 
