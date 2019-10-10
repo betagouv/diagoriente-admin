@@ -114,8 +114,8 @@ const menu = [
     id: 15
   },
   {
-    nom: 'Apropos',
-    url: '/apropos',
+    nom: 'Page',
+    url: '/page',
     icon: Conv,
     id: 16
   }

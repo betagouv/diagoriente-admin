@@ -543,21 +543,25 @@ declare module 'requests' {
     rebrique: string;
     questions: { question: string; response: any }[];
   }
-  // apropos **
-  export interface IApropos {
+  // Page **
+  export interface IPage {
     _id: string;
     title: string;
-    apropos: { text: string }[];
+    type: string;
+    page: { text: string }[];
   }
 
-  export interface createApropos {
-    apropos: { text: string }[];
-  }
-  export type ListAproposResponse = ListResponse<IApropos>;
-  export type GetAproposParams = DeleteOrGetParams;
-  export type PatchAproposParams = createAproposParams & { id: string };
-  export interface createAproposParams {
+  export interface createPage {
     title: string;
-    apropos: { text: string }[];
+    type: string;
+    page: { text: string }[];
+  }
+  export type ListPageResponse = ListResponse<IPage>;
+  export type GetPageParams = DeleteOrGetParams;
+  export type PatchPageParams = createPageParams & { id: string };
+  export interface createPageParams {
+    title: string;
+    type: string;
+    page: { text: string }[];
   }
 }

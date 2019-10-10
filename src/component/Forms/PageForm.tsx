@@ -13,7 +13,11 @@ import htmlToDraft from 'html-to-draftjs';
 import { map } from 'lodash';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 interface Props {
-  onSubmitHandler(params: { title: string; apropos: { text: string }[] }): void;
+  onSubmitHandler(params: {
+    title: string;
+    type: string;
+    page: { text: string }[];
+  }): void;
   header?: string;
   submitText?: string;
   classes: any;
@@ -25,15 +29,17 @@ interface State {
   submit: boolean;
   error: string;
   title: string;
-  apropos: { text: string }[];
+  type: string;
+  page: { text: string }[];
 }
 
-class AproposForm extends React.Component<Props> {
+class PageForm extends React.Component<Props> {
   state: State = {
     submit: false,
     error: '',
     title: '',
-    apropos: [{ text: '' }],
+    type: '',
+    page: [{ text: '' }],
   };
 
   convertHTMLtoEditorState(html: string): any {
@@ -56,47 +62,49 @@ class AproposForm extends React.Component<Props> {
   };
   componentDidUpdate(props: Props) {
     if (this.props.data && props.data !== this.props.data) {
-      const formattedArray = this.props.data.apropos.map((el: any) => {
+      const formattedArray = this.props.data.page.map((el: any) => {
+        console.log(el);
         return {
-          title: el.title,
-          apropos: this.convertHTMLtoEditorState(el.text),
+          text: this.convertHTMLtoEditorState(el.text),
         };
       });
       this.setState({
         title: this.props.data.title,
-        apropos: formattedArray,
+        type: this.props.data.type,
+        page: formattedArray,
       });
     }
   }
   addInputField = () => {
     this.setState({
-      apropos: [...this.state.apropos, { text: '' }],
+      page: [...this.state.page, { text: '' }],
     });
   };
   handleChangeRebrique = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ title: e.target.value, error: '' });
   };
-
+  handleChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ type: e.target.value, error: '' });
+  };
   // handle question changes
   onEditorStateChange = (value: any, index: number) => {
-    const nextFiled = [...this.state.apropos];
+    const nextFiled = [...this.state.page];
     nextFiled[index] = {
       ...nextFiled[index],
       text: value,
     };
-
-    this.setState({ apropos: nextFiled });
+    this.setState({ page: nextFiled });
   };
 
   handelRemove = (index: number) => {
-    this.state.apropos.splice(index, 1);
-    this.setState({ apropos: this.state.apropos });
+    this.state.page.splice(index, 1);
+    this.setState({ page: this.state.page });
   }; // oncreate theme handler
 
   onSubmit = (e: MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (this.state.apropos.length !== 0) {
-      const error = this.state.apropos.find((el: any) => {
+    if (this.state.page.length !== 0) {
+      const error = this.state.page.find((el: any) => {
         return el.text === '';
       });
       if (error) {
@@ -104,14 +112,15 @@ class AproposForm extends React.Component<Props> {
           error: 'Veuillez remplire le champs text',
         });
       } else {
-        const formattedArray = map(this.state.apropos, (el: any) => {
+        const formattedArray = map(this.state.page, (el: any) => {
           return {
             text: this.valueToHtml(el.text),
           };
         });
         this.props.onSubmitHandler({
           title: this.state.title,
-          apropos: formattedArray,
+          type: this.state.type,
+          page: formattedArray,
         });
       }
     }
@@ -119,7 +128,6 @@ class AproposForm extends React.Component<Props> {
 
   public render(): JSX.Element {
     const { classes } = this.props;
-    console.log('data', this.props.data);
     return (
       <Card className={classes.card}>
                 
@@ -144,6 +152,14 @@ class AproposForm extends React.Component<Props> {
           <Grid className={this.props.classes.inputsContainer} item sm={8}>
             <div className={classes.error}>{this.state.error}</div>
             <Input
+              placeholder="Type"
+              id="0"
+              label="Type"
+              value={this.state.type}
+              onChangeInput={this.handleChangeType}
+              name={this.state.type}
+            />
+            <Input
               placeholder="Title"
               id="0"
               label="Title"
@@ -151,7 +167,8 @@ class AproposForm extends React.Component<Props> {
               onChangeInput={this.handleChangeRebrique}
               name={this.state.title}
             />
-            {this.state.apropos.map((field, index) => {
+            {this.state.page.map((field, index) => {
+              console.log(field)
               return (
                 <div key={index}>
                   <Editor
@@ -176,7 +193,7 @@ class AproposForm extends React.Component<Props> {
                     }
                   />
 
-                  {this.state.apropos.length > 1 ? (
+                  {this.state.page.length > 1 ? (
                     <div>
                       <Button
                         variant="contained"
@@ -289,4 +306,4 @@ const styles = () =>
     },
   });
 
-export default withStyles(styles)(AproposForm);
+export default withStyles(styles)(PageForm);

@@ -11,17 +11,17 @@ import { Location } from 'history';
 import classes from './apropos.module.css';
 
 import {
-  listApropos,
-  CreateApropos,
-  getApropos,
-  patchApropos,
-  deleteApropos,
-  ListAproposParams,
+  listPage,
+  CreatePage,
+  getPage,
+  patchPage,
+  deletePage,
+  ListPageParams,
 } from '../../requests';
-import { createAproposParams } from 'requests';
+import { createPageParams } from 'requests';
 
 import withApi, { ApiComponentProps } from '../../hoc/withApis';
-import AproposForm from '../../component/Forms/AproposForm';
+import PageForm from '../../component/Forms/PageForm';
 
 import { decodeUri, encodeUri } from '../../utils/url';
 import ConfirmModal from '../../component/ConfirmModal/ConfirmModal';
@@ -35,16 +35,16 @@ interface State {
 
 type Props = RouteComponentProps &
   ApiComponentProps<{
-    create: typeof CreateApropos;
-    list: typeof listApropos;
-    details: typeof getApropos;
-    edit: typeof patchApropos;
-    delete: typeof deleteApropos;
+    create: typeof CreatePage;
+    list: typeof listPage;
+    details: typeof getPage;
+    edit: typeof patchPage;
+    delete: typeof deletePage;
   }>;
 
 const PER_PAGE = 5;
 
-class AproposContainer extends React.Component<Props, State> {
+class PageContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -81,7 +81,6 @@ class AproposContainer extends React.Component<Props, State> {
     const { page } = decodeUri(this.props.location.search);
     const edit = this.isEdit(this.props.location);
     if (edit && !this.isEdit(props.location)) {
-      console.log('details call')
       this.props.details.call({ id: (edit.params as any).id });
     }
     if (
@@ -90,7 +89,7 @@ class AproposContainer extends React.Component<Props, State> {
         !this.props.list.fetching &&
         this.props.list.data.totalPages < page)
     ) {
-      this.props.history.push('/apropos');
+      this.props.history.push('/page');
       this.getList({ search: this.search });
     }
     if (
@@ -108,7 +107,7 @@ class AproposContainer extends React.Component<Props, State> {
     ) {
       this.getList({ page });
       this.props.history.push({
-        pathname: '/apropos',
+        pathname: '/page',
         search: this.props.location.search,
       });
     }
@@ -131,30 +130,30 @@ class AproposContainer extends React.Component<Props, State> {
   checkEdit = () => {
     const { location } = this.props;
     return matchPath(location.pathname, {
-      path: '/apropos/edit/:id',
+      path: '/page/edit/:id',
       exact: true,
     });
   };
   isEdit = (location: Location<any>) =>
     matchPath(location.pathname, {
-      path: '/questions/:id',
+      path: '/Page/:id',
       exact: true,
     });
   openEdit = (id: string) => {
     this.handleEdit(id);
-    this.props.history.push(`/apropos/edit/${id}`);
+    this.props.history.push(`/page/edit/${id}`);
   };
 
   handleEdit = (id: string) => {
-    this.title = 'Modifier Apropos Question';
+    this.title = 'Modifier Page Question';
     this.props.details.call(id);
   };
 
   closeModal = () => {
-    this.props.history.push('/apropos');
+    this.props.history.push('/page');
   };
 
-  edit = (data: createAproposParams) => {
+  edit = (data: createPageParams) => {
     const editMatch = this.checkEdit();
     const id = this.props.details.data._id;
 
@@ -165,7 +164,7 @@ class AproposContainer extends React.Component<Props, State> {
       });
     }
   };
-  create = (data: createAproposParams) => {
+  create = (data: createPageParams) => {
     this.props.create.call(data);
   };
 
@@ -174,12 +173,12 @@ class AproposContainer extends React.Component<Props, State> {
     this.getList({ search });
   };
 
-  getList = (params: ListAproposParams = {}) => {
+  getList = (params: ListPageParams = {}) => {
     this.props.list.call({ perPage: PER_PAGE, ...params });
   };
 
   handlePageChange = (page: number) => {
-    const params: ListAproposParams = { page };
+    const params: ListPageParams = { page };
     if (this.search) params.search = this.search;
     this.props.history.push({
       pathname: this.props.location.pathname,
@@ -207,7 +206,7 @@ class AproposContainer extends React.Component<Props, State> {
 
   openEditModal = (id: string) => {
     this.props.history.push({
-      pathname: `/apropos/edit/${id}`,
+      pathname: `/page/edit/${id}`,
       search: this.props.location.search,
     });
   };
@@ -225,10 +224,9 @@ class AproposContainer extends React.Component<Props, State> {
 
   renderModalContent = () => {
     if (!!this.checkEdit()) {
-      console.log(this.props.details);
       if (this.props.details && this.props.details.data) {
         return (
-          <AproposForm
+          <PageForm
             onSubmitHandler={this.edit}
             data={this.props.details.data}
             buttonName="Modifier"
@@ -237,7 +235,7 @@ class AproposContainer extends React.Component<Props, State> {
       }
     } else {
       return (
-        <AproposForm onSubmitHandler={this.create} buttonName="Enregistrer" />
+        <PageForm onSubmitHandler={this.create} buttonName="Enregistrer" />
       );
     }
   };
@@ -279,20 +277,20 @@ class AproposContainer extends React.Component<Props, State> {
         )}
         {!this.props.list.fetching && (!data || data.length === 0) && (
           <p className={classes.empty}>
-            {this.props.list.error || 'Aucune apropos ...'}
+            {this.props.list.error || 'Aucune pages ...'}
           </p>
         )}
         <FullModal
           open={!!this.checkEdit()}
           handleClose={this.closeModal}
-          title="Modifier apropos"
+          title="Modifier page"
           maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
         <FullModal
           open={this.state.open}
           handleClose={this.handleClose}
-          title="Créer apropos"
+          title="Créer page"
           maxWidth="lg">
           <div className={classes.center}>{this.renderModalContent()}</div>
         </FullModal>
@@ -308,9 +306,9 @@ class AproposContainer extends React.Component<Props, State> {
 }
 
 export default withApi({
-  create: CreateApropos,
-  list: listApropos,
-  details: getApropos,
-  edit: patchApropos,
-  delete: deleteApropos,
-})(AproposContainer);
+  create: CreatePage,
+  list: listPage,
+  details: getPage,
+  edit: patchPage,
+  delete: deletePage,
+})(PageContainer);
