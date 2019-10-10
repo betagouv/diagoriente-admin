@@ -26,6 +26,7 @@ import EnvironmentContainer from '../EnvironmentContainer';
 import QuestionJobContainer from '../QuestionJobContainer';
 import GroupContainer from '../GroupeContainer'
 import FaqContainer from '../FaqContainer'
+import AproposContainer from '../AproposContainer'
 
 interface MapToProps {
   language: Language;
@@ -77,6 +78,7 @@ class HomeContainer extends React.Component<Props> {
                 <Route path="/environment" component={EnvironmentContainer} />
                 <Route path="/questionJob" component={QuestionJobContainer} />
                 <Route path="/faq" component={FaqContainer} />
+                <Route path="/apropos" component={AproposContainer} />
 
               </>
             )}

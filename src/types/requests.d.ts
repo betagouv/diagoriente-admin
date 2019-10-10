@@ -543,4 +543,21 @@ declare module 'requests' {
     rebrique: string;
     questions: { question: string; response: any }[];
   }
+  // apropos **
+  export interface IApropos {
+    _id: string;
+    title: string;
+    apropos: { text: string }[];
+  }
+
+  export interface createApropos {
+    apropos: { text: string }[];
+  }
+  export type ListAproposResponse = ListResponse<IApropos>;
+  export type GetAproposParams = DeleteOrGetParams;
+  export type PatchAproposParams = createAproposParams & { id: string };
+  export interface createAproposParams {
+    title: string;
+    apropos: { text: string }[];
+  }
 }
