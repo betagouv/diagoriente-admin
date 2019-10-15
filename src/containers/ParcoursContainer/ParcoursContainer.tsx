@@ -683,9 +683,9 @@ class ParcoursContainer extends Component<Props, State> {
                       // style={{ width: 200 }} 
                     >
                      //
-                      <MenuItem value={'family'}>Les pistes issues de l'expérience</MenuItem>
+                      <MenuItem value={'interest'}>Les pistes issues de l'expérience</MenuItem>
                       <MenuItem value={'family'}>Les pistes issues des intérêts</MenuItem>
-                      <MenuItem value={'family'}>Le mix entre les expériences et les intérêts</MenuItem>
+                      <MenuItem value={'interest_family'}>Le mix entre les expériences et les intérêts</MenuItem>
                     </Select>
                   </FormControl>
                 </div>
