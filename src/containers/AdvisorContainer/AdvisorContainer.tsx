@@ -23,9 +23,7 @@ import FullModal from '../../component/fullScreenModal/fullModal';
 import AdvisorForm, { AdvisorFormComponent } from '../../component/Forms/AdvisorForm';
 // utils
 import { encodeUri, decodeUri } from '../../utils/url';
-import $ from 'jquery';
-/* import 'https://zammad.wereactinc.online/assets/form/form.js';
- */ const styles = () =>
+const styles = () =>
   createStyles({
     center: {
       display: 'flex',
