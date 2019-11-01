@@ -7,6 +7,7 @@ import Card from '@material-ui/core/Card';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from '../inputs/input';
+
 import { CreateEnvironmentParams } from 'requests';
 export interface createAccessibilityParams {
   name: string;
@@ -14,7 +15,7 @@ export interface createAccessibilityParams {
 interface Props {
   classes?: any;
   fetching?: boolean;
-  onSubmitHandler: (params: CreateEnvironmentParams) => void;
+  onSubmitHandler: (params: createAccessibilityParams) => void;
   header: string;
   submitText: string;
   title?: string;
@@ -59,7 +60,7 @@ class ContecxtForm extends React.Component<Props, State> {
       });
     } else {
       this.props.onSubmitHandler({
-        title: this.state.title,
+        name: this.state.title,
       });
     }
   };

@@ -27,6 +27,7 @@ import QuestionJobContainer from '../QuestionJobContainer';
 import GroupContainer from '../GroupeContainer';
 import FaqContainer from '../FaqContainer';
 import PageContainer from '../PageContainer';
+import AcessContainer from '../accessContainer';
 
 interface MapToProps {
   language: Language;
@@ -48,9 +49,7 @@ class HomeContainer extends React.Component<Props> {
 
     this.props.history.push({
       pathname: this.props.location.pathname,
-      search: search
-        ? encodeUri({ ...decodeUri(search), lang: value })
-        : encodeUri({ lang: value }),
+      search: search ? encodeUri({ ...decodeUri(search), lang: value }) : encodeUri({ lang: value }),
     });
   };
 
@@ -79,6 +78,7 @@ class HomeContainer extends React.Component<Props> {
                 <Route path="/questionJob" component={QuestionJobContainer} />
                 <Route path="/faq" component={FaqContainer} />
                 <Route path="/page" component={PageContainer} />
+                <Route path="/Accessibilité" component={AcessContainer} />
               </>
             )}
             <Route path="/parcours" component={ParcoursContainer} />
