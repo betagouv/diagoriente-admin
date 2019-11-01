@@ -226,7 +226,7 @@ class JobsContainer extends React.Component<Props, State> {
           )}
         </FullModal>
         <FullModal title={this.title} handleClose={this.closeModal} open={!!this.checkEdit()} maxWidth={'md'} fullScreen>
-          {this.props.secteurs.data.data && this.props.details.data.secteur && (
+          {this.props.secteurs.data.data && this.props.details.data.secteur && !this.props.details.fetching && (
             <JobForm
               submitText={this.title}
               fetching={this.props.details.fetching || this.props.edit.fetching}
