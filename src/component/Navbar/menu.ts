@@ -21,104 +21,110 @@ const menu = [
     nom: 'Thèmes',
     url: '/themes',
     icon: DashBoard,
-    id: 0
+    id: 0,
   },
   {
     nom: 'Activité',
     url: '/activities',
     icon: Assessement,
-    id: 1
+    id: 1,
   },
   {
     nom: 'Utilisateurs',
     url: '/users',
     icon: SupervisorAccount,
-    id: 2
+    id: 2,
   },
   {
     nom: 'Intérêts',
     url: '/interests',
     icon: TrackChanges,
-    id: 3
+    id: 3,
   },
   {
     nom: 'Compétences',
     url: '/competences',
     icon: Assignment,
-    id: 4
+    id: 4,
   },
   {
     nom: 'Parcours',
     url: '/parcours',
     icon: Runner,
-    id: 5
+    id: 5,
   },
   {
     nom: 'Conseiller',
     url: '/advisor',
     icon: Advisor,
-    id: 6
+    id: 6,
   },
   {
     nom: 'Secteur',
     url: '/secteur',
     icon: ViewCompact,
-    id: 7
+    id: 7,
   },
   {
     nom: 'Famille Intérêts',
     url: '/famille',
     icon: LineStyle,
-    id: 8
+    id: 8,
   },
   {
     nom: 'Piste des métiers',
     url: '/jobs',
     icon: BusinessCenter,
-    id: 9
+    id: 9,
   },
   {
     nom: 'Questions',
     url: '/questions',
     icon: question_answer,
-    id: 10
+    id: 10,
   },
   {
     nom: 'Rang Famille',
     url: '/familleRank',
     icon: Layers,
-    id: 11
+    id: 11,
   },
   {
     nom: 'Contexte',
     url: '/context',
     icon: context,
-    id: 12
+    id: 12,
   },
   {
     nom: 'Environnement',
     url: '/environment',
     icon: environment,
-    id: 13
+    id: 13,
   },
   {
     nom: 'Question Métier',
     url: '/questionJob',
     icon: questionJob,
-    id: 14
+    id: 14,
   },
   {
     nom: 'FAQ',
     url: '/faq',
     icon: Conv,
-    id: 15
+    id: 15,
   },
   {
     nom: 'Page',
     url: '/page',
     icon: Conv,
-    id: 16
-  }
+    id: 16,
+  },
+  {
+    nom: 'Accessibilité',
+    url: '/Accessibilité',
+    icon: Conv,
+    id: 17,
+  },
 ];
 
 export const menuAdvisor = [
@@ -126,20 +132,20 @@ export const menuAdvisor = [
     nom: 'Parcours',
     url: '/parcours',
     icon: Runner,
-    id: 0
+    id: 0,
   },
   {
     nom: 'Mon Compte',
     url: '/advisor',
     icon: AccountCircle,
-    id: 1
+    id: 1,
   },
   {
     nom: 'Groupes',
     url: '/groupes',
     icon: Share,
     id: 2,
-  }
+  },
 ];
 
 export default menu;

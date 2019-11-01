@@ -371,6 +371,7 @@ declare module 'requests' {
     interests: Interest[];
     resources: any[];
   }
+
   export type GetFamilleParams = DeleteOrGetParams;
   export type DeleteFamilleParams = DeleteOrGetParams;
   export type DeletePhotoParams = {
@@ -398,6 +399,8 @@ declare module 'requests' {
     competences: { _id: string; weight: number; rank: string; title: string }[];
     formations: any;
     _id: string;
+    niveau: { _id: string; name: string }[];
+
     jobRank: number;
     secteur: { title: string; _id: string }[];
     accessibility: string;
@@ -425,6 +428,7 @@ declare module 'requests' {
     link: string;
     salaire: string;
     questionJobs: { _id?: string; label: string }[];
+    niveau: string[];
   }
 
   export interface CreateQuestionJobData {
@@ -481,6 +485,7 @@ declare module 'requests' {
   export interface CreateEnvironmentParams {
     title: string;
   }
+
   export type PatchEnvironmentparams = CreateEnvironmentParams & { id: string };
   export interface ListEnvironmentsParams {
     page?: number;

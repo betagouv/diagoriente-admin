@@ -19,4 +19,5 @@ export * from './environment';
 export * from './questionJob';
 export * from './group';
 export * from './faq';
-export * from './page'
+export * from './page';
+export * from './accibility';

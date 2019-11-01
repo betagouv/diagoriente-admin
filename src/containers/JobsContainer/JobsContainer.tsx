@@ -236,6 +236,7 @@ class JobsContainer extends React.Component<Props, State> {
               error={this.props.details.error || this.props.edit.error}
               interests={this.props.details.data.interests}
               competences={this.props.details.data.competences}
+              niveau={this.props.details.data.niveau && this.props.details.data.niveau.length ? this.props.details.data.niveau[0] : {}}
               secteur={this.props.secteurs.data.data}
               environments={this.props.details.data.environments}
               Acceccible={this.props.details.data.accessibility}

@@ -8,23 +8,25 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from '../inputs/input';
 import AutoComplete from '../inputs/autoComplete';
 import { CreateJobData } from 'requests';
+import { listAccessibility } from '../../requests';
+import withApi, { ApiComponentProps } from '../../hoc/withApis';
 
-import {
-  listInterests,
-  listCompetences,
-  listEnvironment,
-} from '../../requests';
+import { listInterests, listCompetences, listEnvironment } from '../../requests';
 import JobAutoComplete from '../inputs/JobAutoComplete';
 import JobCompetencesAutoComplete from '../inputs/JobCompetencesAutoComplete';
 import SelectInput from '../inputs/selectInput';
+import SelectNiveau from '../inputs/SelectNiveau';
 import environment from '../../reducers/environment';
+import any from 'draftjs-to-html';
 
+type oneChoice = { _id: string; name: string };
 interface Props {
   classes: { [key: string]: string };
   fetching: boolean;
   submitText: string;
   onSubmit: (args: CreateJobData) => void;
   title?: string;
+  niveau?: { _id: string; name: string } | any;
   description?: string;
   error?: string;
   interests: { _id: string; weight: number; rank: string; nom: string }[];
@@ -54,6 +56,7 @@ interface State {
     rank: string;
     title: string;
   }[];
+  niveau: string;
   secteurProps?: string;
   secteur?: string;
   Acceccible: string;
@@ -66,10 +69,11 @@ interface State {
   salaireProps?: string;
   questionJobs: [];
 }
+type ApiProps = ApiComponentProps<{
+  list: typeof listAccessibility;
+}>;
 
-const formatInterests = (
-  interests: { _id: string; weight: number; rank: string; nom: string }[],
-) => {
+const formatInterests = (interests: { _id: string; weight: number; rank: string; nom: string }[]) => {
   return interests.map((interest) => ({
     value: interest._id,
     weight: `${interest.weight}`,
@@ -77,9 +81,7 @@ const formatInterests = (
   }));
 };
 
-const formatCompétence = (
-  competences: { _id: string; weight: number; rank: string; title: string }[],
-) => {
+const formatCompétence = (competences: { _id: string; weight: number; rank: string; title: string }[]) => {
   return competences.map((competence) => ({
     value: competence._id,
     weight: `${competence.weight}`,
@@ -94,7 +96,7 @@ const formatEnvironment = (environments: { _id: string; title: string }[]) => {
   }));
 };
 
-class JobForm extends React.Component<Props, State> {
+class JobForm extends React.Component<Props & ApiProps, State> {
   static defaultProps = {
     submitText: 'Créer Emplois',
     onSubmit: () => {},
@@ -121,9 +123,7 @@ class JobForm extends React.Component<Props, State> {
         interests: formatInterests(props.interests),
         interestsProps: props.interests,
       };
-      returnValue = returnValue
-        ? { ...returnValue, ...interestsPart }
-        : interestsPart;
+      returnValue = returnValue ? { ...returnValue, ...interestsPart } : interestsPart;
     }
 
     if (!isEqual(state.competencesProps, props.competences)) {
@@ -131,9 +131,7 @@ class JobForm extends React.Component<Props, State> {
         competences: formatCompétence(props.competences),
         competencesProps: props.competences,
       };
-      returnValue = returnValue
-        ? { ...returnValue, ...competencePart }
-        : competencePart;
+      returnValue = returnValue ? { ...returnValue, ...competencePart } : competencePart;
     }
 
     if (state.secteurProps !== props.selectedSecteur) {
@@ -141,18 +139,14 @@ class JobForm extends React.Component<Props, State> {
         secteurProps: props.selectedSecteur,
         secteur: props.selectedSecteur,
       };
-      returnValue = returnValue
-        ? { ...returnValue, ...secteurPart }
-        : secteurPart;
+      returnValue = returnValue ? { ...returnValue, ...secteurPart } : secteurPart;
     }
     if (state.AcceccibleProps !== props.Acceccible) {
       const AccecciblePart = {
         Acceccible: props.Acceccible,
         AcceccibleProps: props.Acceccible,
       };
-      returnValue = returnValue
-        ? { ...returnValue, ...AccecciblePart }
-        : AccecciblePart;
+      returnValue = returnValue ? { ...returnValue, ...AccecciblePart } : AccecciblePart;
     }
 
     if (state.linkProps !== props.link) {
@@ -167,9 +161,7 @@ class JobForm extends React.Component<Props, State> {
         salaire: props.salaire,
         salaireProps: props.salaire,
       };
-      returnValue = returnValue
-        ? { ...returnValue, ...salairePart }
-        : salairePart;
+      returnValue = returnValue ? { ...returnValue, ...salairePart } : salairePart;
     }
 
     if (!isEqual(state.environmentsProps, props.environments)) {
@@ -177,9 +169,7 @@ class JobForm extends React.Component<Props, State> {
         environments: formatEnvironment(props.environments),
         environmentsProps: props.environments,
       };
-      returnValue = returnValue
-        ? { ...returnValue, ...environmentPart }
-        : environmentPart;
+      returnValue = returnValue ? { ...returnValue, ...environmentPart } : environmentPart;
     }
 
     return returnValue;
@@ -198,6 +188,7 @@ class JobForm extends React.Component<Props, State> {
     competencesProps: this.props.competences,
     secteurProps: this.props.selectedSecteur,
     secteur: this.props.selectedSecteur || '',
+    niveau: this.props.niveau._id || any,
     environmentsProps: this.props.environments,
     environments: formatEnvironment(this.props.environments),
     Acceccible: this.props.Acceccible || '',
@@ -208,37 +199,21 @@ class JobForm extends React.Component<Props, State> {
     salaireProps: this.props.salaire,
     questionJobs: [],
   };
-
+  componentDidMount() {
+    this.props.list.call();
+  }
   isValid = () => {
-    const {
-      title,
-      titleError,
-      description,
-      descriptionError,
-      competences,
-      interests,
-      environments,
-    } = this.state;
+    const { title, titleError, description, descriptionError, competences, interests, environments } = this.state;
 
     const titleValid = !!title && !titleError;
     const descriptionValid = !!description && !descriptionError;
     const interestsValid = this.isWeightValid(interests);
     const competencesValid = this.isWeightValid(competences);
-    const environmentsValid =
-      (environments instanceof Array && !environment.length) ||
-      environments.filter((env) => env.label && env.value).length;
-    return (
-      titleValid &&
-      descriptionValid &&
-      interestsValid &&
-      competencesValid &&
-      environmentsValid
-    );
+    const environmentsValid = (environments instanceof Array && !environment.length) || environments.filter((env) => env.label && env.value).length;
+    return titleValid && descriptionValid && interestsValid && competencesValid && environmentsValid;
   };
 
-  isWeightValid = (
-    array: { label: string; value: string; weight: string }[],
-  ) => {
+  isWeightValid = (array: { label: string; value: string; weight: string }[]) => {
     if (array.length === 0) return true;
     if (array.find(({ weight }) => (weight as any) <= 0)) return false;
     return true;
@@ -268,15 +243,11 @@ class JobForm extends React.Component<Props, State> {
     });
   };
 
-  handleInterestChange = (
-    interests: { value: string; weight: string; label: string }[],
-  ) => {
+  handleInterestChange = (interests: { value: string; weight: string; label: string }[]) => {
     this.setState({ interests });
   };
 
-  handleCompetenceChange = (
-    competences: { value: string; weight: string; label: string }[],
-  ) => {
+  handleCompetenceChange = (competences: { value: string; weight: string; label: string }[]) => {
     this.setState({ competences });
   };
 
@@ -366,14 +337,24 @@ class JobForm extends React.Component<Props, State> {
       link: this.state.link,
       salaire: this.state.salaire,
       questionJobs: [],
+      niveau: [this.state.niveau],
     });
   };
   handleSecteurChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ secteur: e.target.value });
   };
+  handleNiveauChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    /*  const selectedNiveau = this.props.list.data.filter((item: oneChoice) => item._id === e.target.value); */
+
+    /* if (selectedNiveau) {
+      this.setState({ niveau: selectedNiveau[0] });
+		} */
+    this.setState({ niveau: e.target.value });
+  };
 
   public render(): JSX.Element {
     const { classes, error, submitText, fetching } = this.props;
+    const { data } = this.props.list;
     return (
       <div className={classes.container}>
         <h1 className={classes.title}>{submitText}</h1>
@@ -392,11 +373,7 @@ class JobForm extends React.Component<Props, State> {
                   label="Titre"
                   value={this.state.title}
                   onChangeInput={this.handleTitleChange}
-                  InputIndication={
-                    this.state.titleError
-                      ? 'Titre doit contenir au moins 3 caractère'
-                      : ''
-                  }
+                  InputIndication={this.state.titleError ? 'Titre doit contenir au moins 3 caractère' : ''}
                 />
               </Grid>
               <Grid item sm={6}>
@@ -407,11 +384,7 @@ class JobForm extends React.Component<Props, State> {
                   label="Description"
                   value={this.state.description}
                   onChangeInput={this.handleDescriptionChange}
-                  InputIndication={
-                    this.state.descriptionError
-                      ? 'Description doit contenir au moins 3 caractère'
-                      : ''
-                  }
+                  InputIndication={this.state.descriptionError ? 'Description doit contenir au moins 3 caractère' : ''}
                 />
               </Grid>
             </Grid>
@@ -423,21 +396,27 @@ class JobForm extends React.Component<Props, State> {
                   handleChange={this.handleSecteurChange}
                   id="3"
                   choice={this.props.secteur}
+                  /*     defaultValue={this.props.selectedSecteur}
+                  defaultValueID={this.props.selectedSecteurId} */
+                />
+              </Grid>
+              <Grid item sm={6}>
+                <Input placeholder="Accessible" id="4" label="Accessible" value={this.state.Acceccible} onChangeInput={this.handleAccecibleChange} />
+              </Grid>
+            </Grid>
+            <Grid container spacing={24} direction={'row'}>
+              <Grid item sm={6}>
+                <SelectNiveau
+                  label="Niveau"
+                  Selectvalue={this.state.niveau}
+                  handleChange={this.handleNiveauChange}
+                  id="4"
+                  choice={data}
                   defaultValue={this.props.selectedSecteur}
                   defaultValueID={this.props.selectedSecteurId}
                 />
               </Grid>
-              <Grid item sm={6}>
-                <Input
-                  placeholder="Accessible"
-                  id="4"
-                  label="Accessible"
-                  value={this.state.Acceccible}
-                  onChangeInput={this.handleAccecibleChange}
-                />
-              </Grid>
             </Grid>
-
             <Grid alignItems="stretch" container spacing={24} direction={'row'}>
               <Grid item sm={6}>
                 <JobAutoComplete
@@ -467,34 +446,16 @@ class JobForm extends React.Component<Props, State> {
                 />
               </Grid>
               <Grid item sm={6}>
-                <Input
-                  placeholder="Lien vidéo"
-                  id="5"
-                  label="Lien vidéo"
-                  value={this.state.link}
-                  onChangeInput={this.handleLinkChange}
-                />
+                <Input placeholder="Lien vidéo" id="5" label="Lien vidéo" value={this.state.link} onChangeInput={this.handleLinkChange} />
               </Grid>
             </Grid>
             <Grid alignItems="stretch" container spacing={24} direction={'row'}>
               <Grid item sm={6}>
-                <Input
-                  placeholder="Salaire"
-                  id="6"
-                  label="Salaire"
-                  value={this.state.salaire}
-                  onChangeInput={this.handleSalaireChange}
-                />
+                <Input placeholder="Salaire" id="6" label="Salaire" value={this.state.salaire} onChangeInput={this.handleSalaireChange} />
               </Grid>
             </Grid>
 
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className={classes.button}
-              onClick={this.submit}
-              disabled={!this.isValid()}>
+            <Button variant="contained" color="primary" type="submit" className={classes.button} onClick={this.submit} disabled={!this.isValid()}>
               {submitText}
             </Button>
           </div>
@@ -565,4 +526,6 @@ const styles = createStyles({
 
 export interface JobFormComponent extends JobForm {}
 
-export default withStyles(styles)(JobForm);
+export default withApi({
+  list: listAccessibility,
+})(withStyles(styles)(JobForm));
