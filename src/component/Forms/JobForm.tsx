@@ -355,8 +355,7 @@ class JobForm extends React.Component<Props & ApiProps, State> {
   public render(): JSX.Element {
     const { classes, error, submitText, fetching } = this.props;
     const { data } = this.props.list;
-    console.log('props niveau', this.props.niveau);
-    console.log('state niveau', this.state.niveau);
+
     return (
       <div className={classes.container}>
         <h1 className={classes.title}>{submitText}</h1>
