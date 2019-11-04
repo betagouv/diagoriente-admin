@@ -315,7 +315,6 @@ class AdvisorContainer extends Component<Props> {
           typeButton={this.role ? true : false}
           hasDelete={this.role ? true : false}
         />
-        <button id="feedback-form">Feedback</button>
         <FullModal open={!!this.isEdit(this.props.location)} handleClose={this.closeEditModal} title="Modifier Conseiller">
           <div className={`${this.props.classes.fill} ${this.props.classes.center}`}>{this.renderModalContent()}</div>
         </FullModal>
