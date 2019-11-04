@@ -28,7 +28,7 @@ import GroupContainer from '../GroupeContainer';
 import FaqContainer from '../FaqContainer';
 import PageContainer from '../PageContainer';
 import AcessContainer from '../accessContainer';
-
+import ChatButton from '../../component/Chat/chat';
 interface MapToProps {
   language: Language;
   role: any;
@@ -85,6 +85,7 @@ class HomeContainer extends React.Component<Props> {
             <Route path="/advisor" component={AdvisorContainer} />
             <Route path="/groupes" component={GroupContainer} />
           </Switch>
+          {this.props.role !== 'admin' && <ChatButton />}
         </div>
       </>
     );
