@@ -6,11 +6,12 @@ class Feedback extends React.Component {
     (window as any).$(function() {
       // eslint-disable-next-line
       new (window as any).ZammadChat({
-        background: '#e6e5e5',
+        background: '#2296F3',
         fontSize: '12px',
         chatId: 1,
         show: false,
         debug: true,
+        Title: '<strong>Chattez</strong> avec nous!',
       });
     });
   }
