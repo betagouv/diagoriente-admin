@@ -29,6 +29,7 @@ import FaqContainer from '../FaqContainer';
 import PageContainer from '../PageContainer';
 import AcessContainer from '../accessContainer';
 import ChatButton from '../../component/Chat/chat';
+import FormationContainer from '../../containers/formationContainer';
 interface MapToProps {
   language: Language;
   role: any;
@@ -84,6 +85,7 @@ class HomeContainer extends React.Component<Props> {
             <Route path="/parcours" component={ParcoursContainer} />
             <Route path="/advisor" component={AdvisorContainer} />
             <Route path="/groupes" component={GroupContainer} />
+            <Route path="/formation" component={FormationContainer} />
           </Switch>
           {this.props.role !== 'admin' && <ChatButton />}
         </div>

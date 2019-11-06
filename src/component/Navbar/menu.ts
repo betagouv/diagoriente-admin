@@ -146,6 +146,12 @@ export const menuAdvisor = [
     icon: Share,
     id: 2,
   },
+  {
+    nom: 'Formation',
+    url: '/formation',
+    icon: BusinessCenter,
+    id: 2,
+  },
 ];
 
 export default menu;
