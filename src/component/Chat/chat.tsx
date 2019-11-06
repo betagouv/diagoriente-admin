@@ -10,8 +10,6 @@ class Feedback extends React.Component {
         fontSize: '12px',
         chatId: 1,
         show: false,
-        debug: true,
-        Title: '<strong>Chattez</strong> avec nous!',
       });
     });
   }
